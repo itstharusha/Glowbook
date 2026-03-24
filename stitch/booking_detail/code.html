@@ -1,0 +1,217 @@
+<!DOCTYPE html>
+
+<html lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>Booking Detail</title>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<script id="tailwind-config">
+        tailwind.config = {
+          darkMode: "class",
+          theme: {
+            extend: {
+              colors: {
+                "secondary-container": "#ff728d",
+                "on-tertiary-container": "#f7fff3",
+                "primary-fixed-dim": "#ffb2bc",
+                "surface-variant": "#e2e2e7",
+                "on-primary-container": "#fffbff",
+                "on-primary": "#ffffff",
+                "surface-container": "#ededf2",
+                "on-secondary-fixed": "#400013",
+                "on-surface-variant": "#5c3f43",
+                "primary": "#b80046",
+                "surface-container-high": "#e8e8ed",
+                "tertiary-fixed-dim": "#62de86",
+                "on-tertiary-fixed-variant": "#005226",
+                "secondary-fixed-dim": "#ffb2bc",
+                "surface-container-low": "#f3f3f8",
+                "on-primary-fixed": "#400013",
+                "tertiary": "#006b32",
+                "on-background": "#1a1c1f",
+                "error": "#ba1a1a",
+                "outline": "#906e72",
+                "on-tertiary": "#ffffff",
+                "on-error-container": "#93000a",
+                "error-container": "#ffdad6",
+                "surface-tint": "#bd0047",
+                "tertiary-container": "#008741",
+                "primary-container": "#e40e5a",
+                "on-error": "#ffffff",
+                "surface-dim": "#d9dade",
+                "primary-fixed": "#ffd9dd",
+                "on-secondary-container": "#730129",
+                "inverse-primary": "#ffb2bc",
+                "on-surface": "#1a1c1f",
+                "on-tertiary-fixed": "#00210b",
+                "surface-container-lowest": "#ffffff",
+                "on-secondary-fixed-variant": "#891737",
+                "background": "#f9f9fe",
+                "secondary-fixed": "#ffd9dd",
+                "tertiary-fixed": "#7ffba0",
+                "surface-container-highest": "#e2e2e7",
+                "secondary": "#aa314e",
+                "on-secondary": "#ffffff",
+                "inverse-on-surface": "#f0f0f5",
+                "surface-bright": "#f9f9fe",
+                "inverse-surface": "#2e3034",
+                "on-primary-fixed-variant": "#910035",
+                "outline-variant": "#e5bdc1",
+                "surface": "#f9f9fe"
+              },
+              fontFamily: {
+                "headline": ["Inter", "sans-serif"],
+                "body": ["Inter", "sans-serif"],
+                "label": ["Inter", "sans-serif"]
+              },
+              borderRadius: {"DEFAULT": "0.25rem", "lg": "0.5rem", "xl": "0.75rem", "full": "9999px"},
+            },
+          },
+        }
+    </script>
+<style>
+        .material-symbols-outlined {
+            font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24;
+        }
+    </style>
+<style>
+    body {
+      min-height: max(884px, 100dvh);
+    }
+  </style>
+  </head>
+<body class="bg-surface text-on-surface font-body antialiased min-h-screen pb-24">
+<!-- Header (Minimal for Focused View) -->
+<header class="sticky top-0 z-10 bg-surface/80 backdrop-blur-md border-b border-surface-container-low px-4 py-3 flex items-center justify-between">
+<button class="text-on-surface hover:text-primary transition-colors flex items-center justify-center w-10 h-10 -ml-2 rounded-full">
+<span class="material-symbols-outlined" data-icon="arrow_back">arrow_back</span>
+</button>
+<div class="flex flex-col items-center">
+<h1 class="text-lg font-headline font-bold text-on-surface">Booking</h1>
+<span class="text-xs font-label font-medium text-tertiary bg-tertiary-container/20 px-2 py-0.5 rounded-full mt-0.5">Upcoming</span>
+</div>
+<div class="w-10"></div> <!-- Spacer for centering -->
+</header>
+<main class="px-4 py-6 space-y-8">
+<!-- APPOINTMENT SECTION -->
+<section>
+<h2 class="text-sm font-headline font-semibold text-outline mb-3 tracking-wider uppercase">Appointment</h2>
+<div class="bg-surface-container-lowest rounded-2xl overflow-hidden shadow-[0_4px_20px_rgba(0,0,0,0.03)] border border-surface-container-low/50">
+<!-- Salon Info -->
+<div class="p-4 border-b border-surface-container-low flex items-center justify-between hover:bg-surface-container-low/30 transition-colors cursor-pointer">
+<div class="flex items-center gap-4">
+<div class="w-14 h-14 rounded-[14px] bg-surface-container-high bg-cover bg-center overflow-hidden shrink-0" data-alt="Modern salon interior" style="background-image: url('https://lh3.googleusercontent.com/aida-public/AB6AXuDtTayh3LcYHJxhU5y4lyV7z_b65ufWXKYVgEtT60wIeblkm2Sks5JKpY3Hc_1RocdWllsjj2ElkBI7sZEzOGFp_iVbwU3l98fOTSwrl-XC4cMBwegLdNFpd9JaBcVYIW_xMYhoFUx2yCjWTakjYPvM7y2Um-wxrdILwhuhbBL0keIIQBZsPuf40pEi57hJb7aYJWTn-CYDx7T-QKXpdbgs4YMNQ0x-I9GNRA-XVdiBMlwflQZ2GfC0krKGJnFYWDsMw_1fvTvtCBKI');">
+</div>
+<div>
+<h3 class="font-headline font-semibold text-on-surface text-lg">Glow Salon &amp; Spa</h3>
+<p class="text-sm text-on-surface-variant mt-0.5 flex items-center gap-1">
+<span class="material-symbols-outlined text-[16px]">location_on</span>
+                                123 Beauty Blvd, NY
+                            </p>
+</div>
+</div>
+<span class="material-symbols-outlined text-outline">chevron_right</span>
+</div>
+<!-- Service Info -->
+<div class="p-4 border-b border-surface-container-low flex items-center gap-4">
+<div class="w-12 h-12 rounded-xl bg-primary/10 flex items-center justify-center text-primary shrink-0">
+<span class="material-symbols-outlined">content_cut</span>
+</div>
+<div>
+<h4 class="font-headline font-medium text-on-surface">Signature Haircut &amp; Blowout</h4>
+<p class="text-sm text-on-surface-variant mt-0.5">60 mins</p>
+</div>
+</div>
+<!-- Stylist Info -->
+<div class="p-4 border-b border-surface-container-low flex items-center gap-4">
+<img alt="Stylist profile" class="w-12 h-12 rounded-full object-cover shrink-0 ring-2 ring-surface-container-lowest" data-alt="Female stylist smiling" src="https://lh3.googleusercontent.com/aida-public/AB6AXuDGS6jUnOiLn4xph_Tay2ZhxzQrSnt30jo-H4A5ATJMmg7VyE7Q4NWx9vQ4TViPahyhsr3S9O-zEubJnis-KXP3wZu3M7A1HDg-A242azyw01rE0dmRsctc91MhwuC9JGSktq-LMOMTqAEpDZkxNFgnToyJa2S9sALFViz3Vfyyy10pl8S93TfVz8XZuHsxt4HPuDO1yUXs1qUBxxgWlsjEly5JgM-YwNrCejVn73aaGwpNYprTnGsjXEzGECV4ehfU8I5uSbQMPJH_"/>
+<div>
+<p class="text-xs text-on-surface-variant uppercase tracking-wider font-medium mb-0.5">Professional</p>
+<h4 class="font-headline font-medium text-on-surface">Sarah Jenkins</h4>
+</div>
+</div>
+<!-- Date & Time -->
+<div class="p-4 flex flex-col sm:flex-row gap-4 sm:gap-8">
+<div class="flex items-center gap-3">
+<div class="w-10 h-10 rounded-lg bg-surface-container-low flex items-center justify-center text-primary">
+<span class="material-symbols-outlined">calendar_today</span>
+</div>
+<div>
+<p class="text-xs text-on-surface-variant font-medium mb-0.5">Date</p>
+<p class="font-headline font-medium text-on-surface">Oct 24, 2023</p>
+</div>
+</div>
+<div class="flex items-center gap-3">
+<div class="w-10 h-10 rounded-lg bg-surface-container-low flex items-center justify-center text-primary">
+<span class="material-symbols-outlined">schedule</span>
+</div>
+<div>
+<p class="text-xs text-on-surface-variant font-medium mb-0.5">Time</p>
+<p class="font-headline font-medium text-on-surface font-mono">14:30 - 15:30</p>
+</div>
+</div>
+</div>
+</div>
+</section>
+<!-- PAYMENT SECTION -->
+<section>
+<h2 class="text-sm font-headline font-semibold text-outline mb-3 tracking-wider uppercase">Payment</h2>
+<div class="bg-surface-container-lowest rounded-2xl p-4 shadow-[0_4px_20px_rgba(0,0,0,0.03)] border border-surface-container-low/50">
+<div class="flex justify-between items-center mb-3">
+<span class="text-on-surface-variant">Service Total</span>
+<span class="font-mono text-on-surface">$120.00</span>
+</div>
+<div class="flex justify-between items-center mb-4">
+<span class="text-on-surface-variant">Tax</span>
+<span class="font-mono text-on-surface">$10.20</span>
+</div>
+<div class="h-px bg-surface-container-low w-full mb-4"></div>
+<div class="flex justify-between items-center">
+<span class="font-headline font-semibold text-on-surface">Total</span>
+<span class="font-mono font-bold text-xl text-primary">$130.20</span>
+</div>
+<div class="mt-4 p-3 bg-surface-container-low rounded-xl flex items-center gap-3">
+<span class="material-symbols-outlined text-outline">credit_card</span>
+<span class="text-sm text-on-surface">Paid via Apple Pay (•••• 1234)</span>
+</div>
+</div>
+</section>
+<!-- NOTES SECTION -->
+<section>
+<h2 class="text-sm font-headline font-semibold text-outline mb-3 tracking-wider uppercase">Notes</h2>
+<div class="bg-surface-container-lowest rounded-2xl p-4 shadow-[0_4px_20px_rgba(0,0,0,0.03)] border border-surface-container-low/50">
+<p class="text-sm text-on-surface-variant leading-relaxed">
+                    Please arrive 10 minutes early. Let the stylist know if you have any sensitive scalp issues or allergies to specific hair products.
+                </p>
+</div>
+</section>
+</main>
+<!-- Sticky Bottom Action -->
+<div class="fixed bottom-0 left-0 right-0 p-4 bg-surface/80 backdrop-blur-xl border-t border-surface-container-low pb-safe z-20">
+<button class="w-full py-4 rounded-xl bg-error-container text-on-error-container font-headline font-semibold text-center transition-opacity hover:opacity-90">
+            Cancel Appointment
+        </button>
+</div>
+<!-- ACTION SHEET OVERLAY (Hidden by default, shown for demonstration structure) -->
+<!-- 
+    <div class="fixed inset-0 z-50 bg-on-surface/40 backdrop-blur-sm flex flex-col justify-end">
+        <div class="bg-surface rounded-t-3xl p-6 pb-safe animate-slide-up">
+            <div class="w-12 h-1.5 bg-surface-container-high rounded-full mx-auto mb-6"></div>
+            
+            <h3 class="text-xl font-headline font-bold text-on-surface text-center mb-2">Cancel Appointment?</h3>
+            <p class="text-on-surface-variant text-center mb-8">Are you sure you want to cancel your appointment with Sarah? This action cannot be undone.</p>
+            
+            <div class="space-y-3">
+                <button class="w-full py-4 rounded-xl bg-error text-on-error font-headline font-semibold text-center shadow-sm">
+                    Yes, Cancel Appointment
+                </button>
+                <button class="w-full py-4 rounded-xl bg-surface-container-low text-on-surface font-headline font-semibold text-center">
+                    Keep Appointment
+                </button>
+            </div>
+        </div>
+    </div>
+    -->
+</body></html>

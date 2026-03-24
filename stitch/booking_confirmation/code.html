@@ -1,0 +1,202 @@
+<!DOCTYPE html>
+
+<html class="light" lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<script id="tailwind-config">
+      tailwind.config = {
+        darkMode: "class",
+        theme: {
+          extend: {
+            colors: {
+              "tertiary-fixed-dim": "#62de86",
+              "on-secondary-container": "#730129",
+              "on-primary": "#ffffff",
+              "on-primary-fixed": "#400013",
+              "on-error-container": "#93000a",
+              "surface-tint": "#bd0047",
+              "secondary-fixed-dim": "#ffb2bc",
+              "on-primary-container": "#fffbff",
+              "primary": "#b80046",
+              "inverse-surface": "#2e3034",
+              "secondary": "#aa314e",
+              "error-container": "#ffdad6",
+              "on-surface-variant": "#5c3f43",
+              "background": "#f9f9fe",
+              "tertiary": "#006b32",
+              "on-tertiary": "#ffffff",
+              "on-surface": "#1a1c1f",
+              "on-secondary-fixed": "#400013",
+              "tertiary-container": "#008741",
+              "surface-container": "#ededf2",
+              "surface-variant": "#e2e2e7",
+              "on-tertiary-fixed": "#00210b",
+              "surface-container-lowest": "#ffffff",
+              "surface-container-highest": "#e2e2e7",
+              "inverse-primary": "#ffb2bc",
+              "primary-container": "#e40e5a",
+              "inverse-on-surface": "#f0f0f5",
+              "on-background": "#1a1c1f",
+              "on-secondary-fixed-variant": "#891737",
+              "on-tertiary-fixed-variant": "#005226",
+              "secondary-container": "#ff728d",
+              "primary-fixed-dim": "#ffb2bc",
+              "surface-bright": "#f9f9fe",
+              "surface": "#f9f9fe",
+              "primary-fixed": "#ffd9dd",
+              "tertiary-fixed": "#7ffba0",
+              "outline-variant": "#e5bdc1",
+              "outline": "#906e72",
+              "surface-container-low": "#f3f3f8",
+              "secondary-fixed": "#ffd9dd",
+              "on-error": "#ffffff",
+              "on-primary-fixed-variant": "#910035",
+              "surface-container-high": "#e8e8ed",
+              "surface-dim": "#d9dade",
+              "on-secondary": "#ffffff",
+              "on-tertiary-container": "#f7fff3",
+              "error": "#ba1a1a"
+            },
+            fontFamily: {
+              "headline": ["Inter"],
+              "body": ["Inter"],
+              "label": ["Inter"]
+            },
+            borderRadius: {"DEFAULT": "0.25rem", "lg": "0.5rem", "xl": "0.75rem", "full": "9999px"},
+          },
+        },
+      }
+    </script>
+<style>
+        .material-symbols-outlined {
+            font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24;
+        }
+        .squircle {
+            border-radius: 3rem; /* Approximating continuous corner */
+        }
+        @supports (mask-image: paint(squircle)) {
+            .squircle {
+                mask-image: paint(squircle);
+                border-radius: 0;
+            }
+        }
+        .bloom-shadow {
+            box-shadow: 0 10px 30px rgba(26, 28, 31, 0.06);
+        }
+        .glass-sheet {
+            background: rgba(255, 255, 255, 0.8);
+            backdrop-filter: blur(20px);
+            -webkit-backdrop-filter: blur(20px);
+        }
+    </style>
+<style>
+    body {
+      min-height: max(884px, 100dvh);
+    }
+  </style>
+  </head>
+<body class="bg-background font-body text-on-surface antialiased">
+<!-- Full-screen Modal Sheet Container -->
+<div class="min-h-screen w-full flex flex-col max-w-md mx-auto relative bg-surface-container-lowest overflow-hidden">
+<!-- Header / TopAppBar -->
+<header class="fixed top-0 w-full z-50 glass-sheet flex items-center justify-between px-6 py-4">
+<div class="w-10"></div> <!-- Spacer for centering -->
+<h1 class="font-headline font-bold text-lg tracking-tight text-on-surface">Booking Confirmed</h1>
+<button class="text-primary font-headline font-semibold text-base active:scale-95 transition-transform">
+                Done
+            </button>
+</header>
+<!-- Main Content Area -->
+<main class="flex-1 mt-20 px-6 pb-24 overflow-y-auto">
+<!-- Success Status Section -->
+<div class="flex flex-col items-center justify-center text-center py-12 space-y-4">
+<div class="relative">
+<div class="absolute inset-0 bg-primary/10 blur-3xl rounded-full scale-150"></div>
+<span class="material-symbols-outlined text-[80px] text-primary relative" style="font-variation-settings: 'FILL' 1;">
+                        check_circle
+                    </span>
+</div>
+<div class="space-y-2">
+<h2 class="text-[34px] font-bold tracking-tight text-on-surface leading-tight">You're booked!</h2>
+<p class="text-on-surface-variant text-base">You will receive a confirmation shortly via email and SMS.</p>
+</div>
+</div>
+<!-- Booking Summary Card (Inset Grouped Style) -->
+<section class="space-y-6">
+<div class="bg-surface-container-low rounded-[24px] p-6 space-y-5 bloom-shadow">
+<!-- Salon Info -->
+<div class="flex items-center gap-4">
+<div class="w-12 h-12 rounded-xl overflow-hidden bg-surface-variant flex-shrink-0">
+<img alt="Salon Interior" class="w-full h-full object-cover" data-alt="Luxury minimalist hair salon interior" src="https://lh3.googleusercontent.com/aida-public/AB6AXuDBuK3jSteGA2oigVsvfGRrqZrCQuzz_ijsQHe1BPDkceBeAWekJ02VELFEmyKmUw-6BFP67SotYAOWEk6KplBEIS4JO-gUicDPGqGLSKgN2y9GyZbkqvdPDFnqn9y-3iQTS54cBYZAZ88cTYr0t1dl77tksrBA4xbENhrTAFunT9kCG3hf5Q5lSwd9gZDUZLiKiApPHPme8QQZ1Co4h125Yo78J5pGZTOEiuDqp2Ygm_15ZPXV9L6M5S6cPrsfm3OAKmkEjl-UOpLg"/>
+</div>
+<div>
+<p class="text-[13px] font-semibold text-primary uppercase tracking-widest">Salon</p>
+<h3 class="text-lg font-bold">Lumière Aesthetics</h3>
+</div>
+</div>
+<!-- Details Grid -->
+<div class="grid grid-cols-1 gap-4">
+<!-- Service -->
+<div class="flex items-center justify-between py-1">
+<div>
+<p class="text-[13px] text-on-surface-variant font-medium">Service</p>
+<p class="text-base font-semibold">Signature Glass Skin Facial</p>
+</div>
+<span class="material-symbols-outlined text-on-surface-variant/40">face_3</span>
+</div>
+<!-- Stylist -->
+<div class="flex items-center justify-between py-1">
+<div>
+<p class="text-[13px] text-on-surface-variant font-medium">Specialist</p>
+<p class="text-base font-semibold">Elena Rodriguez</p>
+</div>
+<div class="w-8 h-8 rounded-full overflow-hidden bg-surface-variant border-2 border-surface-container-lowest">
+<img alt="Stylist portrait" class="w-full h-full object-cover" data-alt="Professional skin care specialist portrait" src="https://lh3.googleusercontent.com/aida-public/AB6AXuC3roW3URP5IMUOcAo_94UXjUZCOWLQ-2iYEvL6VdvBjKzHzeFbSCg9gXygTe07ktElTSDq0BnPGktoKgXG3SzAkBMr61bGKtuCxmr_Od3A0FOy-s3Q5ZEuLzAkcvhKGcnh0lYtVYPdbYmdCm_3j7f03uONVsTK2dhBHq9JQgjIV7ov1analKXCMAchkdJt1N44iLH8sgJ-emyaqz3XNt2aB2YR2PlIMfkWykcASgfjwNeYghFk8jwISa4_oT9ZiH8cBpnk6MLfkSrA"/>
+</div>
+</div>
+<!-- Date & Time -->
+<div class="flex items-center justify-between py-1">
+<div>
+<p class="text-[13px] text-on-surface-variant font-medium">Date &amp; Time</p>
+<p class="text-base font-semibold">Friday, Oct 24 • <span class="font-mono">14:30</span></p>
+</div>
+<span class="material-symbols-outlined text-on-surface-variant/40">calendar_month</span>
+</div>
+<!-- Price -->
+<div class="flex items-center justify-between pt-3 border-t border-outline-variant/15">
+<p class="text-base font-bold">Total Price</p>
+<p class="text-xl font-bold font-mono text-primary">$120.00</p>
+</div>
+</div>
+</div>
+<!-- Actions Section -->
+<div class="flex flex-col gap-4">
+<!-- Add to Calendar Button -->
+<button class="w-full h-14 bg-secondary-container rounded-xl flex items-center justify-center gap-3 active:scale-[0.98] transition-all bloom-shadow">
+<span class="material-symbols-outlined text-on-secondary-container">calendar_add_on</span>
+<span class="text-on-secondary-container font-headline font-bold text-base">Add to Calendar</span>
+</button>
+<!-- View Booking Secondary Button -->
+<button class="w-full h-14 bg-transparent border-2 border-primary/20 rounded-xl flex items-center justify-center active:scale-[0.98] transition-all">
+<span class="text-primary font-headline font-bold text-base">View Booking Details</span>
+</button>
+</div>
+</section>
+<!-- Bottom Note -->
+<p class="mt-8 text-center text-[13px] text-on-surface-variant/60 leading-relaxed px-4">
+                Need to reschedule? You can change your booking up to 24 hours before your appointment through the Profile tab.
+            </p>
+</main>
+<!-- Navigation Placeholder (Suppressed as per task for a full-screen modal focus) -->
+<div class="h-20 w-full pointer-events-none"></div>
+</div>
+<!-- Background Decorative Elements -->
+<div class="fixed top-0 left-0 w-full h-full -z-10 bg-background overflow-hidden pointer-events-none">
+<div class="absolute -top-24 -right-24 w-96 h-96 bg-primary/5 rounded-full blur-[100px]"></div>
+<div class="absolute top-1/2 -left-24 w-72 h-72 bg-secondary-container/10 rounded-full blur-[80px]"></div>
+</div>
+</body></html>

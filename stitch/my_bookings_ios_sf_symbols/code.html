@@ -1,0 +1,228 @@
+<!DOCTYPE html>
+
+<html lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>Bookings - GlowBook</title>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&amp;family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<script id="tailwind-config">
+      tailwind.config = {
+        darkMode: "class",
+        theme: {
+          extend: {
+            colors: {
+              "on-primary-fixed": "#400013",
+              "surface-variant": "#e2e2e7",
+              "on-primary": "#ffffff",
+              "primary-container": "#e40e5a",
+              "on-secondary-fixed": "#400013",
+              "outline-variant": "#e5bdc1",
+              "surface-dim": "#d9dade",
+              "surface-bright": "#f9f9fe",
+              "inverse-primary": "#ffb2bc",
+              "tertiary-container": "#008741",
+              "on-error": "#ffffff",
+              "tertiary-fixed": "#7ffba0",
+              "secondary-fixed-dim": "#ffb2bc",
+              "tertiary-fixed-dim": "#62de86",
+              "surface-container": "#ededf2",
+              "secondary-container": "#ff728d",
+              "on-surface-variant": "#5c3f43",
+              "inverse-surface": "#2e3034",
+              "primary-fixed": "#ffd9dd",
+              "surface": "#f9f9fe",
+              "secondary-fixed": "#ffd9dd",
+              "on-tertiary": "#ffffff",
+              "on-surface": "#1a1c1f",
+              "on-secondary-container": "#730129",
+              "tertiary": "#006b32",
+              "surface-container-highest": "#e2e2e7",
+              "secondary": "#aa314e",
+              "primary": "#b80046",
+              "on-error-container": "#93000a",
+              "error": "#ba1a1a",
+              "inverse-on-surface": "#f0f0f5",
+              "surface-container-high": "#e8e8ed",
+              "surface-container-lowest": "#ffffff",
+              "primary-fixed-dim": "#ffb2bc",
+              "on-tertiary-fixed": "#00210b",
+              "on-primary-container": "#fffbff",
+              "on-primary-fixed-variant": "#910035",
+              "surface-tint": "#bd0047",
+              "outline": "#906e72",
+              "on-tertiary-container": "#f7fff3",
+              "surface-container-low": "#f3f3f8",
+              "on-background": "#1a1c1f",
+              "on-tertiary-fixed-variant": "#005226",
+              "on-secondary-fixed-variant": "#891737",
+              "on-secondary": "#ffffff",
+              "background": "#f9f9fe",
+              "error-container": "#ffdad6"
+            },
+            fontFamily: {
+              "headline": ["Inter", "sans-serif"],
+              "body": ["Inter", "sans-serif"],
+              "label": ["Inter", "sans-serif"]
+            },
+            borderRadius: {"DEFAULT": "0.25rem", "lg": "0.5rem", "xl": "0.75rem", "full": "9999px"},
+          },
+        },
+      }
+    </script>
+<style>
+        .material-symbols-outlined {
+            font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24;
+        }
+        .ios-blur {
+            backdrop-filter: blur(20px);
+            -webkit-backdrop-filter: blur(20px);
+        }
+        .inset-grouped-container {
+            padding: 0 16px;
+        }
+    </style>
+<style>
+    body {
+      min-height: max(884px, 100dvh);
+    }
+  </style>
+  </head>
+<body class="bg-surface font-body text-on-surface antialiased">
+<!-- Top Navigation Shell -->
+<header class="sticky top-0 w-full z-50 bg-white/80 dark:bg-black/80 backdrop-blur-xl flex items-center justify-between px-4 h-11">
+<div class="flex items-center gap-2">
+<span class="material-symbols-outlined text-slate-400 dark:text-slate-500 active:scale-95 duration-200 transition-opacity hover:opacity-70">menu</span>
+</div>
+<div class="font-sans antialiased text-[17px] font-semibold tracking-tight text-xl font-bold tracking-tighter text-slate-900 dark:text-white">GlowBook</div>
+<div class="flex items-center gap-2">
+<span class="material-symbols-outlined text-slate-400 dark:text-slate-500 active:scale-95 duration-200 transition-opacity hover:opacity-70">notifications</span>
+</div>
+</header>
+<main class="pb-32">
+<!-- iOS Large Title -->
+<div class="px-5 pt-6 pb-2">
+<h1 class="text-[34px] font-bold tracking-tight text-on-surface">Bookings</h1>
+</div>
+<!-- Segmented Control -->
+<div class="px-5 mb-6">
+<div class="flex bg-surface-container-high p-1 rounded-xl">
+<button class="flex-1 py-1.5 text-[13px] font-semibold rounded-lg bg-surface-container-lowest shadow-sm text-on-surface">Upcoming</button>
+<button class="flex-1 py-1.5 text-[13px] font-medium text-on-surface-variant hover:text-on-surface transition-colors">Completed</button>
+<button class="flex-1 py-1.5 text-[13px] font-medium text-on-surface-variant hover:text-on-surface transition-colors">Cancelled</button>
+</div>
+</div>
+<!-- Booking Cards: Inset Grouped List -->
+<div class="inset-grouped-container flex flex-col gap-4">
+<!-- Booking Card 1: Confirmed -->
+<div class="relative group overflow-hidden rounded-2xl bg-surface-container-lowest shadow-[0_10px_30px_rgba(0,0,0,0.04)] border border-outline-variant/10">
+<!-- Swipe Action Reveal Mock (Visual only) -->
+<div class="absolute inset-y-0 right-0 flex translate-x-full group-hover:translate-x-0 transition-transform duration-300">
+<div class="bg-surface-container-highest px-6 flex items-center justify-center text-primary font-semibold text-sm">Cancel</div>
+</div>
+<div class="p-4 flex gap-4 transition-transform duration-300 group-hover:-translate-x-12">
+<div class="w-20 h-20 rounded-xl overflow-hidden flex-shrink-0">
+<img class="w-full h-full object-cover" data-alt="Modern luxury hair salon interior" src="https://lh3.googleusercontent.com/aida-public/AB6AXuA1k4aFvivfvgBPzabfwimBNnKipbTK89OG_0_2gIkyB5oxjExMWJKkGZqPw_rr7b6bIamlxT2WWWR7ySmvcp64Is3JUsbavWH8BZ28podWh0p3xQ0-_bxsnpFcN6BNu-kKCWV6kokyXLttfpkqicgQ0VvKHEHofa_V5mecKcZiD0I0JZszXopFNq4sMtaNwBLHSuWJulh0AiCd7A8ILnL1Jn83iG9Z7E5wtPxA3O7J8Kay8auevXv_fbu8at83ymnMZwMwEBDaL_C3"/>
+</div>
+<div class="flex flex-col justify-between flex-grow">
+<div class="flex justify-between items-start">
+<div>
+<h3 class="text-[17px] font-semibold leading-tight text-on-surface">Radiant Glow Studio</h3>
+<p class="text-[15px] text-on-surface-variant mt-0.5">Balayage &amp; Styling</p>
+</div>
+<span class="px-2.5 py-1 rounded-full text-[11px] font-bold uppercase tracking-wider bg-tertiary-container/10 text-tertiary">Confirmed</span>
+</div>
+<div class="flex items-center justify-between mt-2">
+<div class="flex items-center gap-1.5">
+<span class="material-symbols-outlined text-[18px] text-primary">person</span>
+<span class="text-[14px] font-medium text-on-surface-variant">Elena Rossi</span>
+</div>
+<div class="text-[14px] font-mono font-medium text-primary">Oct 24 • 14:30</div>
+</div>
+</div>
+</div>
+</div>
+<!-- Booking Card 2: Pending -->
+<div class="relative group overflow-hidden rounded-2xl bg-surface-container-lowest shadow-[0_10px_30px_rgba(0,0,0,0.04)] border border-outline-variant/10">
+<div class="p-4 flex gap-4 transition-transform duration-300 group-hover:-translate-x-12">
+<div class="w-20 h-20 rounded-xl overflow-hidden flex-shrink-0">
+<img class="w-full h-full object-cover" data-alt="Chic facial treatment room aesthetic" src="https://lh3.googleusercontent.com/aida-public/AB6AXuCallOvgRrudI9uKJhVKU4iOkMMel5Ot62a-IiFA-4kqZZli2bxDY9-ybfUwRNWau63kLTRb1qJyz0r03tlYUGG41wdiTFtwFmNXyDhgWVhseHw3BHDp5XXfIRNoir5V6tWOZWgFkKboX77cMY3nJFc8oYi_LVERPgI2fT0gCx37sIogM5OADutJVGbcBw9DPBMli3b2GZCgUh5_q3P6itaHMlBHXVak3HRgaB3GyBafGuyUpHqBlONSukY1DBUzVKbtMj1lOQksnMh"/>
+</div>
+<div class="flex flex-col justify-between flex-grow">
+<div class="flex justify-between items-start">
+<div>
+<h3 class="text-[17px] font-semibold leading-tight text-on-surface">The Skin Loft</h3>
+<p class="text-[15px] text-on-surface-variant mt-0.5">HydraFacial Deluxe</p>
+</div>
+<span class="px-2.5 py-1 rounded-full text-[11px] font-bold uppercase tracking-wider bg-secondary-container/20 text-secondary">Pending</span>
+</div>
+<div class="flex items-center justify-between mt-2">
+<div class="flex items-center gap-1.5">
+<span class="material-symbols-outlined text-[18px] text-primary">person</span>
+<span class="text-[14px] font-medium text-on-surface-variant">Marcus Chen</span>
+</div>
+<div class="text-[14px] font-mono font-medium text-primary">Oct 28 • 11:00</div>
+</div>
+</div>
+</div>
+</div>
+<!-- Booking Card 3: Confirmed -->
+<div class="relative group overflow-hidden rounded-2xl bg-surface-container-lowest shadow-[0_10px_30px_rgba(0,0,0,0.04)] border border-outline-variant/10">
+<div class="p-4 flex gap-4 transition-transform duration-300 group-hover:-translate-x-12">
+<div class="w-20 h-20 rounded-xl overflow-hidden flex-shrink-0">
+<img class="w-full h-full object-cover" data-alt="Manicure and nail art display" src="https://lh3.googleusercontent.com/aida-public/AB6AXuCSbEdg6A_ICGy1F5iGHT12vHVuQInVZKLBxIbPVukorHWKxShK4r1nY-v-rWvfmNtHveZVaRrkXkxvQmNLjgE92dhr-KjcJSVwq91lvdDG-qSqujEYpa0qeR1lWPDWRN8vIimbQ5HkVOzrkjU58ta1mnf5WnYnl5x8GXJhiYXuMqXG29bu3I1FJIBOBeJpkRvbGeHc4X3XpAgXPSGcFrtllbZZW21HJ7ehFjM8rI9oFkTWKy5byc3F3s_Ldm8kpb3zYJfYjLnCUPAb"/>
+</div>
+<div class="flex flex-col justify-between flex-grow">
+<div class="flex justify-between items-start">
+<div>
+<h3 class="text-[17px] font-semibold leading-tight text-on-surface">Velvet Nails Bar</h3>
+<p class="text-[15px] text-on-surface-variant mt-0.5">Gel Manicure + Art</p>
+</div>
+<span class="px-2.5 py-1 rounded-full text-[11px] font-bold uppercase tracking-wider bg-tertiary-container/10 text-tertiary">Confirmed</span>
+</div>
+<div class="flex items-center justify-between mt-2">
+<div class="flex items-center gap-1.5">
+<span class="material-symbols-outlined text-[18px] text-primary">person</span>
+<span class="text-[14px] font-medium text-on-surface-variant">Sofia Kim</span>
+</div>
+<div class="text-[14px] font-mono font-medium text-primary">Nov 02 • 16:45</div>
+</div>
+</div>
+</div>
+</div>
+</div>
+<!-- Suggestion Card (Bento Style) -->
+<div class="px-5 mt-10">
+<div class="bg-gradient-to-br from-primary to-primary-container p-6 rounded-3xl text-on-primary shadow-xl relative overflow-hidden">
+<div class="relative z-10">
+<h4 class="text-xl font-bold mb-1">Time for a refresh?</h4>
+<p class="text-on-primary/80 text-[15px] max-w-[200px] mb-4">Your last manicure was 3 weeks ago. Schedule a fill-in today.</p>
+<button class="bg-white text-primary px-5 py-2.5 rounded-xl font-semibold text-[15px] active:scale-95 transition-transform">Book Now</button>
+</div>
+<div class="absolute -right-4 -bottom-4 opacity-20">
+<span class="material-symbols-outlined text-[120px]" style="font-variation-settings: 'FILL' 1;">spa</span>
+</div>
+</div>
+</div>
+</main>
+<!-- Bottom Navigation Shell -->
+<nav class="fixed bottom-0 w-full z-50 border-t border-slate-200/20 dark:border-white/10 bg-white/80 dark:bg-black/80 backdrop-blur-xl flex justify-around items-center h-[83px] pb-safe px-2">
+<a class="flex flex-col items-center justify-center text-slate-400 dark:text-slate-500 hover:text-[#FF2D6B] transition-colors active:scale-90 duration-200" href="#">
+<span class="material-symbols-outlined">home</span>
+<span class="text-[10px] font-medium tracking-wide">Home</span>
+</a>
+<a class="flex flex-col items-center justify-center text-slate-400 dark:text-slate-500 hover:text-[#FF2D6B] transition-colors active:scale-90 duration-200" href="#">
+<span class="material-symbols-outlined">search</span>
+<span class="text-[10px] font-medium tracking-wide">Explore</span>
+</a>
+<a class="flex flex-col items-center justify-center text-[#FF2D6B] dark:text-[#FF2D6B] active:scale-90 duration-200" href="#">
+<span class="material-symbols-outlined" style="font-variation-settings: 'FILL' 1;">calendar_today</span>
+<span class="text-[10px] font-medium tracking-wide">Bookings</span>
+</a>
+<a class="flex flex-col items-center justify-center text-slate-400 dark:text-slate-500 hover:text-[#FF2D6B] transition-colors active:scale-90 duration-200" href="#">
+<span class="material-symbols-outlined">account_circle</span>
+<span class="text-[10px] font-medium tracking-wide">Profile</span>
+</a>
+</nav>
+</body></html>

@@ -1,0 +1,114 @@
+<!DOCTYPE html>
+
+<html class="light" lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700;800;900&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<script id="tailwind-config">
+      tailwind.config = {
+        darkMode: "class",
+        theme: {
+          extend: {
+            colors: {
+              "tertiary-fixed-dim": "#62de86",
+              "on-secondary-container": "#730129",
+              "on-primary": "#ffffff",
+              "on-primary-fixed": "#400013",
+              "on-error-container": "#93000a",
+              "surface-tint": "#bd0047",
+              "secondary-fixed-dim": "#ffb2bc",
+              "on-primary-container": "#fffbff",
+              "primary": "#b80046",
+              "inverse-surface": "#2e3034",
+              "secondary": "#aa314e",
+              "error-container": "#ffdad6",
+              "on-surface-variant": "#5c3f43",
+              "background": "#f9f9fe",
+              "tertiary": "#006b32",
+              "on-tertiary": "#ffffff",
+              "on-surface": "#1a1c1f",
+              "on-secondary-fixed": "#400013",
+              "tertiary-container": "#008741",
+              "surface-container": "#ededf2",
+              "surface-variant": "#e2e2e7",
+              "on-tertiary-fixed": "#00210b",
+              "surface-container-lowest": "#ffffff",
+              "surface-container-highest": "#e2e2e7",
+              "inverse-primary": "#ffb2bc",
+              "primary-container": "#e40e5a",
+              "inverse-on-surface": "#f0f0f5",
+              "on-background": "#1a1c1f",
+              "on-secondary-fixed-variant": "#891737",
+              "on-tertiary-fixed-variant": "#005226",
+              "secondary-container": "#ff728d",
+              "primary-fixed-dim": "#ffb2bc",
+              "surface-bright": "#f9f9fe",
+              "surface": "#f9f9fe",
+              "primary-fixed": "#ffd9dd",
+              "tertiary-fixed": "#7ffba0",
+              "outline-variant": "#e5bdc1",
+              "outline": "#906e72",
+              "surface-container-low": "#f3f3f8",
+              "secondary-fixed": "#ffd9dd",
+              "on-error": "#ffffff",
+              "on-primary-fixed-variant": "#910035",
+              "surface-container-high": "#e8e8ed",
+              "surface-dim": "#d9dade",
+              "on-secondary": "#ffffff",
+              "on-tertiary-container": "#f7fff3",
+              "error": "#ba1a1a"
+            },
+            fontFamily: {
+              "headline": ["Inter"],
+              "body": ["Inter"],
+              "label": ["Inter"]
+            },
+            borderRadius: {"DEFAULT": "0.25rem", "lg": "0.5rem", "xl": "0.75rem", "full": "9999px"},
+          },
+        },
+      }
+    </script>
+<style>
+        .material-symbols-outlined {
+            font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24;
+        }
+        /* Continuous corner radius simulation (Squircle) */
+        .squircle-lg {
+            border-radius: 22%;
+        }
+    </style>
+<style>
+    body {
+      min-height: max(884px, 100dvh);
+    }
+  </style>
+</head>
+<body class="bg-surface-container-lowest text-on-surface font-body antialiased">
+<!-- Shell Visibility & Relevance Filter: Navigation is suppressed for Splash/Launch screens -->
+<main class="flex flex-col items-center justify-center min-h-screen">
+<!-- App Icon Section -->
+<div class="flex flex-col items-center gap-6">
+<!-- Icon Primitive: 76pt (approx 101px) proportion -->
+<!-- Using Gradient Rule: Primary to Primary Container -->
+<div class="w-[101px] h-[101px] bg-gradient-to-br from-primary to-primary-container flex items-center justify-center shadow-lg squircle-lg" style="box-shadow: 0 10px 30px rgba(184, 0, 70, 0.06);">
+<svg class="w-14 h-14 text-on-primary" fill="none" viewbox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+<path d="M19.5 3C19.5 3 19.5 5.5 21 5.5C19.5 5.5 19.5 8 19.5 8C19.5 8 19.5 5.5 18 5.5C19.5 5.5 19.5 3 19.5 3Z" fill="currentColor"></path>
+<path d="M15.5 1C15.5 1 15.5 2.5 16.5 2.5C15.5 2.5 15.5 4 15.5 4C15.5 4 15.5 2.5 14.5 2.5C15.5 2.5 15.5 1 15.5 1Z" fill="currentColor"></path>
+<path clip-rule="evenodd" d="M6 10.5C7.38071 10.5 8.5 9.38071 8.5 8C8.5 6.61929 7.38071 5.5 6 5.5C4.61929 5.5 3.5 6.61929 3.5 8C3.5 9.38071 4.61929 10.5 6 10.5ZM6 12C3.79086 12 2 10.2091 2 8C2 5.79086 3.79086 4 6 4C7.03152 4 7.97343 4.39054 8.68264 5.03164L11 7.349V3H13V9.349L15.3174 7.03164C16.0266 4.39054 16.9685 4 18 4C20.2091 4 22 5.79086 22 8C22 10.2091 20.2091 12 18 12C16.9685 12 16.0266 11.6095 15.3174 10.9684L12 7.651V21H10V7.651L6.68264 10.9684C5.97343 11.6095 5.03152 12 6 12ZM18 10.5C19.3807 10.5 20.5 9.38071 20.5 8C20.5 6.61929 19.3807 5.5 18 5.5C16.6193 5.5 15.5 6.61929 15.5 8C15.5 9.38071 16.6193 10.5 18 10.5Z" fill="currentColor" fill-rule="evenodd"></path>
+</svg>
+</div>
+<!-- Typography: Brand Label -->
+<!-- Casing Integrity: GlowBook exactly as provided -->
+<h1 class="font-headline font-semibold text-[20pt] text-on-surface tracking-tight">
+                GlowBook
+            </h1>
+</div>
+</main>
+<!-- Contextual Footer (Hidden/Minimal for Apple Splash Style) -->
+<div class="fixed bottom-12 left-0 right-0 flex justify-center">
+<!-- Optional system status or purely empty to maintain minimalist aesthetic -->
+</div>
+</body></html>

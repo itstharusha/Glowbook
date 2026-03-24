@@ -1,0 +1,246 @@
+<!DOCTYPE html>
+
+<html class="light" lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<style>
+        .material-symbols-outlined {
+            font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24;
+        }
+        .apple-blur {
+            backdrop-filter: blur(20px);
+            -webkit-backdrop-filter: blur(20px);
+        }
+        .hide-scrollbar::-webkit-scrollbar {
+            display: none;
+        }
+        .hide-scrollbar {
+            -ms-overflow-style: none;
+            scrollbar-width: none;
+        }
+    </style>
+<script id="tailwind-config">
+        tailwind.config = {
+            darkMode: "class",
+            theme: {
+                extend: {
+                    colors: {
+                        "tertiary-fixed-dim": "#62de86",
+                        "on-secondary-container": "#730129",
+                        "on-primary": "#ffffff",
+                        "on-primary-fixed": "#400013",
+                        "on-error-container": "#93000a",
+                        "surface-tint": "#bd0047",
+                        "secondary-fixed-dim": "#ffb2bc",
+                        "on-primary-container": "#fffbff",
+                        "primary": "#b80046",
+                        "inverse-surface": "#2e3034",
+                        "secondary": "#aa314e",
+                        "error-container": "#ffdad6",
+                        "on-surface-variant": "#5c3f43",
+                        "background": "#f9f9fe",
+                        "tertiary": "#006b32",
+                        "on-tertiary": "#ffffff",
+                        "on-surface": "#1a1c1f",
+                        "on-secondary-fixed": "#400013",
+                        "tertiary-container": "#008741",
+                        "surface-container": "#ededf2",
+                        "surface-variant": "#e2e2e7",
+                        "on-tertiary-fixed": "#00210b",
+                        "surface-container-lowest": "#ffffff",
+                        "surface-container-highest": "#e2e2e7",
+                        "inverse-primary": "#ffb2bc",
+                        "primary-container": "#e40e5a",
+                        "inverse-on-surface": "#f0f0f5",
+                        "on-background": "#1a1c1f",
+                        "on-secondary-fixed-variant": "#891737",
+                        "on-tertiary-fixed-variant": "#005226",
+                        "secondary-container": "#ff728d",
+                        "primary-fixed-dim": "#ffb2bc",
+                        "surface-bright": "#f9f9fe",
+                        "surface": "#f9f9fe",
+                        "primary-fixed": "#ffd9dd",
+                        "tertiary-fixed": "#7ffba0",
+                        "outline-variant": "#e5bdc1",
+                        "outline": "#906e72",
+                        "surface-container-low": "#f3f3f8",
+                        "secondary-fixed": "#ffd9dd",
+                        "on-error": "#ffffff",
+                        "on-primary-fixed-variant": "#910035",
+                        "surface-container-high": "#e8e8ed",
+                        "surface-dim": "#d9dade",
+                        "on-secondary": "#ffffff",
+                        "on-tertiary-container": "#f7fff3",
+                        "error": "#ba1a1a"
+                    },
+                    fontFamily: {
+                        "headline": ["Inter"],
+                        "body": ["Inter"],
+                        "label": ["Inter"]
+                    },
+                    borderRadius: {"DEFAULT": "0.25rem", "lg": "0.5rem", "xl": "0.75rem", "full": "9999px"},
+                },
+            },
+        }
+    </script>
+<style>
+    body {
+      min-height: max(884px, 100dvh);
+    }
+  </style>
+  </head>
+<body class="bg-background text-on-surface font-body min-h-screen pb-32">
+<!-- Top Navigation Bar -->
+<nav class="fixed top-0 w-full z-50 bg-white/80 dark:bg-black/80 apple-blur border-none flex items-center justify-between px-6 py-4">
+<div class="flex items-center gap-4">
+<span class="material-symbols-outlined text-on-surface cursor-pointer">arrow_back_ios</span>
+</div>
+<h1 class="text-on-surface font-headline font-bold text-lg tracking-tight">Book Appointment</h1>
+<button class="text-primary font-semibold hover:opacity-70 transition-opacity">Cancel</button>
+</nav>
+<main class="pt-20 px-4 max-w-2xl mx-auto space-y-8">
+<!-- Progress Steps -->
+<div class="flex justify-center items-center gap-3 py-4">
+<!-- Step 1: Completed -->
+<div class="w-8 h-8 rounded-full bg-primary-container flex items-center justify-center">
+<span class="material-symbols-outlined text-white text-sm" style="font-variation-settings: 'FILL' 1;">check</span>
+</div>
+<div class="h-0.5 w-8 bg-primary-container/30"></div>
+<!-- Step 2: Active -->
+<div class="w-8 h-8 rounded-full border-2 border-primary-container flex items-center justify-center">
+<div class="w-2.5 h-2.5 rounded-full bg-primary-container"></div>
+</div>
+<div class="h-0.5 w-8 bg-surface-variant"></div>
+<!-- Step 3: Future -->
+<div class="w-8 h-8 rounded-full bg-surface-variant flex items-center justify-center">
+<div class="w-2.5 h-2.5 rounded-full bg-outline-variant"></div>
+</div>
+</div>
+<!-- Step 1: Service Selection (Collapsed/Summary view for current step visualization) -->
+<section class="space-y-4">
+<div class="flex items-center justify-between">
+<h2 class="text-xl font-bold font-headline tracking-tight">Select Service</h2>
+<span class="text-primary text-sm font-semibold">Change</span>
+</div>
+<div class="bg-surface-container-low rounded-xl p-1 overflow-hidden">
+<div class="bg-surface-container-lowest p-4 flex justify-between items-center transition-all">
+<div class="flex flex-col">
+<span class="font-headline font-semibold text-on-surface">Signature Facial Glow</span>
+<span class="text-on-surface-variant text-sm">60 mins • $120.00</span>
+</div>
+<span class="material-symbols-outlined text-primary" style="font-variation-settings: 'FILL' 1;">check_circle</span>
+</div>
+</div>
+</section>
+<!-- Step 2: Stylist & Schedule (Active Focus) -->
+<section class="space-y-6">
+<div>
+<h2 class="text-xl font-bold font-headline tracking-tight mb-4">Choose Stylist</h2>
+<div class="flex gap-4 overflow-x-auto hide-scrollbar pb-2 px-1">
+<div class="flex flex-col items-center gap-2 group cursor-pointer">
+<div class="w-16 h-16 rounded-full ring-2 ring-primary ring-offset-2 overflow-hidden bg-surface-container-high">
+<img alt="" class="w-full h-full object-cover" data-alt="Portrait of a professional beauty stylist" src="https://lh3.googleusercontent.com/aida-public/AB6AXuBLMrKEMVOFrU0YQqzdqR-8rF05HbF9gM-RfrhhisJCxgO3gkCodnZX57Ko8BcdDxMGRUBM-z1D3BHr4Vu9BlbuUWv9gzE-cDzufuehPuO1_UKkrHVLC2aXYXPbxoyrzW6U8pq6G2yXsqHCoNQGlMauVKOt4ErnfKjFqZKYhbQIgptlkpn2msUSm8jd4ECDEQVYt1Bs1LPNKyzUqaae1uwnvNgqSfF_7XphL7jhdTzeq1Yx5GtvKk-XPWrzWNCs2mGNdzw4fGOOHE-T"/>
+</div>
+<span class="text-xs font-bold text-primary">Elena</span>
+</div>
+<div class="flex flex-col items-center gap-2 group cursor-pointer opacity-60 grayscale hover:grayscale-0 hover:opacity-100 transition-all">
+<div class="w-16 h-16 rounded-full overflow-hidden bg-surface-container-high">
+<img alt="" class="w-full h-full object-cover" data-alt="Portrait of a professional male stylist" src="https://lh3.googleusercontent.com/aida-public/AB6AXuByk-qB_LJIdlpRyoKKPgTdLM4-f64bQdVTpX01Ahtut9Dtrwgp0Ogdi0wq27j6wg44h0g2Z8gpto2yeCcl51Ib_7dEeStqm8VXdf5S122h-7gInoeiAr4YlmiUnFOK1S62ogMIRdZAlP9d9hvpccnqWzVnst1l5yJr5nGzl_U_4BY4LF8TX14pg9GVFx5D2J62jT7fXZ9aWJBCE-tyPs7mtXijcvv_s5nv8Qbz0tigI6mfGGmaxkC9nf0EWQWRg9BO4lAdddlePO3p"/>
+</div>
+<span class="text-xs font-semibold">Marcus</span>
+</div>
+<div class="flex flex-col items-center gap-2 group cursor-pointer opacity-60 grayscale hover:grayscale-0 hover:opacity-100 transition-all">
+<div class="w-16 h-16 rounded-full overflow-hidden bg-surface-container-high">
+<img alt="" class="w-full h-full object-cover" data-alt="Portrait of a professional female aesthetician" src="https://lh3.googleusercontent.com/aida-public/AB6AXuDFHlACZVxW4KRrLVzhwrpu2EzJNmMB3DfA52XlqoxS3ZCa_sFFAUyyTqnarxy5wxFS9fT5lLmDNyIcrgSV44rNrAol3qF4179Ur0hRsA7SIGxuhzLhtOsVNvXO5EmQibVnEtUQ-KnqeED2GgnTUvJPFRHEJsFUCzHJbbhVaIfHmTY3wRsgdhCAqJMVfxKIBM32vPvhfZv5rhEv45GgIULr7xwFlXJix51uQmzcVcNJcE8A0AK9w7-Ds-_8P1FNDtbV5uqtK8MjWjst"/>
+</div>
+<span class="text-xs font-semibold">Sofia</span>
+</div>
+<div class="flex flex-col items-center gap-2 group cursor-pointer opacity-60 grayscale hover:grayscale-0 hover:opacity-100 transition-all">
+<div class="w-16 h-16 rounded-full overflow-hidden bg-surface-container-high">
+<img alt="" class="w-full h-full object-cover" data-alt="Portrait of a professional salon technician" src="https://lh3.googleusercontent.com/aida-public/AB6AXuDGqT4afPvqmUVGkxdP2T3wmJxDBtX8DUVaFsVYAaorcPK41Y28FlUoIo-PtU_lbdNu1jNn8C95lG6TGWR-gOxIaHX7gHRWYrXIamjIiTIFQhpzEePRYJwsxUb_jgsmci-sgSVS8uCJ6atD12_GWxnwL3YjUh0EhJKPDImX1HBBF3gmGWtvz_xX_GE9ASFFkQ2murAe3Wom1c01fWrvrWfPyAcAmQ6mEVF45ixOu4vOl3JT5EYuueqwr4hvdB8yEnKlgdEkReKF7roy"/>
+</div>
+<span class="text-xs font-semibold">David</span>
+</div>
+</div>
+</div>
+<div>
+<h2 class="text-xl font-bold font-headline tracking-tight mb-4">Select Date</h2>
+<div class="flex gap-3 overflow-x-auto hide-scrollbar pb-2">
+<div class="flex-shrink-0 w-14 h-20 rounded-xl bg-surface-container-low flex flex-col items-center justify-center transition-all hover:bg-surface-container-high cursor-pointer">
+<span class="text-[10px] uppercase tracking-widest text-on-surface-variant font-bold">Mon</span>
+<span class="text-lg font-bold">14</span>
+</div>
+<div class="flex-shrink-0 w-14 h-20 rounded-xl bg-primary-container text-white flex flex-col items-center justify-center shadow-lg shadow-primary-container/20">
+<span class="text-[10px] uppercase tracking-widest opacity-80 font-bold">Tue</span>
+<span class="text-lg font-bold">15</span>
+</div>
+<div class="flex-shrink-0 w-14 h-20 rounded-xl bg-surface-container-low flex flex-col items-center justify-center">
+<span class="text-[10px] uppercase tracking-widest text-on-surface-variant font-bold">Wed</span>
+<span class="text-lg font-bold">16</span>
+</div>
+<div class="flex-shrink-0 w-14 h-20 rounded-xl bg-surface-container-low flex flex-col items-center justify-center">
+<span class="text-[10px] uppercase tracking-widest text-on-surface-variant font-bold">Thu</span>
+<span class="text-lg font-bold">17</span>
+</div>
+<div class="flex-shrink-0 w-14 h-20 rounded-xl bg-surface-container-low flex flex-col items-center justify-center">
+<span class="text-[10px] uppercase tracking-widest text-on-surface-variant font-bold">Fri</span>
+<span class="text-lg font-bold">18</span>
+</div>
+</div>
+</div>
+<div>
+<h2 class="text-xl font-bold font-headline tracking-tight mb-4">Select Time</h2>
+<div class="grid grid-cols-3 gap-3">
+<div class="py-3 px-2 text-center rounded-xl bg-surface-container-lowest border-outline-variant/15 border text-sm font-semibold hover:border-primary-container transition-colors cursor-pointer">09:00</div>
+<div class="py-3 px-2 text-center rounded-xl bg-surface-container-lowest border-outline-variant/15 border text-sm font-semibold hover:border-primary-container transition-colors cursor-pointer">10:30</div>
+<div class="py-3 px-2 text-center rounded-xl bg-primary-container text-white text-sm font-bold shadow-md">11:15</div>
+<div class="py-3 px-2 text-center rounded-xl bg-surface-container-lowest border-outline-variant/15 border text-sm font-semibold hover:border-primary-container transition-colors cursor-pointer">13:00</div>
+<div class="py-3 px-2 text-center rounded-xl bg-surface-container-lowest border-outline-variant/15 border text-sm font-semibold hover:border-primary-container transition-colors cursor-pointer">14:30</div>
+<div class="py-3 px-2 text-center rounded-xl bg-surface-container-lowest border-outline-variant/15 border text-sm font-semibold hover:border-primary-container transition-colors cursor-pointer">16:00</div>
+</div>
+</div>
+</section>
+<!-- Step 3: Review & Confirm (Preview) -->
+<section class="space-y-6 opacity-40">
+<h2 class="text-2xl font-bold font-headline tracking-tight">Review &amp; Confirm</h2>
+<div class="bg-surface-container-low rounded-2xl p-1 space-y-1">
+<div class="bg-surface-container-lowest p-4 rounded-t-xl flex justify-between items-center">
+<span class="text-on-surface-variant font-medium">Salon</span>
+<span class="font-semibold">Glow Sanctuary NYC</span>
+</div>
+<div class="bg-surface-container-lowest p-4 flex justify-between items-center">
+<span class="text-on-surface-variant font-medium">Service</span>
+<span class="font-semibold">Signature Facial Glow</span>
+</div>
+<div class="bg-surface-container-lowest p-4 flex justify-between items-center">
+<span class="text-on-surface-variant font-medium">Stylist</span>
+<span class="font-semibold">Elena Rodriguez</span>
+</div>
+<div class="bg-surface-container-lowest p-4 flex justify-between items-center">
+<span class="text-on-surface-variant font-medium">Date &amp; Time</span>
+<span class="font-semibold">Tue, Jun 15 • 11:15 AM</span>
+</div>
+<div class="bg-surface-container-lowest p-4 rounded-b-xl flex justify-between items-center">
+<span class="text-on-surface-variant font-medium">Price</span>
+<span class="font-bold text-primary">$120.00</span>
+</div>
+</div>
+<div class="space-y-2">
+<label class="text-sm font-semibold text-on-surface-variant ml-2">Special Notes (Optional)</label>
+<textarea class="w-full bg-surface-container-low border-none rounded-xl p-4 focus:ring-2 focus:ring-primary/20 text-on-surface placeholder:text-on-surface-variant/40 h-24" placeholder="Any skin sensitivities or preferences?"></textarea>
+</div>
+</section>
+</main>
+<!-- Sticky Bottom Action -->
+<footer class="fixed bottom-0 w-full p-6 bg-white/80 apple-blur z-50">
+<div class="max-w-2xl mx-auto">
+<button class="w-full bg-gradient-to-r from-primary to-primary-container text-white font-headline font-bold py-4 rounded-xl shadow-xl shadow-primary/20 active:scale-95 transition-transform">
+                Confirm Booking
+            </button>
+</div>
+</footer>
+</body></html>

@@ -1,0 +1,205 @@
+<!DOCTYPE html>
+
+<html class="light" lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<script id="tailwind-config">
+      tailwind.config = {
+        darkMode: "class",
+        theme: {
+          extend: {
+            colors: {
+              "on-primary-fixed": "#400013",
+              "surface-variant": "#e2e2e7",
+              "on-primary": "#ffffff",
+              "primary-container": "#e40e5a",
+              "on-secondary-fixed": "#400013",
+              "outline-variant": "#e5bdc1",
+              "surface-dim": "#d9dade",
+              "surface-bright": "#f9f9fe",
+              "inverse-primary": "#ffb2bc",
+              "tertiary-container": "#008741",
+              "on-error": "#ffffff",
+              "tertiary-fixed": "#7ffba0",
+              "secondary-fixed-dim": "#ffb2bc",
+              "tertiary-fixed-dim": "#62de86",
+              "surface-container": "#ededf2",
+              "secondary-container": "#ff728d",
+              "on-surface-variant": "#5c3f43",
+              "inverse-surface": "#2e3034",
+              "primary-fixed": "#ffd9dd",
+              "surface": "#f9f9fe",
+              "secondary-fixed": "#ffd9dd",
+              "on-tertiary": "#ffffff",
+              "on-surface": "#1a1c1f",
+              "on-secondary-container": "#730129",
+              "tertiary": "#006b32",
+              "surface-container-highest": "#e2e2e7",
+              "secondary": "#aa314e",
+              "primary": "#b80046",
+              "on-error-container": "#93000a",
+              "error": "#ba1a1a",
+              "inverse-on-surface": "#f0f0f5",
+              "surface-container-high": "#e8e8ed",
+              "surface-container-lowest": "#ffffff",
+              "primary-fixed-dim": "#ffb2bc",
+              "on-tertiary-fixed": "#00210b",
+              "on-primary-container": "#fffbff",
+              "on-primary-fixed-variant": "#910035",
+              "surface-tint": "#bd0047",
+              "outline": "#906e72",
+              "on-tertiary-container": "#f7fff3",
+              "surface-container-low": "#f3f3f8",
+              "on-background": "#1a1c1f",
+              "on-tertiary-fixed-variant": "#005226",
+              "on-secondary-fixed-variant": "#891737",
+              "on-secondary": "#ffffff",
+              "background": "#f9f9fe",
+              "error-container": "#ffdad6"
+            },
+            fontFamily: {
+              "headline": ["Inter", "sans-serif"],
+              "body": ["Inter", "sans-serif"],
+              "label": ["Inter", "sans-serif"]
+            },
+            borderRadius: {"DEFAULT": "0.25rem", "lg": "0.5rem", "xl": "0.75rem", "full": "9999px"},
+          },
+        },
+      }
+    </script>
+<style>
+        .material-symbols-outlined {
+            font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24;
+        }
+        body { font-family: 'Inter', sans-serif; }
+        .glass-header {
+            backdrop-filter: blur(20px);
+            -webkit-backdrop-filter: blur(20px);
+        }
+    </style>
+<style>
+    body {
+      min-height: max(884px, 100dvh);
+    }
+  </style>
+  </head>
+<body class="bg-surface text-on-surface min-h-screen pb-32">
+<!-- TopAppBar -->
+<header class="sticky top-0 w-full z-50 bg-white/80 dark:bg-black/80 backdrop-blur-xl flex items-center justify-between px-4 h-11">
+<div class="flex items-center">
+<span class="material-symbols-outlined text-[#FF2D6B] active:scale-95 duration-200 cursor-pointer">menu</span>
+</div>
+<h1 class="font-sans antialiased text-[17px] font-semibold tracking-tight text-slate-900 dark:text-white">Profile</h1>
+<div class="flex items-center">
+<span class="material-symbols-outlined text-[#FF2D6B] active:scale-95 duration-200 cursor-pointer">notifications</span>
+</div>
+</header>
+<main class="max-w-md mx-auto px-4 pt-6">
+<!-- Large Title -->
+<h2 class="text-[34px] font-bold tracking-tight text-on-surface mb-6">Profile</h2>
+<!-- Header Card -->
+<div class="bg-surface-container-lowest rounded-[14px] p-6 mb-6 shadow-[0_10px_30px_rgba(26,28,31,0.06)] flex items-center space-x-4">
+<div class="relative">
+<img alt="User Profile" class="w-20 h-20 rounded-full object-cover" data-alt="Close up portrait of a smiling woman" src="https://lh3.googleusercontent.com/aida-public/AB6AXuC3yZnxTDjXYhzZq2l6Gzao5kUbfnNvr4aDIFHkIUwoCuq-A__TNlxpbYq0STWxF_gOTRGtQRj23PoXi2EPx2zRvI9mXbF65-yfCsrnYUoOtt3Cf65j58d1heXRIIsrOoCk19CtDMG1hHN-2gqo0LffSOxUJQwLh4gVrFv5e_WdzoL2ObZTmx3tP1ZhsidQBs2e5u0-gQA6OuSmFqITlyQ-iWpTw9Zt1SM4OVH_CywRQCpN9AeW6D1LZgxvnKBu7S8xOqsnnM106ZTT"/>
+<div class="absolute bottom-0 right-0 bg-[#FF2D6B] p-1.5 rounded-full border-2 border-white">
+<span class="material-symbols-outlined text-white text-[14px]" style="font-variation-settings: 'FILL' 1;">edit</span>
+</div>
+</div>
+<div>
+<h3 class="text-[20px] font-bold text-on-surface">Sophia Anderson</h3>
+<p class="text-[14px] text-on-surface-variant">sophia.a@example.com</p>
+<div class="mt-2 inline-flex items-center px-2 py-0.5 rounded-full bg-secondary-container/20 text-[#FF2D6B] text-[12px] font-semibold">
+                    Gold Member
+                </div>
+</div>
+</div>
+<!-- Stats Row -->
+<div class="grid grid-cols-3 gap-3 mb-8">
+<div class="bg-surface-container-low rounded-[14px] p-4 text-center">
+<div class="font-mono text-[18px] font-bold text-on-surface">12</div>
+<div class="text-[11px] font-medium text-on-surface-variant uppercase tracking-wider">Visits</div>
+</div>
+<div class="bg-surface-container-low rounded-[14px] p-4 text-center">
+<div class="font-mono text-[18px] font-bold text-on-surface">4</div>
+<div class="text-[11px] font-medium text-on-surface-variant uppercase tracking-wider">Reviews</div>
+</div>
+<div class="bg-surface-container-low rounded-[14px] p-4 text-center">
+<div class="font-mono text-[18px] font-bold text-on-surface">28</div>
+<div class="text-[11px] font-medium text-on-surface-variant uppercase tracking-wider">Saved</div>
+</div>
+</div>
+<!-- Inset Grouped Menu Lists -->
+<div class="space-y-6">
+<!-- Section 1 -->
+<div class="bg-surface-container-lowest rounded-[14px] overflow-hidden shadow-[0_10px_30px_rgba(26,28,31,0.06)]">
+<div class="flex items-center px-4 py-4 active:bg-surface-container-high transition-colors cursor-pointer group">
+<span class="material-symbols-outlined text-[#FF2D6B] mr-3">calendar_today</span>
+<span class="flex-1 text-[17px] font-medium text-on-surface">My Bookings</span>
+<span class="material-symbols-outlined text-outline-variant group-hover:translate-x-1 transition-transform">chevron_right</span>
+</div>
+<div class="h-[1px] mx-4 bg-surface-container-high"></div>
+<div class="flex items-center px-4 py-4 active:bg-surface-container-high transition-colors cursor-pointer group">
+<span class="material-symbols-outlined text-[#FF2D6B] mr-3">favorite</span>
+<span class="flex-1 text-[17px] font-medium text-on-surface">Saved Salons</span>
+<span class="material-symbols-outlined text-outline-variant group-hover:translate-x-1 transition-transform">chevron_right</span>
+</div>
+<div class="h-[1px] mx-4 bg-surface-container-high"></div>
+<div class="flex items-center px-4 py-4 active:bg-surface-container-high transition-colors cursor-pointer group">
+<span class="material-symbols-outlined text-[#FF2D6B] mr-3">notifications</span>
+<span class="flex-1 text-[17px] font-medium text-on-surface">Notifications</span>
+<span class="material-symbols-outlined text-outline-variant group-hover:translate-x-1 transition-transform">chevron_right</span>
+</div>
+</div>
+<!-- Section 2 -->
+<div class="bg-surface-container-lowest rounded-[14px] overflow-hidden shadow-[0_10px_30px_rgba(26,28,31,0.06)]">
+<div class="flex items-center px-4 py-4 active:bg-surface-container-high transition-colors cursor-pointer group">
+<span class="material-symbols-outlined text-[#FF2D6B] mr-3">help</span>
+<span class="flex-1 text-[17px] font-medium text-on-surface">Help</span>
+<span class="material-symbols-outlined text-outline-variant group-hover:translate-x-1 transition-transform">chevron_right</span>
+</div>
+<div class="h-[1px] mx-4 bg-surface-container-high"></div>
+<div class="flex items-center px-4 py-4 active:bg-surface-container-high transition-colors cursor-pointer group">
+<span class="material-symbols-outlined text-[#FF2D6B] mr-3">lock</span>
+<span class="flex-1 text-[17px] font-medium text-on-surface">Privacy</span>
+<span class="material-symbols-outlined text-outline-variant group-hover:translate-x-1 transition-transform">chevron_right</span>
+</div>
+<div class="h-[1px] mx-4 bg-surface-container-high"></div>
+<div class="flex items-center px-4 py-4 active:bg-surface-container-high transition-colors cursor-pointer group">
+<span class="material-symbols-outlined text-[#FF2D6B] mr-3">description</span>
+<span class="flex-1 text-[17px] font-medium text-on-surface">Terms</span>
+<span class="material-symbols-outlined text-outline-variant group-hover:translate-x-1 transition-transform">chevron_right</span>
+</div>
+</div>
+</div>
+<!-- Sign Out Button -->
+<div class="mt-12 mb-8">
+<button class="w-full bg-surface-container-low text-error text-[17px] font-bold py-4 rounded-[12px] active:scale-[0.98] transition-all">
+                Sign Out
+            </button>
+<p class="text-center text-[12px] text-on-surface-variant mt-4 opacity-50">GlowBook v2.4.1</p>
+</div>
+</main>
+<!-- BottomNavBar -->
+<nav class="fixed bottom-0 w-full z-50 bg-white/80 dark:bg-black/80 backdrop-blur-xl border-t border-slate-200/20 dark:border-white/10 flex justify-around items-center h-[83px] pb-safe px-2">
+<a class="flex flex-col items-center justify-center text-slate-400 dark:text-slate-500 hover:text-[#FF2D6B] transition-colors active:scale-90 duration-200" href="#">
+<span class="material-symbols-outlined text-[24px]">home</span>
+<span class="text-[10px] font-medium tracking-wide">Home</span>
+</a>
+<a class="flex flex-col items-center justify-center text-slate-400 dark:text-slate-500 hover:text-[#FF2D6B] transition-colors active:scale-90 duration-200" href="#">
+<span class="material-symbols-outlined text-[24px]">search</span>
+<span class="text-[10px] font-medium tracking-wide">Explore</span>
+</a>
+<a class="flex flex-col items-center justify-center text-slate-400 dark:text-slate-500 hover:text-[#FF2D6B] transition-colors active:scale-90 duration-200" href="#">
+<span class="material-symbols-outlined text-[24px]">calendar_today</span>
+<span class="text-[10px] font-medium tracking-wide">Bookings</span>
+</a>
+<a class="flex flex-col items-center justify-center text-[#FF2D6B] dark:text-[#FF2D6B] active:scale-90 duration-200" href="#">
+<span class="material-symbols-outlined text-[24px]" style="font-variation-settings: 'FILL' 1;">account_circle</span>
+<span class="text-[10px] font-medium tracking-wide">Profile</span>
+</a>
+</nav>
+</body></html>

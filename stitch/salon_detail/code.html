@@ -1,0 +1,260 @@
+<!DOCTYPE html>
+
+<html class="light" lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<script id="tailwind-config">
+      tailwind.config = {
+        darkMode: "class",
+        theme: {
+          extend: {
+            colors: {
+              "tertiary-fixed-dim": "#62de86",
+              "on-secondary-container": "#730129",
+              "on-primary": "#ffffff",
+              "on-primary-fixed": "#400013",
+              "on-error-container": "#93000a",
+              "surface-tint": "#bd0047",
+              "secondary-fixed-dim": "#ffb2bc",
+              "on-primary-container": "#fffbff",
+              "primary": "#b80046",
+              "inverse-surface": "#2e3034",
+              "secondary": "#aa314e",
+              "error-container": "#ffdad6",
+              "on-surface-variant": "#5c3f43",
+              "background": "#f9f9fe",
+              "tertiary": "#006b32",
+              "on-tertiary": "#ffffff",
+              "on-surface": "#1a1c1f",
+              "on-secondary-fixed": "#400013",
+              "tertiary-container": "#008741",
+              "surface-container": "#ededf2",
+              "surface-variant": "#e2e2e7",
+              "on-tertiary-fixed": "#00210b",
+              "surface-container-lowest": "#ffffff",
+              "surface-container-highest": "#e2e2e7",
+              "inverse-primary": "#ffb2bc",
+              "primary-container": "#e40e5a",
+              "inverse-on-surface": "#f0f0f5",
+              "on-background": "#1a1c1f",
+              "on-secondary-fixed-variant": "#891737",
+              "on-tertiary-fixed-variant": "#005226",
+              "secondary-container": "#ff728d",
+              "primary-fixed-dim": "#ffb2bc",
+              "surface-bright": "#f9f9fe",
+              "surface": "#f9f9fe",
+              "primary-fixed": "#ffd9dd",
+              "tertiary-fixed": "#7ffba0",
+              "outline-variant": "#e5bdc1",
+              "outline": "#906e72",
+              "surface-container-low": "#f3f3f8",
+              "secondary-fixed": "#ffd9dd",
+              "on-error": "#ffffff",
+              "on-primary-fixed-variant": "#910035",
+              "surface-container-high": "#e8e8ed",
+              "surface-dim": "#d9dade",
+              "on-secondary": "#ffffff",
+              "on-tertiary-container": "#f7fff3",
+              "error": "#ba1a1a"
+            },
+            fontFamily: {
+              "headline": ["Inter"],
+              "body": ["Inter"],
+              "label": ["Inter"]
+            },
+            borderRadius: {"DEFAULT": "0.25rem", "lg": "0.5rem", "xl": "0.75rem", "full": "9999px"},
+          },
+        },
+      }
+    </script>
+<style>
+        .material-symbols-outlined {
+            font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24;
+            vertical-align: middle;
+        }
+        .glass-nav {
+            background: rgba(255, 255, 255, 0.7);
+            backdrop-filter: blur(20px);
+            -webkit-backdrop-filter: blur(20px);
+        }
+        .no-scrollbar::-webkit-scrollbar {
+            display: none;
+        }
+        .no-scrollbar {
+            -ms-overflow-style: none;
+            scrollbar-width: none;
+        }
+    </style>
+<style>
+    body {
+      min-height: max(884px, 100dvh);
+    }
+  </style>
+  </head>
+<body class="bg-background text-on-background font-body pb-32">
+<!-- Translucent Material Nav Bar -->
+<nav class="fixed top-0 w-full z-50 glass-nav px-4 py-3 flex items-center justify-between">
+<div class="flex items-center gap-4">
+<button class="w-10 h-10 flex items-center justify-center rounded-full bg-surface-container-highest/50 active:scale-95 transition-transform">
+<span class="material-symbols-outlined text-on-surface">chevron_left</span>
+</button>
+</div>
+<!-- Large Title placeholder for scroll transition (hidden by default or small) -->
+<span class="font-headline font-bold text-lg tracking-tight opacity-0 transition-opacity duration-300">Lumière Aesthetics</span>
+<div class="flex items-center gap-2">
+<button class="w-10 h-10 flex items-center justify-center rounded-full bg-surface-container-highest/50 active:scale-95 transition-transform">
+<span class="material-symbols-outlined text-on-surface">share</span>
+</button>
+<button class="w-10 h-10 flex items-center justify-center rounded-full bg-surface-container-highest/50 active:scale-95 transition-transform">
+<span class="material-symbols-outlined text-primary">favorite</span>
+</button>
+</div>
+</nav>
+<!-- Hero Section -->
+<section class="w-full h-[320px] relative overflow-hidden">
+<img alt="Luxury Salon Interior" class="w-full h-full object-cover" data-alt="Modern high-end luxury spa interior with gold accents" src="https://lh3.googleusercontent.com/aida-public/AB6AXuDqK6nDIMs0MOttOe1l6Ph9IzfvIPDcT0V3Vz9yrMKuGqLtniljMagVhmBqhbMQridK2fFTGKqucqH2578eo6TR3l-vWAi4x-lMWqpnrWeNAr-oNVh-r_KZR9hnZcKEANeyASjIAD6dq3skT3ZhVqfM9g2QmV2wJKSryP7aP15NdofzExURduVX8Qg0bbNz5LTQJjDo2Kd9GUlRccdGxvat0dlKh9uGkY1hHzXtU1U0romzttfvV_BHN8BRV7oqMalUH17CRiDPFygt"/>
+</section>
+<!-- Header Section -->
+<header class="px-6 -mt-6 relative z-10">
+<div class="bg-surface-container-lowest rounded-[24px] p-6 shadow-sm">
+<div class="flex justify-between items-start">
+<div>
+<h1 class="text-[28px] font-bold text-on-surface leading-tight font-headline">Lumière Aesthetics</h1>
+<p class="text-[15px] font-semibold text-primary tracking-wide uppercase mt-1">Medical Spa &amp; Wellness</p>
+</div>
+<div class="flex items-center gap-1 bg-primary/10 px-2 py-1 rounded-lg">
+<span class="material-symbols-outlined text-primary text-[18px]" style="font-variation-settings: 'FILL' 1;">star</span>
+<span class="font-bold text-primary text-sm">4.9</span>
+</div>
+</div>
+<div class="mt-4 flex items-center gap-2">
+<div class="w-2 h-2 rounded-full bg-tertiary"></div>
+<span class="text-[15px] font-medium text-tertiary">Open · Closes at 8 PM</span>
+</div>
+<!-- Action Row -->
+<div class="flex items-center gap-3 mt-6">
+<button class="flex-1 flex flex-col items-center justify-center gap-1 bg-surface-container-low py-3 rounded-xl active:scale-95 transition-transform">
+<span class="material-symbols-outlined text-primary">directions</span>
+<span class="text-[11px] font-semibold text-on-surface-variant uppercase tracking-wider">Directions</span>
+</button>
+<button class="flex-1 flex flex-col items-center justify-center gap-1 bg-surface-container-low py-3 rounded-xl active:scale-95 transition-transform">
+<span class="material-symbols-outlined text-primary">call</span>
+<span class="text-[11px] font-semibold text-on-surface-variant uppercase tracking-wider">Call</span>
+</button>
+<button class="flex-1 flex flex-col items-center justify-center gap-1 bg-surface-container-low py-3 rounded-xl active:scale-95 transition-transform">
+<span class="material-symbols-outlined text-primary">ios_share</span>
+<span class="text-[11px] font-semibold text-on-surface-variant uppercase tracking-wider">Share</span>
+</button>
+</div>
+</div>
+</header>
+<!-- Photo Strip -->
+<section class="mt-8">
+<div class="flex overflow-x-auto gap-3 px-6 no-scrollbar">
+<div class="flex-shrink-0 w-[72px] h-[72px] rounded-xl overflow-hidden ring-2 ring-surface-container-low">
+<img class="w-full h-full object-cover" data-alt="Skincare treatment closeup" src="https://lh3.googleusercontent.com/aida-public/AB6AXuBhwTrtoh4NQRDmNdwJF934dFeB2TouHjya2ft__uiS1ZWF0CDR-dekIrG3yuBjJI018a_b7ql_hi_uD3M6nWqrn9OupgzngRgS0znU8XrajN1iC3TAUKIzMCpV3k1oRD6a53_vhnbgHt5nY8vwoajnmDA0WeJd9lpSYcatP2GgBlBVfi9NX8UbBb4Qa2jEMt4bqMMtZ7X9CzEEQ2dUu_125YRIcWm36OmqO-1GFayZEUP5qNkQGek5LsnJLvx4DKLLfD4PMkA7KUOc"/>
+</div>
+<div class="flex-shrink-0 w-[72px] h-[72px] rounded-xl overflow-hidden ring-2 ring-surface-container-low">
+<img class="w-full h-full object-cover" data-alt="Salon manicure station" src="https://lh3.googleusercontent.com/aida-public/AB6AXuDXSKNYBKa74drFj-n5ull32g7-tV79V9Qu6hPZdK4RDy6juml90WJ9mehyUXtXIjebTVx8QTgf7wRWefFBMUJ0dxMtAIhvUeSSiDPEFrcTjkkmNiTOMPYn9BzLpuh6WUkrS25g2mx1LfJZG5rhh5tMqqJN5EUKIziXXMk5WuKjOrTiUQQoJg0R-ttAYk4R9R1kmiDNgxowOGHyVJXF9VvzlFGFgrqZIqLUDdVENtARNrg21nA5lDFgCtbd-Lc62y87GhsrdTBM8qJz"/>
+</div>
+<div class="flex-shrink-0 w-[72px] h-[72px] rounded-xl overflow-hidden ring-2 ring-surface-container-low">
+<img class="w-full h-full object-cover" data-alt="Face mask application" src="https://lh3.googleusercontent.com/aida-public/AB6AXuCZRXJMeN9DYPFk5-jY0PKfo8q0n52I4k8BMB310wcA-2cf10B4wTU9qhC3_XHnDNIvMIML3jdBcUZ_4msypYl_OaxkSvWACu3rme5TSxmMfEbGTmIlKdZFcC7jqIxBNgHQhJzFnK5kwuKIdd3QN5K6ZHQtTILxAOCAMivecKrbAzhf0py0Hx2sUtffjR1Bv3lQXrk3t33pkPsA-WCzdQ9vY-UfXn4o3wae-G4qrCgbZVMQLbiHWHilhjR7eEhjeDTgNje866t2PX5z"/>
+</div>
+<div class="flex-shrink-0 w-[72px] h-[72px] rounded-xl overflow-hidden ring-2 ring-surface-container-low">
+<img class="w-full h-full object-cover" data-alt="Luxury facial massage" src="https://lh3.googleusercontent.com/aida-public/AB6AXuAbkOeC_cm-dw4iOrpKJbIG3KQ53Cumjra6Ytf9iajUswtKM0BGi0iiTnBg0hmRXCO51A5ep2YjrlMCbMA5dJEK4SbyADErkCmfnGYsWcS4FL7_Qm5UVBffCp9TdoBmuyN1U9JXCOCEKF1fYkZ0kiYQsmJANAxYHS_oW0Honu7GCI3uQ4d-FRE1A6EUpYBjZdSL132ZCBIpXOv5Rsqf8XBp9YFllsAht5sanV9jkjW_PcZ7wWTVVKsPPRxi4hzPfAwz6Yzz8X_Z5Sy9"/>
+</div>
+<div class="flex-shrink-0 w-[72px] h-[72px] rounded-xl overflow-hidden ring-2 ring-surface-container-low">
+<img class="w-full h-full object-cover" data-alt="Nail art display" src="https://lh3.googleusercontent.com/aida-public/AB6AXuCVY_E1Obwb2jE1fn6vz1VhhfTIsPqfQBWtQNn6-AvP50Xk5oM1VFr-WR-Kxp5q_x83GV_3wqj14lO-AxlX5Tqy9cNgZkoziM2TeMJb_aDXapMSjnQeRvWADhU5IThPxBLk9niDxn5r4kdm3Hg9eRUXO6oVk_NOnYDNS_J9KzmuoX0VVwkRebxDXAdclyyMNpAmMyhskSN9KlP_FzVlFV99jQ1cdVMAERrdO9I_U2d1209H4Hy9d2JYv8U7XP5A8pp_hiZJXyYDMsMd"/>
+</div>
+</div>
+</section>
+<!-- Segmented Control -->
+<div class="px-6 mt-8">
+<div class="flex p-1 bg-surface-container-low rounded-xl">
+<button class="flex-1 py-2 text-sm font-bold bg-surface-container-lowest text-on-surface shadow-sm rounded-lg">Services</button>
+<button class="flex-1 py-2 text-sm font-semibold text-on-surface-variant">Stylists</button>
+<button class="flex-1 py-2 text-sm font-semibold text-on-surface-variant">Reviews</button>
+</div>
+</div>
+<!-- Services Tab - Inset Grouped Sections -->
+<main class="mt-8 px-6 space-y-8">
+<!-- Section: Facial Treatments -->
+<section>
+<h3 class="text-xs font-bold text-on-surface-variant uppercase tracking-[0.15em] mb-4 ml-2">Facial Treatments</h3>
+<div class="bg-surface-container-lowest rounded-[20px] overflow-hidden">
+<!-- Service Cell 1 -->
+<div class="p-4 flex items-center justify-between group active:bg-surface-container-low transition-colors">
+<div class="flex-1">
+<h4 class="text-[17px] font-semibold text-on-surface font-headline">Glow signature Facial</h4>
+<div class="flex items-center gap-2 mt-1">
+<span class="text-[13px] text-on-surface-variant">60 min</span>
+<span class="w-1 h-1 rounded-full bg-outline-variant"></span>
+<span class="font-mono text-[15px] font-semibold text-primary">$120.00</span>
+</div>
+</div>
+<button class="w-10 h-10 flex items-center justify-center rounded-full bg-primary/10 text-primary active:scale-90 transition-transform">
+<span class="material-symbols-outlined" style="font-variation-settings: 'wght' 600;">add</span>
+</button>
+</div>
+<!-- Service Cell 2 -->
+<div class="p-4 flex items-center justify-between border-t border-surface-container-low group active:bg-surface-container-low transition-colors">
+<div class="flex-1">
+<h4 class="text-[17px] font-semibold text-on-surface font-headline">Hydra-Bright Peel</h4>
+<div class="flex items-center gap-2 mt-1">
+<span class="text-[13px] text-on-surface-variant">45 min</span>
+<span class="w-1 h-1 rounded-full bg-outline-variant"></span>
+<span class="font-mono text-[15px] font-semibold text-primary">$95.00</span>
+</div>
+</div>
+<button class="w-10 h-10 flex items-center justify-center rounded-full bg-primary/10 text-primary active:scale-90 transition-transform">
+<span class="material-symbols-outlined" style="font-variation-settings: 'wght' 600;">add</span>
+</button>
+</div>
+</div>
+</section>
+<!-- Section: Body & Wellness -->
+<section>
+<h3 class="text-xs font-bold text-on-surface-variant uppercase tracking-[0.15em] mb-4 ml-2">Body &amp; Wellness</h3>
+<div class="bg-surface-container-lowest rounded-[20px] overflow-hidden">
+<!-- Service Cell 3 -->
+<div class="p-4 flex items-center justify-between group active:bg-surface-container-low transition-colors">
+<div class="flex-1">
+<h4 class="text-[17px] font-semibold text-on-surface font-headline">Detox Body Wrap</h4>
+<div class="flex items-center gap-2 mt-1">
+<span class="text-[13px] text-on-surface-variant">90 min</span>
+<span class="w-1 h-1 rounded-full bg-outline-variant"></span>
+<span class="font-mono text-[15px] font-semibold text-primary">$185.00</span>
+</div>
+</div>
+<button class="w-10 h-10 flex items-center justify-center rounded-full bg-primary/10 text-primary active:scale-90 transition-transform">
+<span class="material-symbols-outlined" style="font-variation-settings: 'wght' 600;">add</span>
+</button>
+</div>
+<!-- Service Cell 4 -->
+<div class="p-4 flex items-center justify-between border-t border-surface-container-low group active:bg-surface-container-low transition-colors">
+<div class="flex-1">
+<h4 class="text-[17px] font-semibold text-on-surface font-headline">Full Body Sculpt</h4>
+<div class="flex items-center gap-2 mt-1">
+<span class="text-[13px] text-on-surface-variant">120 min</span>
+<span class="w-1 h-1 rounded-full bg-outline-variant"></span>
+<span class="font-mono text-[15px] font-semibold text-primary">$240.00</span>
+</div>
+</div>
+<button class="w-10 h-10 flex items-center justify-center rounded-full bg-primary/10 text-primary active:scale-90 transition-transform">
+<span class="material-symbols-outlined" style="font-variation-settings: 'wght' 600;">add</span>
+</button>
+</div>
+</div>
+</section>
+</main>
+<!-- Sticky Bottom Booking Action -->
+<div class="fixed bottom-0 w-full p-6 pb-10 glass-nav z-50">
+<button class="w-full h-[50px] bg-gradient-to-r from-primary to-primary-container text-on-primary rounded-[14px] font-headline font-bold text-[17px] shadow-lg shadow-primary/20 active:scale-95 transition-transform flex items-center justify-center gap-2">
+            Book Appointment
+        </button>
+</div>
+</body></html>

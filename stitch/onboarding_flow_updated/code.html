@@ -1,0 +1,117 @@
+<!DOCTYPE html>
+
+<html class="light" lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover" name="viewport"/>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<script id="tailwind-config">
+      tailwind.config = {
+        darkMode: "class",
+        theme: {
+          extend: {
+            colors: {
+              "primary": "#E29DA3", // Rose Quartz
+              "on-primary": "#ffffff",
+              "background": "#ffffff",
+              "on-background": "#1C1C1E",
+              "surface-variant": "#E5E5EA",
+              "on-surface-variant": "#8E8E93",
+            },
+            fontFamily: {
+              "headline": ["Inter", "-apple-system", "BlinkMacSystemFont", "sans-serif"],
+              "body": ["Inter", "-apple-system", "BlinkMacSystemFont", "sans-serif"],
+            },
+            borderRadius: {
+                "ios": "14px",
+            }
+          },
+        },
+      }
+    </script>
+<style>
+        .material-symbols-outlined {
+            font-variation-settings: 'FILL' 0, 'wght' 300, 'GRAD' 0, 'opsz' 24;
+            display: inline-block;
+            line-height: 1;
+        }
+        .hide-scrollbar::-webkit-scrollbar {
+            display: none;
+        }
+        .hide-scrollbar {
+            -ms-overflow-style: none;
+            scrollbar-width: none;
+        }
+        /* Emulating SF Pro behavior */
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+            -webkit-font-smoothing: antialiased;
+        }
+    </style>
+</head>
+<body class="bg-background text-on-background font-body select-none overflow-hidden h-screen w-screen">
+<!-- Onboarding Container -->
+<main class="relative h-full w-full flex flex-col overflow-hidden">
+<!-- Horizontal Scroll Section -->
+<div class="flex-1 flex overflow-x-auto snap-x snap-mandatory hide-scrollbar">
+<!-- Page 1 -->
+<section class="min-w-full h-full snap-start flex flex-col">
+<div class="w-full h-[55%] relative overflow-hidden">
+<img alt="Luxury Salon" class="w-full h-full object-cover" src="https://lh3.googleusercontent.com/aida-public/AB6AXuDsHX5_H7n7W9HZNLZZYkE8sn3hR2HjoeRnmqjaUE2rHjwWeyj9_0Vbw-apzqm4swR80P25ubj9WWOEQKXJplokty52dqSd6Nu-0ItrlPy2fLJFy5nryhomwpdLEsilq-lOec7FaFS51HepRcxeJWtJBQkjUf1yXL5N3oMhKbxgh1udGyqn6tq84HxXns0i0NEoBJo3agbfSjEob5CS_w_BNcFKRO2LZupNMycrEpYWi3Tv3LMhtZ9sJELh81tFaKhy_AybBSNZcYpq"/>
+</div>
+<div class="flex-1 flex flex-col items-center justify-start pt-10 px-8 text-center space-y-3">
+<h1 class="text-[32px] font-bold tracking-tight text-on-background leading-tight">Expert Services, <br/>Tailored for You</h1>
+<p class="text-[17px] text-on-surface-variant leading-snug px-4">Discover top-tier stylists and salons curated for your unique beauty aesthetic.</p>
+</div>
+</section>
+<!-- Page 2 -->
+<section class="min-w-full h-full snap-start flex flex-col">
+<div class="w-full h-[55%] relative overflow-hidden">
+<img alt="Facial Treatment" class="w-full h-full object-cover" src="https://lh3.googleusercontent.com/aida-public/AB6AXuDIzs44-WnXGOXY2OjjMlcNwawCIae2vUGtbCZ39f8HwHiSWiQ98irfwxX4LW7eLYh7Y2LZ5FTitfvW23EeLLIMpcTnn00tJFHQLQlnqGz6ktwOX0ZoXpA9kSnG_7gqClVk2FWzdGJaxcqCRdqK9g0C_e8zS39NSv8Q43Kl2pu7SSLmY4XlSG9yntVLhFAiIKtENGR3Ss1uwFXW1ztAQM-iDkS3YVoHG8LlnVosDNTCsJXKm1zLT98cVSgoS3_RPyAbMXuBHLEgsAuv"/>
+</div>
+<div class="flex-1 flex flex-col items-center justify-start pt-10 px-8 text-center space-y-3">
+<h1 class="text-[32px] font-bold tracking-tight text-on-background leading-tight">Seamless Booking <br/>Experience</h1>
+<p class="text-[17px] text-on-surface-variant leading-snug px-4">Real-time availability and instant confirmations with the city's finest.</p>
+</div>
+</section>
+<!-- Page 3 -->
+<section class="min-w-full h-full snap-start flex flex-col">
+<div class="w-full h-[55%] relative overflow-hidden">
+<img alt="Beauty Products" class="w-full h-full object-cover" src="https://lh3.googleusercontent.com/aida-public/AB6AXuAig_rtnPlcaXfMK1GxYjq6QjKaorDi3NepIBLfEgS35_HJGHVmoLXRfAA_2vD1nVH72amsgP606IFGqM5z2B--AsyRndUMUxUpsvRRlXQnSvwKrv1tpCou7MYUIDKPYZF9Kb8K6cYydcHzsqzk0xColhrEOAUwHFkOJAw5HNxN3QpVN0anP0KNWIPFq1Ho-d63YprLfjXxGUj1Ez3e4Li96DFLYpjmZDaFLA-5BAC1U4r4dIolsNiIW2p7pxAspxpW9ZEox9ExQGQn"/>
+</div>
+<div class="flex-1 flex flex-col items-center justify-start pt-10 px-8 text-center space-y-3">
+<h1 class="text-[32px] font-bold tracking-tight text-on-background leading-tight">Elevate Your <br/>Beauty Ritual</h1>
+<p class="text-[17px] text-on-surface-variant leading-snug px-4">Join GlowBook today and unlock exclusive rewards at your favorite spots.</p>
+</div>
+</section>
+</div>
+<!-- Sticky Bottom Navigation Controls (Apple HIG) -->
+<div class="pb-[calc(32px+env(safe-area-inset-bottom))] px-8 space-y-8 bg-background">
+<!-- iOS UIPageControl Dots -->
+<div class="flex justify-center items-center space-x-2">
+<div class="w-2 h-2 rounded-full bg-surface-variant"></div>
+<div class="w-2 h-2 rounded-full bg-primary"></div>
+<div class="w-2 h-2 rounded-full bg-surface-variant"></div>
+</div>
+<!-- Actions -->
+<div class="space-y-4 flex flex-col items-center">
+<button class="w-full h-[52px] bg-primary text-white font-semibold text-[17px] rounded-ios active:opacity-80 transition-opacity">
+                    Get Started
+                </button>
+<button class="text-primary font-semibold text-[17px] py-2 active:opacity-60 transition-opacity">
+                    Sign In
+                </button>
+</div>
+</div>
+</main>
+<!-- iOS Status Bar Area -->
+<div class="fixed top-0 left-0 right-0 h-12 pointer-events-none z-50 flex justify-between items-end px-8 pb-2">
+<span class="text-[15px] font-semibold">9:41</span>
+<div class="flex space-x-1.5 items-center">
+<span class="material-symbols-outlined text-[18px]">signal_cellular_alt</span>
+<span class="material-symbols-outlined text-[18px]">wifi</span>
+<span class="material-symbols-outlined text-[20px]">battery_full</span>
+</div>
+</div>
+</body></html>

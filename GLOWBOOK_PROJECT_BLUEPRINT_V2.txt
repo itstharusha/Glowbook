@@ -1,0 +1,1544 @@
+================================================================================
+GLOWBOOK — SALON & BEAUTY BOOKING APP
+PROJECT BLUEPRINT v2.0 (3-ROLE SYSTEM UPDATE)
+================================================================================
+Course   : SE2020 — Web and Mobile Technologies
+Group    : 6 Members
+Duration : 8 Weeks
+Stack    : React Native (Expo) + Node.js + Express.js + MongoDB Atlas
+Hosting  : Render or Railway (backend) + MongoDB Atlas (database)
+================================================================================
+
+IMPORTANT NOTE FOR CODING AGENTS
+----------------------------------
+This document is the SINGLE SOURCE OF TRUTH for the entire GlowBook project.
+Every member uses this same document. Every coding agent MUST read this entire
+file before writing a single line of code. Do not deviate from the folder
+structure, naming conventions, API contracts, or data models defined here.
+
+This is v2.0. Key upgrade from v1.0: 3-role system (customer / vendor / admin).
+Vendors are salon owners who manage their own content. They are NOT admins.
+Customers book. Vendors manage. Admins oversee.
+
+ALREADY IMPLEMENTED — DO NOT REBUILD:
+  - Splash screen
+  - Onboarding slides (3 screens)
+  - LoginScreen
+  - RegisterScreen (needs role picker added — see Section 14 Member 1)
+  - AuthContext.js (needs updateUser added — see Section 14 Member 1)
+  - services/api.js Axios instance
+  - ProfileScreen, EditProfileScreen, SavedSalonsScreen
+  - Customer bottom tab navigation (needs 3-way role branch — see Member 1)
+
+================================================================================
+SECTION 1 — PROJECT OVERVIEW
+================================================================================
+
+GlowBook is a 3-sided marketplace:
+  CUSTOMERS browse salons, book appointments, write reviews
+  VENDORS   list their salon, manage services/stylists, handle bookings
+  ADMIN     oversees the entire platform
+
+Role logic:
+  - customer : default role on register
+  - vendor   : chosen on register — must complete salon setup before using app
+  - admin    : manually set in database — never selectable on register
+
+One vendor = one salon. A vendor cannot create multiple salons.
+A vendor can only manage content belonging to their own salon.
+Attempting to modify another vendor's data returns 403.
+
+================================================================================
+SECTION 2 — FOLDER STRUCTURE
+================================================================================
+
+BACKEND (glowbook-backend/)
+----------------------------
+glowbook-backend/
+├── config/
+│   ├── db.js
+│   └── cloudinary.js
+├── middleware/
+│   ├── authMiddleware.js
+│   ├── adminMiddleware.js
+│   └── vendorMiddleware.js          ← NEW in v2.0
+├── models/
+│   ├── User.js                      ← UPDATED: vendor role + ownedSalon field
+│   ├── Salon.js                     ← UPDATED: owner field added
+│   ├── Service.js
+│   ├── Stylist.js
+│   ├── Appointment.js
+│   └── Review.js
+├── controllers/
+│   ├── authController.js            ← UPDATED: accept role on register
+│   ├── salonController.js           ← UPDATED: ownership checks + getMySalon
+│   ├── serviceController.js         ← UPDATED: ownership checks
+│   ├── stylistController.js         ← UPDATED: ownership checks
+│   ├── appointmentController.js     ← UPDATED: vendor-salon endpoint
+│   ├── reviewController.js
+│   └── userController.js
+├── routes/
+│   ├── authRoutes.js
+│   ├── salonRoutes.js               ← UPDATED: middleware changes
+│   ├── serviceRoutes.js             ← UPDATED: middleware changes
+│   ├── stylistRoutes.js             ← UPDATED: middleware changes
+│   ├── appointmentRoutes.js         ← UPDATED: new vendor route
+│   ├── reviewRoutes.js
+│   └── userRoutes.js
+├── uploads/
+├── .env
+├── .gitignore
+├── package.json
+└── server.js
+
+FRONTEND (glowbook-mobile/)
+----------------------------
+glowbook-mobile/
+├── assets/
+│   └── screens/                     ← Google Stitch exported screens go here
+├── screens/
+│   ├── auth/
+│   │   ├── LoginScreen.js           ← DO NOT TOUCH (already working)
+│   │   └── RegisterScreen.js        ← UPDATED: add role picker
+│   ├── onboarding/                  ← DO NOT TOUCH (already working)
+│   │   ├── SplashScreen.js
+│   │   └── OnboardingScreen.js
+│   ├── salons/
+│   │   ├── HomeScreen.js
+│   │   ├── SalonDetailScreen.js
+│   │   └── ExploreScreen.js
+│   ├── stylists/
+│   │   └── StylistDetailScreen.js
+│   ├── appointments/
+│   │   ├── BookingFlowScreen.js
+│   │   ├── BookingConfirmationScreen.js
+│   │   ├── MyBookingsScreen.js
+│   │   └── BookingDetailScreen.js
+│   ├── reviews/
+│   │   └── WriteReviewScreen.js
+│   ├── profile/                     ← DO NOT TOUCH (already working)
+│   │   ├── ProfileScreen.js
+│   │   ├── EditProfileScreen.js
+│   │   └── SavedSalonsScreen.js
+│   ├── vendor/                      ← ALL NEW in v2.0
+│   │   ├── VendorWelcomeScreen.js
+│   │   ├── VendorCreateSalonScreen.js
+│   │   ├── VendorDashboardScreen.js
+│   │   ├── VendorSalonScreen.js
+│   │   ├── VendorEditSalonScreen.js
+│   │   ├── VendorBookingsScreen.js
+│   │   ├── VendorBookingDetailScreen.js
+│   │   ├── VendorAddEditServiceScreen.js
+│   │   └── VendorAddEditStylistScreen.js
+│   └── admin/
+│       ├── AdminDashboardScreen.js  ← UPDATED: vendor stats
+│       ├── ManageSalonsScreen.js
+│       ├── AddEditSalonScreen.js
+│       ├── AdminUsersScreen.js      ← NEW
+│       └── ManageAppointmentsScreen.js
+├── components/
+│   ├── SalonCard.js
+│   ├── ServiceItem.js
+│   ├── StylistCard.js
+│   ├── ReviewCard.js
+│   ├── StarRating.js
+│   ├── BookingCard.js
+│   ├── VendorBookingCard.js         ← NEW
+│   ├── CategoryChip.js
+│   ├── RolePickerCard.js            ← NEW
+│   ├── StatusChip.js                ← NEW
+│   └── LoadingSpinner.js
+├── navigation/
+│   └── AppNavigator.js              ← FULL REWRITE: 3-way role branch
+├── context/
+│   └── AuthContext.js               ← UPDATED: add updateUser function
+├── services/
+│   └── api.js                       ← DO NOT TOUCH (already working)
+├── constants/
+│   └── theme.js
+├── App.js
+└── package.json
+
+================================================================================
+SECTION 3 — ENVIRONMENT VARIABLES (.env)
+================================================================================
+
+PORT=5000
+MONGO_URI=mongodb+srv://<username>:<password>@cluster0.xxxxx.mongodb.net/glowbook
+JWT_SECRET=glowbook_super_secret_jwt_key_2024
+JWT_EXPIRE=7d
+CLOUDINARY_CLOUD_NAME=your_cloud_name
+CLOUDINARY_API_KEY=your_api_key
+CLOUDINARY_API_SECRET=your_api_secret
+NODE_ENV=development
+
+NEVER commit .env to GitHub. Always in .gitignore.
+When deploying to Render/Railway: add these same keys in the platform dashboard.
+
+================================================================================
+SECTION 4 — SERVER ENTRY POINT (server.js)
+================================================================================
+
+const express = require('express');
+const dotenv  = require('dotenv');
+const cors    = require('cors');
+const connectDB = require('./config/db');
+
+dotenv.config();
+connectDB();
+
+const app = express();
+app.use(cors());
+app.use(express.json());
+
+app.use('/api/auth',         require('./routes/authRoutes'));
+app.use('/api/salons',       require('./routes/salonRoutes'));
+app.use('/api/services',     require('./routes/serviceRoutes'));
+app.use('/api/stylists',     require('./routes/stylistRoutes'));
+app.use('/api/appointments', require('./routes/appointmentRoutes'));
+app.use('/api/reviews',      require('./routes/reviewRoutes'));
+app.use('/api/users',        require('./routes/userRoutes'));
+
+app.get('/', (req, res) => res.json({ message: 'GlowBook API v2.0 running' }));
+
+const PORT = process.env.PORT || 5000;
+app.listen(PORT, () => console.log(`Server running on port ${PORT}`));
+
+================================================================================
+SECTION 5 — DATABASE CONFIG (config/db.js)
+================================================================================
+
+const mongoose = require('mongoose');
+
+const connectDB = async () => {
+  try {
+    await mongoose.connect(process.env.MONGO_URI);
+    console.log('MongoDB Atlas connected');
+  } catch (error) {
+    console.error('MongoDB connection failed:', error.message);
+    process.exit(1);
+  }
+};
+
+module.exports = connectDB;
+
+================================================================================
+SECTION 6 — CLOUDINARY CONFIG (config/cloudinary.js)
+================================================================================
+
+const cloudinary = require('cloudinary').v2;
+const { CloudinaryStorage } = require('multer-storage-cloudinary');
+const multer = require('multer');
+
+cloudinary.config({
+  cloud_name: process.env.CLOUDINARY_CLOUD_NAME,
+  api_key:    process.env.CLOUDINARY_API_KEY,
+  api_secret: process.env.CLOUDINARY_API_SECRET,
+});
+
+const storage = new CloudinaryStorage({
+  cloudinary,
+  params: {
+    folder: 'glowbook',
+    allowed_formats: ['jpg', 'jpeg', 'png', 'webp'],
+  },
+});
+
+const upload = multer({ storage });
+
+module.exports = { cloudinary, upload };
+
+================================================================================
+SECTION 7 — ALL MIDDLEWARE
+================================================================================
+
+--- middleware/authMiddleware.js ---
+
+const jwt  = require('jsonwebtoken');
+const User = require('../models/User');
+
+const protect = async (req, res, next) => {
+  let token;
+  if (
+    req.headers.authorization &&
+    req.headers.authorization.startsWith('Bearer')
+  ) {
+    try {
+      token = req.headers.authorization.split(' ')[1];
+      const decoded = jwt.verify(token, process.env.JWT_SECRET);
+      req.user = await User.findById(decoded.id).select('-password');
+      next();
+    } catch (error) {
+      return res.status(401).json({ success: false, message: 'Not authorized, token failed' });
+    }
+  }
+  if (!token) {
+    return res.status(401).json({ success: false, message: 'Not authorized, no token' });
+  }
+};
+
+module.exports = { protect };
+
+
+--- middleware/adminMiddleware.js ---
+
+const admin = (req, res, next) => {
+  if (req.user && req.user.role === 'admin') {
+    next();
+  } else {
+    res.status(403).json({ success: false, message: 'Admin access required' });
+  }
+};
+
+module.exports = { admin };
+
+
+--- middleware/vendorMiddleware.js --- (NEW in v2.0)
+
+const isVendor = (req, res, next) => {
+  if (req.user && req.user.role === 'vendor') {
+    return next();
+  }
+  return res.status(403).json({ success: false, message: 'Vendor access required' });
+};
+
+const isVendorOrAdmin = (req, res, next) => {
+  if (req.user && (req.user.role === 'vendor' || req.user.role === 'admin')) {
+    return next();
+  }
+  return res.status(403).json({ success: false, message: 'Vendor or Admin access required' });
+};
+
+module.exports = { isVendor, isVendorOrAdmin };
+
+================================================================================
+SECTION 8 — MONGOOSE MODELS (complete definitions)
+================================================================================
+
+--- User.js --- (UPDATED in v2.0)
+
+const mongoose = require('mongoose');
+const bcrypt   = require('bcryptjs');
+
+const userSchema = new mongoose.Schema({
+  name: {
+    type: String, required: true, trim: true
+  },
+  email: {
+    type: String, required: true, unique: true, lowercase: true, trim: true
+  },
+  password: {
+    type: String, required: true, minlength: 6
+  },
+  role: {
+    type: String,
+    enum: ['customer', 'vendor', 'admin'],
+    default: 'customer'
+  },
+  profilePhoto: {
+    type: String, default: ''
+  },
+  savedSalons: [{
+    type: mongoose.Schema.Types.ObjectId, ref: 'Salon'
+  }],
+  ownedSalon: {
+    // vendors only — null until they create their salon
+    type: mongoose.Schema.Types.ObjectId,
+    ref: 'Salon',
+    default: null
+  },
+  createdAt: {
+    type: Date, default: Date.now
+  }
+});
+
+userSchema.pre('save', async function (next) {
+  if (!this.isModified('password')) return next();
+  this.password = await bcrypt.hash(this.password, 10);
+  next();
+});
+
+module.exports = mongoose.model('User', userSchema);
+
+
+--- Salon.js --- (UPDATED in v2.0: owner field added)
+
+Fields:
+  name         : String, required, trim
+  description  : String, required
+  location     : String, required
+  phone        : String, required
+  openingHours : String, required       (e.g. "9:00 AM - 8:00 PM")
+  category     : String, required
+                 enum: ['Hair','Nails','Skin','Makeup','Spa','Waxing']
+  gallery      : [String]               (Cloudinary URLs array)
+  avgRating    : Number, default 0
+  owner        : ObjectId, ref 'User', required   ← NEW: vendor who owns this salon
+  isVerified   : Boolean, default false            ← NEW: admin can verify vendors
+  createdAt    : Date, default Date.now
+
+
+--- Service.js --- (unchanged from v1.0)
+
+Fields:
+  salonId     : ObjectId, ref 'Salon', required
+  name        : String, required, trim
+  category    : String, required
+  description : String
+  price       : Number, required, min 0
+  duration    : Number, required            (minutes)
+  image       : String                      (Cloudinary URL)
+  isActive    : Boolean, default true
+  createdAt   : Date, default Date.now
+
+
+--- Stylist.js --- (unchanged from v1.0)
+
+Fields:
+  salonId         : ObjectId, ref 'Salon', required
+  name            : String, required, trim
+  bio             : String
+  specializations : [String]
+  portfolio       : [String]                (Cloudinary URLs)
+  availability    : [{
+                      day   : String,       (e.g. 'Monday')
+                      slots : [String]      (e.g. ['09:00','09:30','10:00'])
+                    }]
+  createdAt       : Date, default Date.now
+
+
+--- Appointment.js --- (unchanged from v1.0)
+
+Fields:
+  userId    : ObjectId, ref 'User', required
+  salonId   : ObjectId, ref 'Salon', required
+  serviceId : ObjectId, ref 'Service', required
+  stylistId : ObjectId, ref 'Stylist', required
+  date      : String, required              (e.g. '2024-12-15')
+  timeSlot  : String, required              (e.g. '10:00')
+  status    : String,
+              enum: ['Pending','Confirmed','Completed','Cancelled'],
+              default: 'Pending'
+  notes     : String, default ''
+  createdAt : Date, default Date.now
+
+
+--- Review.js --- (unchanged from v1.0)
+
+Fields:
+  userId    : ObjectId, ref 'User', required
+  salonId   : ObjectId, ref 'Salon', required
+  rating    : Number, required, min 1, max 5
+  comment   : String, required, trim
+  createdAt : Date, default Date.now
+
+Unique index: { userId: 1, salonId: 1 }   ← one review per user per salon
+
+================================================================================
+SECTION 9 — COMPLETE API REFERENCE (v2.0)
+================================================================================
+
+BASE URL (development) : http://localhost:5000
+BASE URL (production)  : https://glowbook-api.onrender.com  ← M6 updates after deploy
+
+Legend:
+  [public]          no token required
+  [customer]        any authenticated user
+  [vendor]          vendor role only
+  [vendor|admin]    vendor or admin
+  [admin]           admin only
+
+All protected routes require header:
+  Authorization: Bearer <JWT_TOKEN>
+
+--------------------------------------------------------------
+AUTH ROUTES — /api/auth
+--------------------------------------------------------------
+POST  /api/auth/register      [public]
+      Body: { name, email, password, role }
+      role must be 'customer' or 'vendor' — 'admin' is rejected
+      Returns: { success, data: { user, token } }
+
+POST  /api/auth/login         [public]
+      Body: { email, password }
+      Returns: { success, data: { user, token } }
+      user object includes: _id, name, email, role, profilePhoto, ownedSalon
+
+--------------------------------------------------------------
+USER ROUTES — /api/users
+--------------------------------------------------------------
+GET    /api/users/profile              [customer]     Get own profile
+PUT    /api/users/profile              [customer]     Update name, email, phone
+PUT    /api/users/profile/photo        [customer]     Upload profile photo (multipart)
+GET    /api/users/saved                [customer]     Get saved salons list
+POST   /api/users/saved/:salonId       [customer]     Save a salon
+DELETE /api/users/saved/:salonId       [customer]     Unsave a salon
+GET    /api/users/all                  [admin]        Get all users (paginated)
+                                                      Query: ?role=&page=&limit=
+
+--------------------------------------------------------------
+SALON ROUTES — /api/salons
+--------------------------------------------------------------
+GET    /api/salons                     [public]       Get all salons
+                                                      Query: ?search=&category=&city=
+GET    /api/salons/my                  [vendor]       Get vendor's own salon
+                                                      Returns: { hasSalon: bool, data: salon|null }
+GET    /api/salons/:id                 [public]       Get single salon
+POST   /api/salons                     [vendor]       Create salon (owner auto-set to req.user._id)
+                                                      Multipart: gallery images
+                                                      One vendor = one salon enforced
+PUT    /api/salons/:id                 [vendor|admin] Update salon
+                                                      Ownership check: salon.owner === req.user._id
+DELETE /api/salons/:id                 [vendor|admin] Delete salon
+                                                      Cascades: deletes all Services, Stylists,
+                                                      Appointments, Reviews for this salon
+                                                      Resets vendor.ownedSalon = null
+
+--------------------------------------------------------------
+SERVICE ROUTES — /api/services
+--------------------------------------------------------------
+GET    /api/services/salon/:salonId    [public]       Get all services for a salon
+GET    /api/services/:id               [public]       Get single service
+POST   /api/services                   [vendor|admin] Create service
+                                                      Ownership: salon.owner === req.user._id
+                                                      Multipart: single image
+PUT    /api/services/:id               [vendor|admin] Update service (ownership check)
+DELETE /api/services/:id               [vendor|admin] Delete service (ownership check)
+PUT    /api/services/:id/toggle        [vendor|admin] Toggle isActive (ownership check)
+
+--------------------------------------------------------------
+STYLIST ROUTES — /api/stylists
+--------------------------------------------------------------
+GET    /api/stylists/salon/:salonId    [public]       Get all stylists for a salon
+GET    /api/stylists/:id               [public]       Get single stylist detail
+POST   /api/stylists                   [vendor|admin] Create stylist
+                                                      Ownership: salon.owner === req.user._id
+                                                      Multipart: portfolio images (max 10)
+PUT    /api/stylists/:id               [vendor|admin] Update stylist (ownership check)
+DELETE /api/stylists/:id               [vendor|admin] Delete stylist (ownership check)
+
+--------------------------------------------------------------
+APPOINTMENT ROUTES — /api/appointments
+--------------------------------------------------------------
+POST   /api/appointments               [customer]     Create booking
+                                                      Double-booking prevention: check if
+                                                      stylistId + date + timeSlot already exists
+                                                      with status != 'Cancelled'
+GET    /api/appointments/my            [customer]     Get own bookings
+                                                      Populated: salon, service, stylist
+GET    /api/appointments/vendor-salon  [vendor]       Get ALL bookings at vendor's salon
+                                                      Populated: userId(name,email,photo),
+                                                      serviceId, stylistId
+GET    /api/appointments               [admin]        Get all bookings (all salons)
+PUT    /api/appointments/:id/cancel    [customer]     Cancel own booking
+                                                      Check: appointment.userId === req.user._id
+                                                      Only cancellable if status is
+                                                      'Pending' or 'Confirmed'
+PUT    /api/appointments/:id/status    [vendor|admin] Update status
+                                                      Vendor allowed: 'Confirmed', 'Completed' only
+                                                      Vendor ownership: appointment salon must be
+                                                      vendor's own salon
+                                                      Admin allowed: any status
+
+--------------------------------------------------------------
+REVIEW ROUTES — /api/reviews
+--------------------------------------------------------------
+POST   /api/reviews/:salonId           [customer]     Post review
+                                                      Enforce: one review per user per salon
+                                                      After save: recalculate salon.avgRating
+GET    /api/reviews/:salonId           [public]       Get all reviews for salon
+                                                      Populated: userId(name,profilePhoto)
+DELETE /api/reviews/:id                [admin]        Delete review
+                                                      After delete: recalculate salon.avgRating
+
+================================================================================
+SECTION 10 — CONTROLLER LOGIC: CRITICAL PATTERNS
+================================================================================
+
+--- OWNERSHIP CHECK PATTERN (use in salon/service/stylist controllers) ---
+
+// For salon-level ownership:
+const salon = await Salon.findById(salonId);
+if (!salon) {
+  return res.status(404).json({ success: false, message: 'Salon not found' });
+}
+if (
+  salon.owner.toString() !== req.user._id.toString() &&
+  req.user.role !== 'admin'
+) {
+  return res.status(403).json({
+    success: false,
+    message: 'You can only manage your own salon'
+  });
+}
+
+// For service/stylist-level ownership (populate to reach salon.owner):
+const service = await Service.findById(req.params.id).populate('salonId');
+if (!service) {
+  return res.status(404).json({ success: false, message: 'Service not found' });
+}
+if (
+  service.salonId.owner.toString() !== req.user._id.toString() &&
+  req.user.role !== 'admin'
+) {
+  return res.status(403).json({
+    success: false,
+    message: 'You can only manage services for your own salon'
+  });
+}
+
+
+--- CREATE SALON (vendor-specific logic) ---
+
+// Prevent vendor creating more than one salon
+const existingSalon = await Salon.findOne({ owner: req.user._id });
+if (existingSalon) {
+  return res.status(400).json({
+    success: false,
+    message: 'You already have a registered salon. Edit your existing salon instead.'
+  });
+}
+
+// Create the salon
+const salon = await Salon.create({
+  ...req.body,
+  owner: req.user._id,
+  gallery: req.files ? req.files.map(f => f.path) : []
+});
+
+// Link salon to vendor's user document
+await User.findByIdAndUpdate(req.user._id, { ownedSalon: salon._id });
+
+res.status(201).json({ success: true, data: salon });
+
+
+--- GET MY SALON (vendor dashboard) ---
+
+const salon = await Salon.findOne({ owner: req.user._id });
+if (!salon) {
+  return res.json({ success: true, hasSalon: false, data: null });
+}
+res.json({ success: true, hasSalon: true, data: salon });
+
+
+--- DELETE SALON (cascade) ---
+
+const salon = await Salon.findById(req.params.id);
+// ownership check first (see pattern above)
+
+await Service.deleteMany({ salonId: salon._id });
+await Stylist.deleteMany({ salonId: salon._id });
+await Appointment.deleteMany({ salonId: salon._id });
+await Review.deleteMany({ salonId: salon._id });
+await User.findByIdAndUpdate(salon.owner, { ownedSalon: null });
+await salon.deleteOne();
+
+res.json({ success: true, message: 'Salon and all related data deleted' });
+
+
+--- DOUBLE BOOKING PREVENTION ---
+
+const conflict = await Appointment.findOne({
+  stylistId: req.body.stylistId,
+  date: req.body.date,
+  timeSlot: req.body.timeSlot,
+  status: { $ne: 'Cancelled' }
+});
+
+if (conflict) {
+  return res.status(400).json({
+    success: false,
+    message: 'This time slot is already booked. Please choose another.'
+  });
+}
+
+
+--- VENDOR APPOINTMENT STATUS UPDATE ---
+
+const allowedStatuses = ['Pending', 'Confirmed', 'Completed', 'Cancelled'];
+const { status } = req.body;
+
+if (!allowedStatuses.includes(status)) {
+  return res.status(400).json({ success: false, message: 'Invalid status' });
+}
+
+// Vendors can only confirm or complete — never cancel
+if (req.user.role === 'vendor') {
+  const vendorAllowed = ['Confirmed', 'Completed'];
+  if (!vendorAllowed.includes(status)) {
+    return res.status(400).json({
+      success: false,
+      message: 'Vendors can only confirm or complete bookings'
+    });
+  }
+
+  // Verify this appointment is for vendor's salon
+  const appointment = await Appointment.findById(req.params.id)
+    .populate('salonId');
+  if (!appointment) {
+    return res.status(404).json({ success: false, message: 'Appointment not found' });
+  }
+  if (appointment.salonId.owner.toString() !== req.user._id.toString()) {
+    return res.status(403).json({
+      success: false,
+      message: 'This booking does not belong to your salon'
+    });
+  }
+}
+
+await Appointment.findByIdAndUpdate(req.params.id, { status }, { new: true });
+res.json({ success: true, message: `Appointment status updated to ${status}` });
+
+
+--- AVG RATING RECALCULATION (call after every review create/delete) ---
+
+const recalculateRating = async (salonId) => {
+  const result = await Review.aggregate([
+    { $match: { salonId: new mongoose.Types.ObjectId(salonId) } },
+    { $group: { _id: '$salonId', avgRating: { $avg: '$rating' } } }
+  ]);
+  const avg = result.length > 0
+    ? parseFloat(result[0].avgRating.toFixed(1))
+    : 0;
+  await Salon.findByIdAndUpdate(salonId, { avgRating: avg });
+};
+
+
+--- ONE REVIEW PER USER PER SALON ---
+
+const existingReview = await Review.findOne({
+  userId: req.user._id,
+  salonId: req.params.salonId
+});
+
+if (existingReview) {
+  return res.status(400).json({
+    success: false,
+    message: 'You have already reviewed this salon'
+  });
+}
+
+================================================================================
+SECTION 11 — AXIOS INSTANCE (services/api.js) — DO NOT TOUCH
+================================================================================
+
+Already implemented. Base URL must be updated by Member 6 after deployment:
+
+import axios from 'axios';
+import AsyncStorage from '@react-native-async-storage/async-storage';
+
+const api = axios.create({
+  baseURL: 'https://glowbook-api.onrender.com',  // ← Member 6 updates this
+  timeout: 10000,
+});
+
+api.interceptors.request.use(async (config) => {
+  const token = await AsyncStorage.getItem('glowbook_token');
+  if (token) config.headers.Authorization = `Bearer ${token}`;
+  return config;
+});
+
+export default api;
+
+================================================================================
+SECTION 12 — AUTH CONTEXT (context/AuthContext.js) — UPDATED
+================================================================================
+
+Changes from v1.0:
+  - Add updateUser() function so VendorCreateSalonScreen can update
+    ownedSalon without requiring a full logout/login cycle
+
+import React, { createContext, useState, useEffect, useContext } from 'react';
+import AsyncStorage from '@react-native-async-storage/async-storage';
+import api from '../services/api';
+
+const AuthContext = createContext();
+
+export const AuthProvider = ({ children }) => {
+  const [user, setUser] = useState(null);
+  const [token, setToken] = useState(null);
+  const [loading, setLoading] = useState(true);
+
+  useEffect(() => { loadStoredAuth(); }, []);
+
+  const loadStoredAuth = async () => {
+    const storedToken = await AsyncStorage.getItem('glowbook_token');
+    const storedUser  = await AsyncStorage.getItem('glowbook_user');
+    if (storedToken && storedUser) {
+      setToken(storedToken);
+      setUser(JSON.parse(storedUser));
+    }
+    setLoading(false);
+  };
+
+  const login = async (email, password) => {
+    const { data } = await api.post('/api/auth/login', { email, password });
+    await AsyncStorage.setItem('glowbook_token', data.data.token);
+    await AsyncStorage.setItem('glowbook_user', JSON.stringify(data.data.user));
+    setToken(data.data.token);
+    setUser(data.data.user);
+  };
+
+  const logout = async () => {
+    await AsyncStorage.removeItem('glowbook_token');
+    await AsyncStorage.removeItem('glowbook_user');
+    setToken(null);
+    setUser(null);
+  };
+
+  // NEW in v2.0 — call this after vendor creates their salon
+  const updateUser = async (updatedFields) => {
+    const updatedUser = { ...user, ...updatedFields };
+    await AsyncStorage.setItem('glowbook_user', JSON.stringify(updatedUser));
+    setUser(updatedUser);
+  };
+
+  return (
+    <AuthContext.Provider value={{ user, token, loading, login, logout, updateUser }}>
+      {children}
+    </AuthContext.Provider>
+  );
+};
+
+export const useAuth = () => useContext(AuthContext);
+
+================================================================================
+SECTION 13 — NAVIGATION (navigation/AppNavigator.js) — FULL REWRITE
+================================================================================
+
+import { useAuth } from '../context/AuthContext';
+
+const AppNavigator = () => {
+  const { user, loading } = useAuth();
+
+  if (loading) return <SplashScreen />;
+
+  // Not logged in → show auth flow
+  if (!user) return <AuthStack />;
+
+  // Logged in as customer
+  if (user.role === 'customer') return <CustomerTabs />;
+
+  // Logged in as vendor
+  if (user.role === 'vendor') {
+    // Vendor hasn't created a salon yet
+    if (!user.ownedSalon) return <VendorSetupStack />;
+    // Vendor has a salon — show dashboard
+    return <VendorTabs />;
+  }
+
+  // Admin
+  if (user.role === 'admin') return <AdminStack />;
+
+  // Fallback
+  return <AuthStack />;
+};
+
+--- AuthStack ---
+Screens (in order):
+  OnboardingScreen  (only shown if first time — check AsyncStorage flag)
+  LoginScreen
+  RegisterScreen
+
+--- CustomerTabs (Bottom Tab Navigator) ---
+Tab 1 — Home (house.fill icon):
+  Stack: HomeScreen → SalonDetailScreen → StylistDetailScreen
+       → BookingFlowScreen → BookingConfirmationScreen
+
+Tab 2 — Explore (magnifyingglass icon):
+  Stack: ExploreScreen → SalonDetailScreen
+
+Tab 3 — Bookings (calendar icon):
+  Stack: MyBookingsScreen → BookingDetailScreen → WriteReviewScreen
+
+Tab 4 — Profile (person.circle icon):
+  Stack: ProfileScreen → EditProfileScreen → SavedSalonsScreen
+
+--- VendorSetupStack (no tabs — vendor MUST complete setup) ---
+Screens:
+  VendorWelcomeScreen → VendorCreateSalonScreen
+No back navigation after entering this stack.
+Vendor cannot skip. "I'll do this later" logs them out.
+
+--- VendorTabs (Bottom Tab Navigator) ---
+Tab 1 — Dashboard (chart.bar.fill icon):
+  Stack: VendorDashboardScreen
+
+Tab 2 — My Salon (storefront.fill icon):
+  Stack: VendorSalonScreen → VendorEditSalonScreen
+       → VendorAddEditServiceScreen → VendorAddEditStylistScreen
+
+Tab 3 — Bookings (calendar.badge.clock icon):
+  Stack: VendorBookingsScreen → VendorBookingDetailScreen
+
+Tab 4 — Profile (person.circle icon):
+  Stack: ProfileScreen → EditProfileScreen
+  (reused from customer — works for both roles)
+
+--- AdminStack (no tabs — simple stack) ---
+Screens:
+  AdminDashboardScreen → AdminSalonsScreen → ManageSalonsScreen
+                       → AdminUsersScreen
+                       → ManageAppointmentsScreen
+
+================================================================================
+SECTION 14 — MEMBER RESPONSIBILITIES (v2.0)
+================================================================================
+
+========================================
+MEMBER 1 — AUTHENTICATION + NAVIGATION
+========================================
+
+Backend files to create/modify:
+  models/User.js                (add vendor to enum, add ownedSalon field)
+  controllers/authController.js (accept role in register body)
+  routes/authRoutes.js
+  middleware/authMiddleware.js
+  middleware/adminMiddleware.js
+  middleware/vendorMiddleware.js  ← NEW
+  config/db.js
+  server.js
+
+Frontend files to create/modify:
+  context/AuthContext.js         (add updateUser function)
+  navigation/AppNavigator.js     (3-way role branch — full rewrite)
+  screens/auth/RegisterScreen.js (add role picker — two large tappable cards)
+  services/api.js                (already done — do not touch)
+
+Register role picker UI:
+  Two large cards side by side, tappable:
+  Card 1 — "I'm a Customer" / "Book beauty services near me" / person icon
+  Card 2 — "I'm a Vendor"   / "List my salon on GlowBook"  / storefront icon
+  Selected card: rose border + rose tint background
+  State: const [selectedRole, setSelectedRole] = useState('customer');
+  Include role in POST /api/auth/register body
+
+Auth controller register logic:
+  - Accept role in body
+  - Only allow 'customer' or 'vendor' — reject 'admin'
+  - Hash password with bcryptjs saltRounds: 10
+  - Sign JWT: jwt.sign({ id: user._id }, process.env.JWT_SECRET, { expiresIn: '7d' })
+  - Return: { success: true, data: { user: { _id, name, email, role, profilePhoto, ownedSalon }, token } }
+
+Auth controller login logic:
+  - Find user by email, compare password with bcrypt.compare
+  - Return same response shape as register (include ownedSalon in user object)
+
+Navigation logic (AppNavigator.js):
+  - Read user.role from AuthContext
+  - customer → CustomerTabs
+  - vendor + no ownedSalon → VendorSetupStack
+  - vendor + has ownedSalon → VendorTabs
+  - admin → AdminStack
+  - null → AuthStack
+
+Viva questions to prepare:
+  Q: What are the three parts of a JWT token?
+  Q: Why do we hash passwords instead of encrypting them?
+  Q: How does your middleware know which user is making the request?
+  Q: How does the navigator decide which stack to show after login?
+  Q: What happens if someone passes role: 'admin' in the register body?
+
+========================================
+MEMBER 2 — SALON MANAGEMENT
+========================================
+
+Backend files to create/modify:
+  models/Salon.js               (add owner field, add isVerified field)
+  controllers/salonController.js
+  routes/salonRoutes.js
+
+Frontend files to create:
+  screens/salons/HomeScreen.js
+  screens/salons/SalonDetailScreen.js
+  screens/salons/ExploreScreen.js
+  screens/admin/ManageSalonsScreen.js
+  screens/admin/AddEditSalonScreen.js
+  components/SalonCard.js
+  components/CategoryChip.js
+
+Routes and middleware:
+  GET    /api/salons              → public
+  GET    /api/salons/my           → protect + isVendor
+  GET    /api/salons/:id          → public
+  POST   /api/salons              → protect + isVendor + upload.array('gallery', 5)
+  PUT    /api/salons/:id          → protect + isVendorOrAdmin
+  DELETE /api/salons/:id          → protect + isVendorOrAdmin
+
+Controller logic:
+  createSalon:
+    - Check if vendor already has a salon (findOne({ owner: req.user._id }))
+    - If yes → 400 'You already have a registered salon'
+    - Set owner: req.user._id automatically
+    - Set gallery from req.files.map(f => f.path)
+    - After create → update User.ownedSalon = newSalon._id
+  getMySalon:
+    - findOne({ owner: req.user._id })
+    - Return { hasSalon: true/false, data: salon|null }
+  updateSalon:
+    - Ownership check (see Section 10)
+  deleteSalon:
+    - Ownership check
+    - Cascade delete all related data (see Section 10)
+
+SalonDetailScreen sections:
+  - Hero image + gallery strip
+  - Salon info: name, category, location, phone, hours, avgRating
+  - Tab navigator: Services | Stylists | Reviews
+  - Fixed bottom "Book Appointment" CTA (customer only — hide if vendor viewing)
+
+Viva questions to prepare:
+  Q: How does Multer + Cloudinary work — where is the image actually stored?
+  Q: How do you enforce one salon per vendor?
+  Q: How does search work using query parameters in Express?
+  Q: What does the cascade delete do and why is it important?
+  Q: What HTTP status code do you return when a salon is not found?
+
+========================================
+MEMBER 3 — SERVICE MANAGEMENT
+========================================
+
+Backend files to create/modify:
+  models/Service.js
+  controllers/serviceController.js
+  routes/serviceRoutes.js
+
+Frontend files to create:
+  screens/vendor/VendorAddEditServiceScreen.js
+  screens/admin/AddEditServiceScreen.js
+  components/ServiceItem.js
+
+Routes and middleware:
+  GET    /api/services/salon/:salonId  → public
+  GET    /api/services/:id             → public
+  POST   /api/services                 → protect + isVendorOrAdmin + upload.single('image')
+  PUT    /api/services/:id             → protect + isVendorOrAdmin + upload.single('image')
+  DELETE /api/services/:id             → protect + isVendorOrAdmin
+  PUT    /api/services/:id/toggle      → protect + isVendorOrAdmin
+
+Controller ownership check (all mutating routes):
+  const service = await Service.findById(req.params.id).populate('salonId');
+  if (service.salonId.owner.toString() !== req.user._id.toString()
+      && req.user.role !== 'admin') {
+    return res.status(403)...
+  }
+
+createService ownership check:
+  const salon = await Salon.findById(req.body.salonId);
+  if (salon.owner.toString() !== req.user._id.toString()
+      && req.user.role !== 'admin') {
+    return res.status(403)...
+  }
+
+VendorAddEditServiceScreen:
+  - salonId auto-populated from user.ownedSalon — never shown as a field
+  - Fields: Name, Category (picker), Description, Price, Duration (mins), isActive toggle
+  - Single image upload
+  - Create → POST /api/services with salonId: user.ownedSalon
+  - Edit   → PUT  /api/services/:id
+
+ServiceItem component:
+  - Displays inside SalonDetailScreen Services tab
+  - Shows: name, duration chip, price (monospaced), "+" button
+  - Selected: rose left border highlight
+
+Viva questions to prepare:
+  Q: How does populate() work — what does it do under the hood?
+  Q: How do you know which salon a service belongs to?
+  Q: What happens if a customer tries to book a deactivated service?
+  Q: How does the ownership check work for updating a service?
+  Q: What validation do you apply before saving a service?
+
+========================================
+MEMBER 4 — STYLIST MANAGEMENT
+========================================
+
+Backend files to create/modify:
+  models/Stylist.js
+  controllers/stylistController.js
+  routes/stylistRoutes.js
+
+Frontend files to create:
+  screens/stylists/StylistDetailScreen.js
+  screens/vendor/VendorAddEditStylistScreen.js
+  components/StylistCard.js
+
+Routes and middleware:
+  GET    /api/stylists/salon/:salonId  → public
+  GET    /api/stylists/:id             → public
+  POST   /api/stylists                 → protect + isVendorOrAdmin + upload.array('portfolio', 10)
+  PUT    /api/stylists/:id             → protect + isVendorOrAdmin + upload.array('portfolio', 10)
+  DELETE /api/stylists/:id             → protect + isVendorOrAdmin
+
+Same ownership check pattern as Service (populate salonId, check owner).
+
+Availability data structure in MongoDB:
+  availability: [
+    { day: 'Monday',    slots: ['09:00','09:30','10:00','10:30','14:00'] },
+    { day: 'Tuesday',   slots: ['09:00','09:30','10:00'] },
+    { day: 'Wednesday', slots: [] },
+    ...
+  ]
+
+VendorAddEditStylistScreen:
+  - salonId auto-populated from user.ownedSalon
+  - Fields: Name, Bio, Specializations (tag input — add/remove tags)
+  - Portfolio: multi-image picker (max 10), show thumbnails with remove X
+  - Availability: for each day Mon-Sun:
+      Toggle switch to enable/disable day
+      If enabled: text input to add time slots (e.g. "09:00")
+      Show added slots as dismissable chips
+  - Create → POST /api/stylists
+  - Edit   → PUT  /api/stylists/:id
+
+StylistDetailScreen:
+  - Large circular avatar (96pt, rose ring)
+  - Name, specialization tags, bio
+  - Portfolio masonry grid (2 col, tap to fullscreen)
+  - Day picker (Mon-Sun horizontal chips)
+  - Time slot grid (3 col) — available/booked/selected states
+  - "Book with [Name]" CTA fixed at bottom
+
+Viva questions to prepare:
+  Q: How is stylist availability stored in MongoDB — show the exact structure?
+  Q: How do you upload an array of portfolio images using Multer?
+  Q: How does the frontend show only the time slots for the selected day?
+  Q: How does the ownership check reach the salon owner through a stylist document?
+  Q: What happens if all slots on a day are booked?
+
+========================================
+MEMBER 5 — APPOINTMENT BOOKING
+========================================
+
+Backend files to create/modify:
+  models/Appointment.js
+  controllers/appointmentController.js
+  routes/appointmentRoutes.js
+
+Frontend files to create:
+  screens/appointments/BookingFlowScreen.js
+  screens/appointments/BookingConfirmationScreen.js
+  screens/appointments/MyBookingsScreen.js
+  screens/appointments/BookingDetailScreen.js
+  screens/vendor/VendorBookingsScreen.js
+  screens/vendor/VendorBookingDetailScreen.js
+  screens/admin/ManageAppointmentsScreen.js
+  components/BookingCard.js
+  components/VendorBookingCard.js
+  components/StatusChip.js
+
+Routes and middleware:
+  POST   /api/appointments                 → protect (customer)
+  GET    /api/appointments/my              → protect (customer)
+  GET    /api/appointments/vendor-salon    → protect + isVendor
+  GET    /api/appointments                 → protect + admin
+  PUT    /api/appointments/:id/cancel      → protect (customer)
+  PUT    /api/appointments/:id/status      → protect + isVendorOrAdmin
+
+IMPORTANT — route order in appointmentRoutes.js:
+  Define /appointments/my and /appointments/vendor-salon BEFORE /appointments/:id
+  Otherwise Express will treat 'my' and 'vendor-salon' as :id params.
+
+  router.get('/my', protect, getMyAppointments);
+  router.get('/vendor-salon', protect, isVendor, getVendorSalonAppointments);
+  router.get('/', protect, admin, getAllAppointments);
+  router.get('/:id', protect, getAppointmentById);   // if needed
+
+Double-booking prevention (in createAppointment):
+  const conflict = await Appointment.findOne({
+    stylistId: req.body.stylistId,
+    date: req.body.date,
+    timeSlot: req.body.timeSlot,
+    status: { $ne: 'Cancelled' }
+  });
+  if (conflict) return res.status(400).json({ message: 'Time slot already booked' });
+
+Cancel logic:
+  - Verify appointment.userId === req.user._id (customer can only cancel OWN)
+  - Only allow cancel if status is 'Pending' or 'Confirmed'
+  - If 'Completed' or already 'Cancelled' → return 400
+
+getVendorSalonAppointments:
+  const salon = await Salon.findOne({ owner: req.user._id });
+  const appointments = await Appointment.find({ salonId: salon._id })
+    .populate('userId', 'name email profilePhoto')
+    .populate('serviceId', 'name price duration')
+    .populate('stylistId', 'name')
+    .sort({ date: 1, timeSlot: 1 });
+
+BookingFlowScreen (3 steps):
+  Step 1 — Select Service (from salon's services list)
+  Step 2 — Select Stylist + Date + Time Slot
+  Step 3 — Confirm (summary card + notes + total price + CTA)
+  Progress indicator at top: 3 connected circles
+
+VendorBookingsScreen:
+  - Calls GET /api/appointments/vendor-salon
+  - Segmented control: Pending | Confirmed | Completed
+  - Each card: customer info, service, stylist, date/time, status chip
+  - "Confirm" button on Pending items
+  - "Complete" button on Confirmed items
+
+StatusChip component:
+  Props: { status }
+  Pending   → amber/orange background
+  Confirmed → green background
+  Completed → gray background
+  Cancelled → red background
+
+Viva questions to prepare:
+  Q: Walk through the full booking flow from "Confirm" tap to DB record created.
+  Q: How do you prevent a stylist being double-booked?
+  Q: How do you ensure a customer can only cancel their OWN booking?
+  Q: Why do the GET /my and GET /vendor-salon routes come before GET /:id in the router?
+  Q: What status transitions can a vendor make vs a customer?
+
+========================================
+MEMBER 6 — REVIEWS + USER PROFILE + DEPLOYMENT
+========================================
+
+Backend files to create/modify:
+  models/Review.js
+  controllers/reviewController.js
+  controllers/userController.js
+  routes/reviewRoutes.js
+  routes/userRoutes.js
+  config/cloudinary.js
+
+Frontend files to create:
+  screens/reviews/WriteReviewScreen.js
+  screens/admin/AdminDashboardScreen.js
+  screens/admin/AdminUsersScreen.js
+  components/ReviewCard.js
+  components/StarRating.js
+
+Profile screens (already done — do not rebuild):
+  screens/profile/ProfileScreen.js      ← already working
+  screens/profile/EditProfileScreen.js  ← already working
+  screens/profile/SavedSalonsScreen.js  ← already working
+
+Routes:
+  POST   /api/reviews/:salonId     → protect
+  GET    /api/reviews/:salonId     → public
+  DELETE /api/reviews/:id          → protect + admin
+  GET    /api/users/profile        → protect
+  PUT    /api/users/profile        → protect
+  PUT    /api/users/profile/photo  → protect + upload.single('photo')
+  GET    /api/users/saved          → protect
+  POST   /api/users/saved/:salonId → protect
+  DELETE /api/users/saved/:salonId → protect
+  GET    /api/users/all            → protect + admin
+
+avgRating recalculation (call after create AND after delete):
+  const recalculateRating = async (salonId) => {
+    const result = await Review.aggregate([
+      { $match: { salonId: new mongoose.Types.ObjectId(salonId) } },
+      { $group: { _id: '$salonId', avgRating: { $avg: '$rating' } } }
+    ]);
+    const avg = result.length > 0
+      ? parseFloat(result[0].avgRating.toFixed(1)) : 0;
+    await Salon.findByIdAndUpdate(salonId, { avgRating: avg });
+  };
+
+WriteReviewScreen:
+  - Context card (salon name + service visited + date) at top
+  - 5 interactive stars (tap to select, scale-spring animation on tap)
+  - Textarea (min 10 chars, max 500 chars) with character counter
+  - Submit → POST /api/reviews/:salonId
+  - Show "Already reviewed" state if review exists
+
+AdminDashboardScreen stats:
+  - Total Salons, Total Bookings, Total Users, Pending Reviews
+  - Total Vendors (role === 'vendor')
+  - Vendors with no salon (ownedSalon === null)
+  Quick actions: View All Salons, View All Users, View All Bookings
+
+AdminUsersScreen:
+  - GET /api/users/all with ?role= filter
+  - Show: name, email, role chip, joined date
+  - For vendors: show salon name if ownedSalon is set, "No salon" if null
+
+Deployment steps (Render.com):
+  1. Ensure .env is in .gitignore — verify before anything else
+  2. Push final backend code to GitHub main branch
+  3. Go to render.com → New Web Service → Connect GitHub repo
+  4. Build command: npm install
+  5. Start command: node server.js
+  6. Add ALL .env variables in Render dashboard → Environment tab:
+       PORT, MONGO_URI, JWT_SECRET, JWT_EXPIRE,
+       CLOUDINARY_CLOUD_NAME, CLOUDINARY_API_KEY, CLOUDINARY_API_SECRET
+  7. Click Deploy — wait for build to complete
+  8. Copy the live URL (e.g. https://glowbook-api.onrender.com)
+  9. Update baseURL in glowbook-mobile/services/api.js to the live URL
+  10. Test EVERY endpoint in Postman using the live URL
+  11. Test the mobile app connecting to live API — no localhost in demo
+
+MongoDB Atlas setup:
+  1. Create free M0 cluster on mongodb.com/atlas
+  2. Create database user with username + password
+  3. Whitelist 0.0.0.0/0 in Network Access (allow all IPs — needed for Render)
+  4. Get connection string → paste as MONGO_URI in .env and Render dashboard
+
+Viva questions to prepare:
+  Q: Walk through deployment from push to Render to live URL working.
+  Q: Why must .env never be pushed to GitHub?
+  Q: How does avgRating stay in sync when reviews are added or deleted?
+  Q: How do you enforce one review per user per salon?
+  Q: How does your mobile app connect to MongoDB Atlas via the hosted backend?
+
+================================================================================
+SECTION 15 — DESIGN SYSTEM (constants/theme.js)
+================================================================================
+
+Apple iOS HIG — rose accent color for the beauty domain.
+
+Colors:
+  primary              : '#FF2D6B'
+  background           : '#FFFFFF'
+  backgroundSecondary  : '#F2F2F7'
+  backgroundGrouped    : '#F2F2F7'
+  labelPrimary         : '#000000'
+  labelSecondary       : 'rgba(60,60,67,0.6)'
+  labelTertiary        : 'rgba(60,60,67,0.3)'
+  separator            : 'rgba(60,60,67,0.29)'
+  opaqueSeparator      : '#C6C6C8'
+  systemGray           : '#8E8E93'
+  systemGray2          : '#AEAEB2'
+  systemGray3          : '#C7C7CC'
+  systemGray4          : '#D1D1D6'
+  systemGray5          : '#E5E5EA'
+  systemGray6          : '#F2F2F7'
+  destructive          : '#FF3B30'
+  success              : '#34C759'
+  warning              : '#FF9500'
+  info                 : '#007AFF'
+
+Status chip colors:
+  Pending   bg: '#FFF3CD'  text: '#856404'
+  Confirmed bg: '#D1E7DD'  text: '#0F5132'
+  Completed bg: '#F2F2F7'  text: '#8E8E93'
+  Cancelled bg: '#F8D7DA'  text: '#842029'
+
+Typography:
+  fontFamily  : Platform.OS === 'ios' ? 'System' : 'sans-serif'
+  largeTitle  : { fontSize: 34, fontWeight: '700' }
+  title1      : { fontSize: 28, fontWeight: '700' }
+  title2      : { fontSize: 22, fontWeight: '700' }
+  title3      : { fontSize: 20, fontWeight: '600' }
+  headline    : { fontSize: 17, fontWeight: '600' }
+  body        : { fontSize: 17, fontWeight: '400' }
+  callout     : { fontSize: 16, fontWeight: '400' }
+  subhead     : { fontSize: 15, fontWeight: '400' }
+  footnote    : { fontSize: 13, fontWeight: '400' }
+  caption1    : { fontSize: 12, fontWeight: '400' }
+  caption2    : { fontSize: 11, fontWeight: '400' }
+
+Spacing (8pt grid):
+  xs: 4, sm: 8, md: 12, base: 16, lg: 20, xl: 24, xxl: 32, xxxl: 44
+
+Corner Radius:
+  sm: 10, md: 12, lg: 14, xl: 16, xxl: 20, round: 999
+
+Shadows:
+  card     : { shadowColor:'#000', shadowOffset:{width:0,height:1}, shadowOpacity:0.04, shadowRadius:3, elevation:2 }
+  elevated : { shadowColor:'#000', shadowOffset:{width:0,height:2}, shadowOpacity:0.08, shadowRadius:8, elevation:4 }
+  floating : { shadowColor:'#000', shadowOffset:{width:0,height:8}, shadowOpacity:0.12, shadowRadius:20, elevation:8 }
+
+Primary button:
+  backgroundColor: '#FF2D6B', borderRadius: 14, height: 50,
+  paddingHorizontal: 16, color: '#FFFFFF', fontSize: 17, fontWeight: '600'
+
+================================================================================
+SECTION 16 — RESPONSE FORMAT STANDARD
+================================================================================
+
+ALL API responses must follow this exact format:
+
+SUCCESS:
+  Status: 200 (ok) or 201 (created)
+  Body: { success: true, data: <payload>, message: '<optional>' }
+
+ERROR:
+  Status: 400 (bad request) | 401 (unauthorized) | 403 (forbidden)
+           404 (not found) | 500 (server error)
+  Body: { success: false, message: '<description>' }
+
+Example — successful login:
+{
+  "success": true,
+  "data": {
+    "token": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9...",
+    "user": {
+      "_id": "64a1b2c3d4e5f6a7b8c9d0e1",
+      "name": "Tharusha",
+      "email": "t@example.com",
+      "role": "vendor",
+      "profilePhoto": "",
+      "ownedSalon": null
+    }
+  }
+}
+
+================================================================================
+SECTION 17 — PACKAGES
+================================================================================
+
+BACKEND (npm install):
+  express mongoose dotenv cors bcryptjs jsonwebtoken
+  multer cloudinary multer-storage-cloudinary
+  --save-dev nodemon
+
+package.json scripts:
+  "start": "node server.js"
+  "dev":   "nodemon server.js"
+
+FRONTEND (expo install):
+  npx create-expo-app glowbook-mobile
+
+  npx expo install @react-navigation/native @react-navigation/native-stack
+  npx expo install @react-navigation/bottom-tabs
+  npx expo install react-native-screens react-native-safe-area-context
+  npx expo install @react-native-async-storage/async-storage
+  npx expo install axios
+  npx expo install expo-image-picker
+  npx expo install expo-haptics
+  npx expo install react-native-gesture-handler
+
+================================================================================
+SECTION 18 — GIT WORKFLOW
+================================================================================
+
+Branch naming:
+  feat/auth-navigation    ← Member 1
+  feat/salon              ← Member 2
+  feat/service            ← Member 3
+  feat/stylist            ← Member 4
+  feat/appointment        ← Member 5
+  feat/review-deploy      ← Member 6
+  main                    ← production only
+
+Rules:
+  - Never commit directly to main
+  - Each member works on their own branch only
+  - Pull Request to merge into main — one other member reviews
+  - Commit message format:
+      feat: add vendor ownership check to salon controller
+      fix: correct route order for vendor-salon endpoint
+      style: update VendorDashboardScreen layout
+  - .env always in .gitignore — never commit secrets
+
+================================================================================
+SECTION 19 — SCREEN → MEMBER MAPPING
+================================================================================
+
+Place Google Stitch exports in: glowbook-mobile/assets/screens/
+Each member implements the screens that match their module.
+
+Member 1 : LoginScreen, RegisterScreen (with role picker), AppNavigator
+Member 2 : HomeScreen, ExploreScreen, SalonDetailScreen,
+           ManageSalonsScreen, AddEditSalonScreen
+Member 3 : ServiceItem component, VendorAddEditServiceScreen,
+           AddEditServiceScreen (admin version)
+Member 4 : StylistDetailScreen, VendorAddEditStylistScreen, StylistCard
+Member 5 : BookingFlowScreen, BookingConfirmationScreen,
+           MyBookingsScreen, BookingDetailScreen,
+           VendorBookingsScreen, VendorBookingDetailScreen,
+           ManageAppointmentsScreen
+Member 6 : WriteReviewScreen, AdminDashboardScreen, AdminUsersScreen,
+           VendorDashboardScreen, VendorSalonScreen, VendorWelcomeScreen,
+           VendorCreateSalonScreen, VendorEditSalonScreen
+
+Shared components (whoever finishes first builds it, others import it):
+  SalonCard.js      ← Member 2
+  ServiceItem.js    ← Member 3
+  StylistCard.js    ← Member 4
+  BookingCard.js    ← Member 5
+  StatusChip.js     ← Member 5
+  StarRating.js     ← Member 6
+  ReviewCard.js     ← Member 6
+  LoadingSpinner.js ← Member 1
+
+================================================================================
+SECTION 20 — INTEGRATION CHECKLIST
+================================================================================
+
+Run this checklist before final demo. All items must pass.
+
+AUTHENTICATION:
+[ ] Register as customer → logs in → sees Customer tabs
+[ ] Register as vendor → logs in → sees VendorWelcomeScreen (no salon yet)
+[ ] Login as existing user → correct role-based navigation every time
+[ ] JWT token persists after app restart (AsyncStorage)
+[ ] Logout clears token and returns to auth stack
+[ ] Passing role: 'admin' in register body returns 400
+
+VENDOR FLOW:
+[ ] Vendor fills VendorCreateSalonScreen → salon saved to DB
+[ ] After salon created → user.ownedSalon updates in AuthContext
+[ ] Navigation automatically switches to VendorTabs (no manual navigate needed)
+[ ] Vendor can add services to THEIR salon
+[ ] Vendor cannot add services to another vendor's salon (Postman test → 403)
+[ ] Vendor sees incoming bookings in VendorBookingsScreen
+[ ] Vendor can confirm a Pending booking
+[ ] Vendor can mark a Confirmed booking as Completed
+[ ] Vendor cannot cancel a booking (returns 400)
+[ ] Vendor avgRating updates when a customer posts a review
+
+CUSTOMER FLOW:
+[ ] Customer browses salons (all vendor salons appear)
+[ ] Customer books appointment → appears in vendor's bookings screen
+[ ] Customer sees booking in MyBookingsScreen
+[ ] Customer can cancel Pending or Confirmed booking
+[ ] Customer cannot cancel Completed booking
+[ ] Customer can write review after visit
+[ ] Customer cannot write second review for same salon
+
+ADMIN FLOW:
+[ ] Admin can view all users, all salons, all bookings
+[ ] Admin can delete any salon (cascade deletes services/stylists/appointments/reviews)
+[ ] Admin can delete any review
+[ ] Admin dashboard shows correct stats
+
+SECURITY:
+[ ] Protected routes return 401 without token
+[ ] Vendor routes return 403 for customer token
+[ ] Admin routes return 403 for vendor or customer token
+[ ] Vendor cannot access another vendor's salon via PUT (Postman → 403)
+
+DEPLOYMENT:
+[ ] Backend live on Render — health check GET / returns 200
+[ ] MongoDB Atlas connected to deployed backend
+[ ] All environment variables set on Render dashboard
+[ ] Mobile app baseURL points to Render URL (not localhost)
+[ ] All screens load real data from live API
+[ ] Image upload works and Cloudinary URL saves correctly
+[ ] No hardcoded data anywhere in the app
+
+================================================================================
+SECTION 21 — COMMON MISTAKES TO AVOID
+================================================================================
+
+1.  Never hardcode data — every list must come from the API
+2.  Never use localhost in the final demo — use the Render URL
+3.  Never push .env to GitHub
+4.  Never allow role: 'admin' to be set via the register endpoint
+5.  Always define /my and /vendor-salon routes BEFORE /:id in the router
+    (Express matches routes top-to-bottom — 'my' will be caught by /:id otherwise)
+6.  Always check ownership before mutating vendor-owned data
+7.  Always include cors() middleware in server.js before all routes
+8.  Always use SafeAreaView on every screen
+9.  Always use the api.js Axios instance — never use fetch() directly
+10. Always use theme.js constants — never hardcode colors or font sizes
+11. Always add loading and error states to every API call
+12. Always validate form inputs on frontend (UX) and backend (security)
+13. Always recalculate avgRating after every review create AND delete
+14. Always set ownedSalon on the User document when vendor creates a salon
+15. Always reset ownedSalon to null when a salon is deleted
+
+================================================================================
+END OF BLUEPRINT
+Project : GlowBook v2.0
+Course  : SE2020 — Web and Mobile Technologies
+Year    : 2 Semester 2 (2026)
+Roles   : Customer / Vendor / Admin
+================================================================================

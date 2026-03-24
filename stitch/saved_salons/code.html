@@ -1,0 +1,235 @@
+<!DOCTYPE html>
+
+<html class="light" lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>Saved Salons - GlowBook</title>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700;800;900&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<script id="tailwind-config">
+      tailwind.config = {
+        darkMode: "class",
+        theme: {
+          extend: {
+            colors: {
+              "tertiary-fixed-dim": "#62de86",
+              "on-secondary-container": "#730129",
+              "on-primary": "#ffffff",
+              "on-primary-fixed": "#400013",
+              "on-error-container": "#93000a",
+              "surface-tint": "#bd0047",
+              "secondary-fixed-dim": "#ffb2bc",
+              "on-primary-container": "#fffbff",
+              "primary": "#b80046",
+              "inverse-surface": "#2e3034",
+              "secondary": "#aa314e",
+              "error-container": "#ffdad6",
+              "on-surface-variant": "#5c3f43",
+              "background": "#f9f9fe",
+              "tertiary": "#006b32",
+              "on-tertiary": "#ffffff",
+              "on-surface": "#1a1c1f",
+              "on-secondary-fixed": "#400013",
+              "tertiary-container": "#008741",
+              "surface-container": "#ededf2",
+              "surface-variant": "#e2e2e7",
+              "on-tertiary-fixed": "#00210b",
+              "surface-container-lowest": "#ffffff",
+              "surface-container-highest": "#e2e2e7",
+              "inverse-primary": "#ffb2bc",
+              "primary-container": "#e40e5a",
+              "inverse-on-surface": "#f0f0f5",
+              "on-background": "#1a1c1f",
+              "on-secondary-fixed-variant": "#891737",
+              "on-tertiary-fixed-variant": "#005226",
+              "secondary-container": "#ff728d",
+              "primary-fixed-dim": "#ffb2bc",
+              "surface-bright": "#f9f9fe",
+              "surface": "#f9f9fe",
+              "primary-fixed": "#ffd9dd",
+              "tertiary-fixed": "#7ffba0",
+              "outline-variant": "#e5bdc1",
+              "outline": "#906e72",
+              "surface-container-low": "#f3f3f8",
+              "secondary-fixed": "#ffd9dd",
+              "on-error": "#ffffff",
+              "on-primary-fixed-variant": "#910035",
+              "surface-container-high": "#e8e8ed",
+              "surface-dim": "#d9dade",
+              "on-secondary": "#ffffff",
+              "on-tertiary-container": "#f7fff3",
+              "error": "#ba1a1a"
+            },
+            fontFamily: {
+              "headline": ["Inter"],
+              "body": ["Inter"],
+              "label": ["Inter"]
+            },
+            borderRadius: {"DEFAULT": "0.25rem", "lg": "0.5rem", "xl": "0.75rem", "full": "9999px"},
+          },
+        },
+      }
+    </script>
+<style>
+        .material-symbols-outlined {
+            font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24;
+            vertical-align: middle;
+        }
+        .filled-icon {
+            font-variation-settings: 'FILL' 1;
+        }
+        .squircle {
+            border-radius: 14pt;
+        }
+        .inset-shadow-bloom {
+            box-shadow: 0 10px 30px rgba(26, 28, 31, 0.06);
+        }
+        .ios-blur {
+            backdrop-filter: blur(20px) saturate(180%);
+            -webkit-backdrop-filter: blur(20px) saturate(180%);
+        }
+    </style>
+<style>
+    body {
+      min-height: max(884px, 100dvh);
+    }
+  </style>
+  </head>
+<body class="bg-surface font-body text-on-surface">
+<!-- TopAppBar -->
+<header class="fixed top-0 w-full z-50 bg-white/80 backdrop-blur-xl flex items-center justify-between px-6 py-4 w-full border-none shadow-sm">
+<div class="flex items-center gap-2">
+<span class="material-symbols-outlined text-slate-400">menu</span>
+</div>
+<h1 class="text-[#FF2D6B] font-black text-xl italic tracking-tight">GlowBook</h1>
+<div class="flex items-center gap-2">
+<span class="material-symbols-outlined text-slate-400">notifications</span>
+</div>
+</header>
+<main class="pt-24 pb-32 px-6 max-w-5xl mx-auto">
+<!-- Large Title & Edit Action -->
+<section class="flex justify-between items-end mb-8">
+<h2 class="text-[34pt] font-bold leading-tight tracking-tight text-on-surface">Saved</h2>
+<button class="text-primary font-headline font-semibold mb-2 active:scale-95 transition-transform">Edit</button>
+</section>
+<!-- Main Content Area: Grid of Saved Salons -->
+<!-- Note: This section handles the case where there ARE saved items -->
+<div class="grid grid-cols-2 gap-4 md:gap-6">
+<!-- Salon Card 1 -->
+<div class="group relative flex flex-col gap-2">
+<div class="aspect-[3/4] overflow-hidden squircle bg-surface-container-low relative">
+<img alt="Luxury hair salon interior with minimalist design" class="w-full h-full object-cover transition-transform duration-500 group-hover:scale-105" data-alt="Interior of a luxury hair salon with minimalist modern design" src="https://lh3.googleusercontent.com/aida-public/AB6AXuAFajHYFsJDiFC7F1lVBHmc7oIsjcIsf3T8ZGVNt5frYF7MT7pZeUO-yYjyOar6rdNM1nhAnpZvmfHDTM929SxGdm9m0oYBAeJBzjWQTTwsLEcTuzCn6_PE33fNt1eu0ruLBpFkYRuzw_K-itW5X9YTVUjQNf92HU54KX6qXA3ehgy5x_heNRshbCpY6wEtSElaQ5eldvf-jRIEOZNHImm1u8muL3CkBLaIo2QcLOpad0GO4gOfzGiQH9e--ulCIaUNnpNYxlG6dsoU"/>
+<div class="absolute top-3 right-3">
+<button class="w-8 h-8 rounded-full bg-secondary-container/90 ios-blur flex items-center justify-center active:scale-90 transition-transform">
+<span class="material-symbols-outlined text-on-primary filled-icon text-[20px]" style="font-variation-settings: 'FILL' 1;">favorite</span>
+</button>
+</div>
+</div>
+<div class="flex flex-col">
+<span class="text-[13px] font-semibold tracking-tight text-on-surface">The Velvet Scissors</span>
+<div class="flex items-center gap-0.5">
+<span class="material-symbols-outlined text-primary text-[14px] filled-icon" style="font-variation-settings: 'FILL' 1;">star</span>
+<span class="material-symbols-outlined text-primary text-[14px] filled-icon" style="font-variation-settings: 'FILL' 1;">star</span>
+<span class="material-symbols-outlined text-primary text-[14px] filled-icon" style="font-variation-settings: 'FILL' 1;">star</span>
+<span class="material-symbols-outlined text-primary text-[14px] filled-icon" style="font-variation-settings: 'FILL' 1;">star</span>
+<span class="material-symbols-outlined text-primary text-[14px] filled-icon" style="font-variation-settings: 'FILL' 1;">star</span>
+</div>
+</div>
+</div>
+<!-- Salon Card 2 -->
+<div class="group relative flex flex-col gap-2">
+<div class="aspect-[3/4] overflow-hidden squircle bg-surface-container-low relative">
+<img alt="High-end skin care clinic with aesthetic lighting" class="w-full h-full object-cover transition-transform duration-500 group-hover:scale-105" data-alt="Modern aesthetic clinic with soft warm pink lighting" src="https://lh3.googleusercontent.com/aida-public/AB6AXuCDxdBWHY_CdN-U0usk_vfNtO25lLgazHu5lqKPGgsBsuPkqybY0Dz4DJP27RfU6hRmWApDRIR9IzVRTLHCefMxc6iAalU9hNo9wzyuPNR8Rwtr3GQWr1yA74QihTOZlG63phUSPkq-yOgSVBDpfpa1krcNJ9Auntb5CspyLvkvIUHa9DoLmALBgawGU8ONPIxVfnlLZcyBF_yOtTbfcf_F3jRaOOJm4KesA5a81yt9loTcub3bYQ8q6ZmdSbHIoMdqwWX3MIIVRVMV"/>
+<div class="absolute top-3 right-3">
+<button class="w-8 h-8 rounded-full bg-secondary-container/90 ios-blur flex items-center justify-center active:scale-90 transition-transform">
+<span class="material-symbols-outlined text-on-primary filled-icon text-[20px]" style="font-variation-settings: 'FILL' 1;">favorite</span>
+</button>
+</div>
+</div>
+<div class="flex flex-col">
+<span class="text-[13px] font-semibold tracking-tight text-on-surface">Luminary Glow Bar</span>
+<div class="flex items-center gap-0.5">
+<span class="material-symbols-outlined text-primary text-[14px] filled-icon" style="font-variation-settings: 'FILL' 1;">star</span>
+<span class="material-symbols-outlined text-primary text-[14px] filled-icon" style="font-variation-settings: 'FILL' 1;">star</span>
+<span class="material-symbols-outlined text-primary text-[14px] filled-icon" style="font-variation-settings: 'FILL' 1;">star</span>
+<span class="material-symbols-outlined text-primary text-[14px] filled-icon" style="font-variation-settings: 'FILL' 1;">star</span>
+<span class="material-symbols-outlined text-primary text-[14px] filled-icon" style="font-variation-settings: 'FILL' 0;">star</span>
+</div>
+</div>
+</div>
+<!-- Salon Card 3 -->
+<div class="group relative flex flex-col gap-2">
+<div class="aspect-[3/4] overflow-hidden squircle bg-surface-container-low relative">
+<img alt="Nail art studio with pink chairs" class="w-full h-full object-cover transition-transform duration-500 group-hover:scale-105" data-alt="Artistic nail salon with stylish pink velvet chairs" src="https://lh3.googleusercontent.com/aida-public/AB6AXuC88tg9dTxbe99JYKG_ImQmFKhBQyUincQ5jMadOHZtDnaNexGTxEVaQB1rihSiNd9lgLYRW1mieaZbByzZsLuhLbitDdT4E2mUrchoD7bON4QS-6mFjKzJhblLDLoPE10SAKy9Uc7iVRz57BMnYlaUFck-W_A3ztVtod6FD4pxkVmBx8mKe-LXLthCIp5CgNru8_ahZFDtEPLdCVC8VInhAyg1N_em78wJvBNOpmt_FUTCXIJhDhpgu0IovqsvZVf4YFzLJ2u-2ax5"/>
+<div class="absolute top-3 right-3">
+<button class="w-8 h-8 rounded-full bg-secondary-container/90 ios-blur flex items-center justify-center active:scale-90 transition-transform">
+<span class="material-symbols-outlined text-on-primary filled-icon text-[20px]" style="font-variation-settings: 'FILL' 1;">favorite</span>
+</button>
+</div>
+</div>
+<div class="flex flex-col">
+<span class="text-[13px] font-semibold tracking-tight text-on-surface">Pastel Polished</span>
+<div class="flex items-center gap-0.5">
+<span class="material-symbols-outlined text-primary text-[14px] filled-icon" style="font-variation-settings: 'FILL' 1;">star</span>
+<span class="material-symbols-outlined text-primary text-[14px] filled-icon" style="font-variation-settings: 'FILL' 1;">star</span>
+<span class="material-symbols-outlined text-primary text-[14px] filled-icon" style="font-variation-settings: 'FILL' 1;">star</span>
+<span class="material-symbols-outlined text-primary text-[14px] filled-icon" style="font-variation-settings: 'FILL' 1;">star</span>
+<span class="material-symbols-outlined text-primary text-[14px] filled-icon" style="font-variation-settings: 'FILL' 1;">star</span>
+</div>
+</div>
+</div>
+<!-- Salon Card 4 -->
+<div class="group relative flex flex-col gap-2">
+<div class="aspect-[3/4] overflow-hidden squircle bg-surface-container-low relative">
+<img alt="Modern lash and brow studio" class="w-full h-full object-cover transition-transform duration-500 group-hover:scale-105" data-alt="Minimalist lash and brow studio interior design" src="https://lh3.googleusercontent.com/aida-public/AB6AXuA-Miu2xYgMMBA230EkpQ3IGP4n0wCjK_DvRWa1vD5A1ctI7FnJ0-o_mdc7MJ-xH0KixAY1SHZdBK3UXOzY3hEhLu1PcyRLY8heYTFAj92kCg4r5L3juLx9ZxbQZJad86ol4KIIfuC-uKxbvLfDbcmwHDnWyBw_nUnyxREs-dXP5Oyn7vDH5ih960p4wklg8CrwnISo0TYaZLliythxyapuDWEDq3iqYfs_GUFpkejCdZHt0BuEKvJFuq_scsTL_jEEdKh_3QLQt_ZS"/>
+<div class="absolute top-3 right-3">
+<button class="w-8 h-8 rounded-full bg-secondary-container/90 ios-blur flex items-center justify-center active:scale-90 transition-transform">
+<span class="material-symbols-outlined text-on-primary filled-icon text-[20px]" style="font-variation-settings: 'FILL' 1;">favorite</span>
+</button>
+</div>
+</div>
+<div class="flex flex-col">
+<span class="text-[13px] font-semibold tracking-tight text-on-surface">Precision Arch</span>
+<div class="flex items-center gap-0.5">
+<span class="material-symbols-outlined text-primary text-[14px] filled-icon" style="font-variation-settings: 'FILL' 1;">star</span>
+<span class="material-symbols-outlined text-primary text-[14px] filled-icon" style="font-variation-settings: 'FILL' 1;">star</span>
+<span class="material-symbols-outlined text-primary text-[14px] filled-icon" style="font-variation-settings: 'FILL' 1;">star</span>
+<span class="material-symbols-outlined text-primary text-[14px] filled-icon" style="font-variation-settings: 'FILL' 1;">star</span>
+<span class="material-symbols-outlined text-primary text-[14px] filled-icon" style="font-variation-settings: 'FILL' 1;">star</span>
+</div>
+</div>
+</div>
+</div>
+<!-- Optional Empty State Example (Hidden by default unless list is empty) -->
+<div class="hidden flex flex-col items-center justify-center py-20 text-center">
+<div class="w-24 h-24 bg-surface-container-low rounded-full flex items-center justify-center mb-6">
+<span class="material-symbols-outlined text-slate-300 text-[48px] filled-icon" style="font-variation-settings: 'FILL' 1;">heart_broken</span>
+</div>
+<h3 class="text-[28pt] font-bold text-on-surface mb-4">Nothing Saved Yet</h3>
+<button class="px-10 py-4 bg-gradient-to-r from-primary to-primary-container text-white rounded-xl font-headline font-semibold shadow-lg active:scale-95 transition-transform">
+                Explore
+            </button>
+</div>
+</main>
+<!-- BottomNavBar -->
+<nav class="fixed bottom-0 w-full z-50 bg-white/80 backdrop-blur-xl flex justify-around items-center w-full h-16 px-4 border-t border-slate-100 pb-safe">
+<a class="flex flex-col items-center justify-center text-slate-400 hover:text-[#FF2D6B] transition-colors active:scale-90 transition-transform" href="#">
+<span class="material-symbols-outlined">home</span>
+<span class="font-['Inter'] font-semibold text-[10px] uppercase tracking-widest mt-1">Home</span>
+</a>
+<a class="flex flex-col items-center justify-center text-slate-400 hover:text-[#FF2D6B] transition-colors active:scale-90 transition-transform" href="#">
+<span class="material-symbols-outlined">search</span>
+<span class="font-['Inter'] font-semibold text-[10px] uppercase tracking-widest mt-1">Explore</span>
+</a>
+<a class="flex flex-col items-center justify-center text-[#FF2D6B] scale-110 active:scale-90 transition-transform" href="#">
+<span class="material-symbols-outlined filled-icon" style="font-variation-settings: 'FILL' 1;">favorite</span>
+<span class="font-['Inter'] font-semibold text-[10px] uppercase tracking-widest mt-1">Bookings</span>
+</a>
+<a class="flex flex-col items-center justify-center text-slate-400 hover:text-[#FF2D6B] transition-colors active:scale-90 transition-transform" href="#">
+<span class="material-symbols-outlined">account_circle</span>
+<span class="font-['Inter'] font-semibold text-[10px] uppercase tracking-widest mt-1">Profile</span>
+</a>
+</nav>
+</body></html>

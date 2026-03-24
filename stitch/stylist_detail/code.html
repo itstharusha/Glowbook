@@ -1,0 +1,223 @@
+<!DOCTYPE html>
+
+<html class="light" lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<script id="tailwind-config">
+      tailwind.config = {
+        darkMode: "class",
+        theme: {
+          extend: {
+            colors: {
+              "tertiary-fixed-dim": "#62de86",
+              "on-secondary-container": "#730129",
+              "on-primary": "#ffffff",
+              "on-primary-fixed": "#400013",
+              "on-error-container": "#93000a",
+              "surface-tint": "#bd0047",
+              "secondary-fixed-dim": "#ffb2bc",
+              "on-primary-container": "#fffbff",
+              "primary": "#b80046",
+              "inverse-surface": "#2e3034",
+              "secondary": "#aa314e",
+              "error-container": "#ffdad6",
+              "on-surface-variant": "#5c3f43",
+              "background": "#f9f9fe",
+              "tertiary": "#006b32",
+              "on-tertiary": "#ffffff",
+              "on-surface": "#1a1c1f",
+              "on-secondary-fixed": "#400013",
+              "tertiary-container": "#008741",
+              "surface-container": "#ededf2",
+              "surface-variant": "#e2e2e7",
+              "on-tertiary-fixed": "#00210b",
+              "surface-container-lowest": "#ffffff",
+              "surface-container-highest": "#e2e2e7",
+              "inverse-primary": "#ffb2bc",
+              "primary-container": "#e40e5a",
+              "inverse-on-surface": "#f0f0f5",
+              "on-background": "#1a1c1f",
+              "on-secondary-fixed-variant": "#891737",
+              "on-tertiary-fixed-variant": "#005226",
+              "secondary-container": "#ff728d",
+              "primary-fixed-dim": "#ffb2bc",
+              "surface-bright": "#f9f9fe",
+              "surface": "#f9f9fe",
+              "primary-fixed": "#ffd9dd",
+              "tertiary-fixed": "#7ffba0",
+              "outline-variant": "#e5bdc1",
+              "outline": "#906e72",
+              "surface-container-low": "#f3f3f8",
+              "secondary-fixed": "#ffd9dd",
+              "on-error": "#ffffff",
+              "on-primary-fixed-variant": "#910035",
+              "surface-container-high": "#e8e8ed",
+              "surface-dim": "#d9dade",
+              "on-secondary": "#ffffff",
+              "on-tertiary-container": "#f7fff3",
+              "error": "#ba1a1a"
+            },
+            fontFamily: {
+              "headline": ["Inter"],
+              "body": ["Inter"],
+              "label": ["Inter"],
+              "mono": ["SF Mono", "ui-monospace", "monospace"]
+            },
+            borderRadius: {"DEFAULT": "0.25rem", "lg": "0.5rem", "xl": "0.75rem", "full": "9999px"},
+          },
+        },
+      }
+    </script>
+<style>
+        .material-symbols-outlined {
+            font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24;
+        }
+        .rose-ring {
+            padding: 3px;
+            background: linear-gradient(135deg, #FF2D6B 0%, #E40E5A 100%);
+        }
+        .glass-sheet {
+            background: rgba(255, 255, 255, 0.8);
+            backdrop-filter: blur(20px);
+            -webkit-backdrop-filter: blur(20px);
+        }
+        .hide-scrollbar::-webkit-scrollbar {
+            display: none;
+        }
+        .hide-scrollbar {
+            -ms-overflow-style: none;
+            scrollbar-width: none;
+        }
+    </style>
+<style>
+    body {
+      min-height: max(884px, 100dvh);
+    }
+  </style>
+  </head>
+<body class="bg-surface font-body text-on-surface">
+<!-- Top App Bar -->
+<header class="fixed top-0 w-full z-50 bg-white/80 dark:bg-black/80 backdrop-blur-xl flex items-center justify-between px-6 py-4 w-full shadow-sm dark:shadow-none">
+<div class="flex items-center gap-4">
+<span class="material-symbols-outlined text-slate-400 dark:text-slate-500 active:scale-95 transition-transform" data-icon="arrow_back">arrow_back</span>
+</div>
+<h1 class="text-[#FF2D6B] font-black text-xl italic tracking-tight">GlowBook</h1>
+<div class="flex items-center gap-4">
+<span class="material-symbols-outlined text-slate-400 dark:text-slate-500 active:scale-95 transition-transform" data-icon="share">share</span>
+</div>
+</header>
+<main class="pt-20 pb-32">
+<!-- Profile Header -->
+<section class="px-6 flex flex-col items-center text-center">
+<div class="w-[96px] h-[96px] rose-ring rounded-full mb-4">
+<img alt="Stylist profile" class="w-full h-full object-cover rounded-full border-2 border-white" data-alt="Close up portrait of a professional female hair stylist" src="https://lh3.googleusercontent.com/aida-public/AB6AXuCQ4INOVstIxLMZ7b1vf1s3WTMyAFdafggH54NAqeCASoyoqZxqXy_0QIbJ5dKbNQn30mQNRiA2QH2c21vszJ_0qOFPVOpJjxVD1HKjR70EtIvBGpJqZOvIaCugycqcapafipGi27LwTlGw0Z_HWB9ePjNZWAliQE3Ov6d_dQKK0asQHnVfHMLEzbl1BXIswnRtLTKfZEHYxF2hYyDpb_cMyQb4dx_khXk8ekvjuWvV2HoCmxh4VY_0Fi1ADkRUSUtmtrETQPaMGSw6"/>
+</div>
+<h2 class="text-[28px] font-bold text-on-surface leading-tight mb-2">Elena Rodriguez</h2>
+<div class="flex flex-wrap justify-center gap-2 mb-4">
+<span class="px-3 py-1 bg-secondary-container text-on-secondary-container text-xs font-semibold rounded-lg">Master Colorist</span>
+<span class="px-3 py-1 bg-secondary-container text-on-secondary-container text-xs font-semibold rounded-lg">Balayage Expert</span>
+</div>
+<p class="text-[17px] text-on-surface-variant leading-relaxed max-w-sm mb-4">
+                Specializing in seamless sun-kissed color and precision cuts. 12+ years of experience in luxury editorial styling.
+            </p>
+<!-- Rating & Experience -->
+<div class="flex flex-col items-center gap-1">
+<div class="flex items-center gap-1">
+<span class="material-symbols-outlined text-[#FF2D6B] text-lg" data-icon="star" style="font-variation-settings: 'FILL' 1;">star</span>
+<span class="material-symbols-outlined text-[#FF2D6B] text-lg" data-icon="star" style="font-variation-settings: 'FILL' 1;">star</span>
+<span class="material-symbols-outlined text-[#FF2D6B] text-lg" data-icon="star" style="font-variation-settings: 'FILL' 1;">star</span>
+<span class="material-symbols-outlined text-[#FF2D6B] text-lg" data-icon="star" style="font-variation-settings: 'FILL' 1;">star</span>
+<span class="material-symbols-outlined text-[#FF2D6B] text-lg" data-icon="star" style="font-variation-settings: 'FILL' 1;">star</span>
+<span class="ml-1 text-[15px] font-bold">4.9</span>
+</div>
+<span class="text-[13px] text-on-surface-variant/70 font-medium">850+ clients served • Top Rated 2024</span>
+</div>
+</section>
+<!-- Portfolio Grid -->
+<section class="mt-10">
+<div class="px-6 flex justify-between items-end mb-4">
+<h3 class="text-[20px] font-bold">Portfolio</h3>
+<span class="text-[14px] text-primary font-semibold">View All</span>
+</div>
+<div class="grid grid-cols-3 gap-[1px] bg-surface-variant">
+<img class="aspect-square object-cover bg-white" data-alt="Blonde balayage hair style on a client" src="https://lh3.googleusercontent.com/aida-public/AB6AXuB05bww_JIAAsLRB3VdkNhC9uV7z2O9j3c8zhHqOQGvacwEfCbecFRnQHzQbtrzn2MEpi8r1DdW6Ye0x1q0ib-dNQLvoMTU2lkWXrOPxquYONN8PfcNJTxZEeHRThINUfx0pZv0OSHC-aby6tdvHrNJZ3vD1NfGTUG4VbpsICc-XWHQpGz6Y31ldnd8otVNzNlfADWHple5Cae7iXnFrKgDle2VkOG2yqDnykG8cFEuA1QXBTAoalcDVx-QZkQ53P_kvn01N95vjhfS"/>
+<img class="aspect-square object-cover bg-white" data-alt="Vibrant pink hair coloring technique" src="https://lh3.googleusercontent.com/aida-public/AB6AXuAhrL5sv01IW86PXzjTN-h_S5axZwex0Tot7xB39LcYcBbu1DWn6htfXxPYEMceyXi8H84nvYiK36pQpOxE4Aex-99pGFyd91PcJcGKw5Gv3vCawv63ITSG2kIDoPSiBf5qMAmX5zfPVdoaRFV6qkgq56tKjrGHqXvVFg0Ym96iUumezxC3-sDo1RLCoe42rATzFeiEh8LpMjNuPMnsrJjN83ZqdltnF6_Z9J_S9ydB5K-V-ZcO9ti0mbaPOR6zQSv7sNcKRlnezuaj"/>
+<img class="aspect-square object-cover bg-white" data-alt="Sophisticated updo bridal hairstyle" src="https://lh3.googleusercontent.com/aida-public/AB6AXuDub_IUU9mdXM0yPDrm8SU70Ye062qCBK7M6GHPVMaHNtS7Lb9O3P_sFRZ9qKTSU3IDu0VcZvlWhz31YSnWAqt3wHA2RdMOHWmWjxrFlDvWhXnoNUUHp9dS2AFO3ZEheHKnPDWzHw_dTJajILLyueFeKEu_T54desjbBJamgMR4zmhwWsf1EWGKcxWVANhkqumczGcsjcen7bcZRcEABJ5gnMqmP25iQz0S8-ZZquBWXLFNM3c5efJcnx0mF7laqIsIrd0zy8t5VYE9"/>
+<img class="aspect-square object-cover bg-white" data-alt="Modern textured bob haircut" src="https://lh3.googleusercontent.com/aida-public/AB6AXuD2Aggz9WCRr1ZqloQqQmx_XFiWEAIVZ1MxkFMnYp-2lK73i9V-61B_xd6_AN_uEHnX4HeRLMoOLanaPyL2DyxvAKRDc1It3MW_I7SOayZysu42lU_x7eJr24oBEcRIuaLu5BpP0-xHQUMuWUZ1_WGqAJc-ct4bA7zFgAPJkzfySyGZAS7DTo-qZFrtteWCFo16lpm5uQcJjxoe5EoiQ9vhpuX2ylU4mVMX_zDIc4ls6Lw2N0JqMbnA3zbaYdH5chJixY8z1KPN5RiH"/>
+<img class="aspect-square object-cover bg-white" data-alt="Deep brunette hair with soft highlights" src="https://lh3.googleusercontent.com/aida-public/AB6AXuAC-SaAyS64GznMNBHz_9vuF1ZwDjnwr7IXA3Q9EQ1CVnWO918Dz2G8wwk_eo-t6EOIeopyevzuMSkDuDRhvpoOhFBJw8aoJQTwNQaxJbe8s66I2R_F8Fd0ym27S05nyjnOFM-9H4fiAEfcF9hz2sEE5bwyKG_y9OyWcAG98F3mYQbisuxmRpLokPeIEBU_LSNKjopt57rlcuo83soArg1v-oezt4bQVyl-DOE3XzQFnFRdA5EWCh2gDIw_To_Y0PibSOOzt9hBJvlC"/>
+<img class="aspect-square object-cover bg-white" data-alt="Stylist working on client hair in salon" src="https://lh3.googleusercontent.com/aida-public/AB6AXuAsLn6xSZmy7E7MvrJ8CHXm8HcCuV88h84DXaWNP7MrpTlYaDQGDQEHS60boOmxe7nLForXUp21hEq0rvcXj6bW5-mA9YWIuAZSA96iThm8bqcm-qcXmoOjX2hPj9P5614Y0y_suSH9FRva5X7pvx_YsOpBGfIDmtGfQnHcCz2iwTJepvWRiVPIanRsYL7Qqndk2r0xWHkkprr1NSUa_ZIxEo1uO0j2-i_aewZQ0KxIKdVWgMpoxbnGAlE3LO0mluAHNBZWnlJeH9kq"/>
+</div>
+</section>
+<!-- Availability -->
+<section class="mt-10">
+<div class="px-6 mb-4">
+<h3 class="text-[20px] font-bold">Availability</h3>
+</div>
+<!-- Horizontal Day Picker -->
+<div class="flex gap-4 overflow-x-auto px-6 pb-4 hide-scrollbar">
+<div class="flex flex-col items-center min-w-[54px] p-3 rounded-2xl bg-primary text-white scale-105 shadow-lg shadow-primary/20">
+<span class="text-[11px] uppercase tracking-tighter opacity-80 mb-1">Mon</span>
+<span class="text-[17px] font-bold">14</span>
+</div>
+<div class="flex flex-col items-center min-w-[54px] p-3 rounded-2xl bg-surface-container-low text-on-surface-variant">
+<span class="text-[11px] uppercase tracking-tighter mb-1">Tue</span>
+<span class="text-[17px] font-bold">15</span>
+</div>
+<div class="flex flex-col items-center min-w-[54px] p-3 rounded-2xl bg-surface-container-low text-on-surface-variant">
+<span class="text-[11px] uppercase tracking-tighter mb-1">Wed</span>
+<span class="text-[17px] font-bold">16</span>
+</div>
+<div class="flex flex-col items-center min-w-[54px] p-3 rounded-2xl bg-surface-container-low text-on-surface-variant">
+<span class="text-[11px] uppercase tracking-tighter mb-1">Thu</span>
+<span class="text-[17px] font-bold">17</span>
+</div>
+<div class="flex flex-col items-center min-w-[54px] p-3 rounded-2xl bg-surface-container-low text-on-surface-variant">
+<span class="text-[11px] uppercase tracking-tighter mb-1">Fri</span>
+<span class="text-[17px] font-bold">18</span>
+</div>
+<div class="flex flex-col items-center min-w-[54px] p-3 rounded-2xl bg-surface-container-low text-on-surface-variant">
+<span class="text-[11px] uppercase tracking-tighter mb-1">Sat</span>
+<span class="text-[17px] font-bold">19</span>
+</div>
+</div>
+<!-- Time Slots Grid -->
+<div class="px-6 mt-4">
+<div class="grid grid-cols-3 gap-3">
+<div class="font-mono text-[13px] py-3 text-center rounded-xl bg-surface-container-highest border border-primary/20 text-primary font-bold">
+                        09:00
+                    </div>
+<div class="font-mono text-[13px] py-3 text-center rounded-xl bg-surface-container-low text-on-surface-variant/40 line-through">
+                        10:30
+                    </div>
+<div class="font-mono text-[13px] py-3 text-center rounded-xl bg-surface-container-low text-on-surface-variant">
+                        12:00
+                    </div>
+<div class="font-mono text-[13px] py-3 text-center rounded-xl bg-surface-container-low text-on-surface-variant">
+                        13:30
+                    </div>
+<div class="font-mono text-[13px] py-3 text-center rounded-xl bg-primary text-white font-bold shadow-md shadow-primary/20">
+                        15:00
+                    </div>
+<div class="font-mono text-[13px] py-3 text-center rounded-xl bg-surface-container-low text-on-surface-variant">
+                        16:30
+                    </div>
+<div class="font-mono text-[13px] py-3 text-center rounded-xl bg-surface-container-low text-on-surface-variant">
+                        18:00
+                    </div>
+</div>
+</div>
+</section>
+</main>
+<!-- Sticky Bottom Booking -->
+<footer class="fixed bottom-0 w-full glass-sheet p-6 z-50">
+<button class="w-full bg-gradient-to-r from-primary to-primary-container text-white h-14 rounded-2xl font-headline font-bold text-[17px] flex items-center justify-center gap-2 active:scale-95 transition-transform shadow-lg shadow-primary/30">
+            Book with Elena
+        </button>
+</footer>
+<!-- Tab Bar (Suppressed on detail pages based on Shell Visibility & Relevance rule, but added placeholder if needed for consistency with Top-Level destinations) -->
+<!-- Navigation is hidden here because this is a sub-page (Stylist Detail) implying a temporary departure from global nav -->
+</body></html>

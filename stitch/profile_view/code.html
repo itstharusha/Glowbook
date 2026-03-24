@@ -1,0 +1,216 @@
+<!DOCTYPE html>
+
+<html class="light" lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<script id="tailwind-config">
+      tailwind.config = {
+        darkMode: "class",
+        theme: {
+          extend: {
+            colors: {
+              "tertiary-fixed-dim": "#62de86",
+              "on-secondary-container": "#730129",
+              "on-primary": "#ffffff",
+              "on-primary-fixed": "#400013",
+              "on-error-container": "#93000a",
+              "surface-tint": "#bd0047",
+              "secondary-fixed-dim": "#ffb2bc",
+              "on-primary-container": "#fffbff",
+              "primary": "#b80046",
+              "inverse-surface": "#2e3034",
+              "secondary": "#aa314e",
+              "error-container": "#ffdad6",
+              "on-surface-variant": "#5c3f43",
+              "background": "#f9f9fe",
+              "tertiary": "#006b32",
+              "on-tertiary": "#ffffff",
+              "on-surface": "#1a1c1f",
+              "on-secondary-fixed": "#400013",
+              "tertiary-container": "#008741",
+              "surface-container": "#ededf2",
+              "surface-variant": "#e2e2e7",
+              "on-tertiary-fixed": "#00210b",
+              "surface-container-lowest": "#ffffff",
+              "surface-container-highest": "#e2e2e7",
+              "inverse-primary": "#ffb2bc",
+              "primary-container": "#e40e5a",
+              "inverse-on-surface": "#f0f0f5",
+              "on-background": "#1a1c1f",
+              "on-secondary-fixed-variant": "#891737",
+              "on-tertiary-fixed-variant": "#005226",
+              "secondary-container": "#ff728d",
+              "primary-fixed-dim": "#ffb2bc",
+              "surface-bright": "#f9f9fe",
+              "surface": "#f9f9fe",
+              "primary-fixed": "#ffd9dd",
+              "tertiary-fixed": "#7ffba0",
+              "outline-variant": "#e5bdc1",
+              "outline": "#906e72",
+              "surface-container-low": "#f3f3f8",
+              "secondary-fixed": "#ffd9dd",
+              "on-error": "#ffffff",
+              "on-primary-fixed-variant": "#910035",
+              "surface-container-high": "#e8e8ed",
+              "surface-dim": "#d9dade",
+              "on-secondary": "#ffffff",
+              "on-tertiary-container": "#f7fff3",
+              "error": "#ba1a1a"
+            },
+            fontFamily: {
+              "headline": ["Inter"],
+              "body": ["Inter"],
+              "label": ["Inter"]
+            },
+            borderRadius: {"DEFAULT": "0.25rem", "lg": "0.5rem", "xl": "0.75rem", "full": "9999px"},
+          },
+        },
+      }
+    </script>
+<style>
+        body { font-family: 'Inter', sans-serif; -webkit-font-smoothing: antialiased; }
+        .material-symbols-outlined { font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24; }
+        .profile-gradient { background: linear-gradient(135deg, #FF2D6B 0%, #E40E5A 100%); }
+        .glass-effect { backdrop-filter: blur(20px); -webkit-backdrop-filter: blur(20px); }
+    </style>
+<style>
+    body {
+      min-height: max(884px, 100dvh);
+    }
+  </style>
+  </head>
+<body class="bg-surface text-on-surface">
+<!-- Top Navigation Bar -->
+<header class="fixed top-0 w-full z-50 bg-white/80 dark:bg-black/80 backdrop-blur-xl shadow-sm dark:shadow-none">
+<div class="flex items-center justify-between px-6 py-4 w-full">
+<div class="flex items-center gap-2">
+<span class="material-symbols-outlined text-[#FF2D6B]">menu</span>
+</div>
+<h1 class="font-['Inter'] font-black text-xl italic text-[#FF2D6B]">GlowBook</h1>
+<div class="flex items-center gap-2">
+<span class="material-symbols-outlined text-slate-400">notifications</span>
+</div>
+</div>
+</header>
+<main class="pt-24 pb-32 px-4 max-w-lg mx-auto space-y-8">
+<!-- Large Title -->
+<div class="px-2">
+<h2 class="text-[34px] font-bold tracking-tight text-on-surface">Profile</h2>
+</div>
+<!-- Header Profile Cell -->
+<section class="bg-surface-container-lowest rounded-[14px] p-4 flex items-center justify-between transition-transform active:scale-[0.98]">
+<div class="flex items-center gap-4">
+<div class="relative">
+<div class="w-[60pt] h-[60pt] rounded-full p-0.5 profile-gradient">
+<img alt="User profile avatar" class="w-full h-full rounded-full object-cover border-2 border-white" data-alt="Close up portrait of a smiling woman" src="https://lh3.googleusercontent.com/aida-public/AB6AXuDAwjlor5he2px5fkAyfHcdyTIDlduDSGwxUcuVHnfnIvR9zWIJNGWEvhsRrwOwp7-sLMIuZEU3EggxY-AIgbyckUWRU9j3EwHI3LOpIFNvUyZzZQWub4nqdU9UXbuxbVaVbJrfdALs4VWyJqK8ln9FUrKG2BPW7LEx5jL-xb8QD8C_Oz_373MyCSCLErAttQc5XP5pSn6-I6v-g_0TN7y9rsBpu2NRIX_NHDZPaAU-mNDtzzFjVEyoGllG2rElOmIY9Ryu0yUdVL9P"/>
+</div>
+</div>
+<div>
+<h3 class="text-[20px] font-semibold tracking-tight text-on-surface">Elena Rodriguez</h3>
+<p class="text-[13px] text-on-surface-variant opacity-60">elena.rodriguez@icloud.com</p>
+</div>
+</div>
+<span class="material-symbols-outlined text-slate-300">chevron_right</span>
+</section>
+<!-- Stats Grid -->
+<section class="bg-surface-container-lowest rounded-[14px] grid grid-cols-3 divide-x divide-slate-50 overflow-hidden">
+<div class="py-5 flex flex-col items-center justify-center">
+<span class="text-[24px] font-bold text-[#FF2D6B]">12</span>
+<span class="text-[11px] font-semibold text-slate-400 uppercase tracking-wider">Visits</span>
+</div>
+<div class="py-5 flex flex-col items-center justify-center">
+<span class="text-[24px] font-bold text-[#FF2D6B]">8</span>
+<span class="text-[11px] font-semibold text-slate-400 uppercase tracking-wider">Reviews</span>
+</div>
+<div class="py-5 flex flex-col items-center justify-center">
+<span class="text-[24px] font-bold text-[#FF2D6B]">24</span>
+<span class="text-[11px] font-semibold text-slate-400 uppercase tracking-wider">Saved</span>
+</div>
+</section>
+<!-- Account Menu Section -->
+<div class="space-y-2">
+<h4 class="px-4 text-[13px] font-semibold text-on-surface-variant opacity-50 uppercase tracking-widest">Account</h4>
+<div class="bg-surface-container-lowest rounded-[14px] overflow-hidden">
+<div class="flex items-center justify-between p-4 hover:bg-slate-50 transition-colors cursor-pointer">
+<div class="flex items-center gap-3">
+<span class="material-symbols-outlined text-[#FF2D6B] text-[20px]">calendar_today</span>
+<span class="text-[17px] font-medium">My Bookings</span>
+</div>
+<span class="material-symbols-outlined text-slate-300">chevron_right</span>
+</div>
+<div class="flex items-center justify-between p-4 hover:bg-slate-50 transition-colors cursor-pointer">
+<div class="flex items-center gap-3">
+<span class="material-symbols-outlined text-[#FF2D6B] text-[20px]">favorite</span>
+<span class="text-[17px] font-medium">Saved Salons</span>
+</div>
+<span class="material-symbols-outlined text-slate-300">chevron_right</span>
+</div>
+<div class="flex items-center justify-between p-4 hover:bg-slate-50 transition-colors cursor-pointer">
+<div class="flex items-center gap-3">
+<span class="material-symbols-outlined text-[#FF2D6B] text-[20px]">notifications_active</span>
+<span class="text-[17px] font-medium">Notifications</span>
+</div>
+<span class="material-symbols-outlined text-slate-300">chevron_right</span>
+</div>
+</div>
+</div>
+<!-- Support Menu Section -->
+<div class="space-y-2">
+<h4 class="px-4 text-[13px] font-semibold text-on-surface-variant opacity-50 uppercase tracking-widest">Support</h4>
+<div class="bg-surface-container-lowest rounded-[14px] overflow-hidden">
+<div class="flex items-center justify-between p-4 hover:bg-slate-50 transition-colors cursor-pointer">
+<div class="flex items-center gap-3">
+<span class="material-symbols-outlined text-[#FF2D6B] text-[20px]">help</span>
+<span class="text-[17px] font-medium">Help</span>
+</div>
+<span class="material-symbols-outlined text-slate-300">chevron_right</span>
+</div>
+<div class="flex items-center justify-between p-4 hover:bg-slate-50 transition-colors cursor-pointer">
+<div class="flex items-center gap-3">
+<span class="material-symbols-outlined text-[#FF2D6B] text-[20px]">verified_user</span>
+<span class="text-[17px] font-medium">Privacy</span>
+</div>
+<span class="material-symbols-outlined text-slate-300">chevron_right</span>
+</div>
+<div class="flex items-center justify-between p-4 hover:bg-slate-50 transition-colors cursor-pointer">
+<div class="flex items-center gap-3">
+<span class="material-symbols-outlined text-[#FF2D6B] text-[20px]">description</span>
+<span class="text-[17px] font-medium">Terms</span>
+</div>
+<span class="material-symbols-outlined text-slate-300">chevron_right</span>
+</div>
+</div>
+</div>
+<!-- Sign Out -->
+<div class="pt-4">
+<button class="w-full bg-surface-container-lowest py-4 rounded-[14px] text-error font-semibold text-[17px] active:scale-[0.98] transition-transform">
+                Sign Out
+            </button>
+</div>
+</main>
+<!-- Bottom Navigation Bar -->
+<nav class="fixed bottom-0 w-full z-50 pb-safe bg-white/80 dark:bg-black/80 backdrop-blur-xl border-t border-slate-100 dark:border-slate-900">
+<div class="flex justify-around items-center w-full h-16 px-4">
+<div class="flex flex-col items-center justify-center text-slate-400 dark:text-slate-600 transition-transform active:scale-90">
+<span class="material-symbols-outlined">home</span>
+<span class="font-['Inter'] font-semibold text-[10px] uppercase tracking-widest mt-1">Home</span>
+</div>
+<div class="flex flex-col items-center justify-center text-slate-400 dark:text-slate-600 transition-transform active:scale-90">
+<span class="material-symbols-outlined">search</span>
+<span class="font-['Inter'] font-semibold text-[10px] uppercase tracking-widest mt-1">Explore</span>
+</div>
+<div class="flex flex-col items-center justify-center text-slate-400 dark:text-slate-600 transition-transform active:scale-90">
+<span class="material-symbols-outlined">calendar_today</span>
+<span class="font-['Inter'] font-semibold text-[10px] uppercase tracking-widest mt-1">Bookings</span>
+</div>
+<div class="flex flex-col items-center justify-center text-[#FF2D6B] dark:text-[#FF2D6B] scale-110 transition-transform active:scale-90">
+<span class="material-symbols-outlined" style="font-variation-settings: 'FILL' 1;">account_circle</span>
+<span class="font-['Inter'] font-semibold text-[10px] uppercase tracking-widest mt-1">Profile</span>
+</div>
+</div>
+</nav>
+</body></html>
