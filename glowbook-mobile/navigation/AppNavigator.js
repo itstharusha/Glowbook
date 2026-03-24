@@ -1,10 +1,10 @@
 import React from 'react';
-import { ActivityIndicator, View, Text, TouchableOpacity } from 'react-native';
+import { ActivityIndicator, View, Text, TouchableOpacity, Platform } from 'react-native';
 import { NavigationContainer } from '@react-navigation/native';
 import { createNativeStackNavigator } from '@react-navigation/native-stack';
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
 
-import { MaterialIcons, Ionicons } from '@expo/vector-icons';
+import { Ionicons } from '@expo/vector-icons';
 import { useAuth } from '../context/AuthContext';
 import theme from '../constants/theme';
 
@@ -48,23 +48,48 @@ const AuthStack = () => (
 
 const CustomerTabs = () => (
   <Tab.Navigator
-    screenOptions={{
+    screenOptions={({ route }) => ({
       tabBarActiveTintColor: theme.primary,
       tabBarInactiveTintColor: theme.systemGray,
-      tabBarStyle: { backgroundColor: theme.background, borderTopColor: theme.separator, height: 83, paddingBottom: 20 },
+      tabBarStyle: {
+        backgroundColor: theme.background,
+        borderTopColor: theme.separator,
+        height: Platform.OS === 'ios' ? 88 : 60,
+        paddingBottom: Platform.OS === 'ios' ? 28 : 10,
+        paddingTop: 8,
+      },
       headerShown: false,
-    }}
+      tabBarIcon: ({ focused, color, size }) => {
+        let iconName;
+
+        if (route.name === 'Home') {
+          iconName = focused ? 'home' : 'home-outline';
+        } else if (route.name === 'Explore') {
+          iconName = focused ? 'search' : 'search-outline';
+        } else if (route.name === 'Bookings') {
+          iconName = focused ? 'calendar' : 'calendar-outline';
+        } else if (route.name === 'Profile') {
+          iconName = focused ? 'person' : 'person-outline';
+        }
+
+        return <Ionicons name={iconName} size={size} color={color} />;
+      },
+      tabBarLabelStyle: {
+        fontSize: 10,
+        fontWeight: '500',
+      },
+    })}
   >
-    <Tab.Screen name="Home" options={{ tabBarIcon: ({ color }) => <MaterialIcons name="home" size={24} color={color} /> }}>
+    <Tab.Screen name="Home">
       {() => <PlaceholderScreen name="Customer Home" />}
     </Tab.Screen>
-    <Tab.Screen name="Explore" options={{ tabBarIcon: ({ color }) => <MaterialIcons name="search" size={24} color={color} /> }}>
+    <Tab.Screen name="Explore">
       {() => <PlaceholderScreen name="Explore Salons" />}
     </Tab.Screen>
-    <Tab.Screen name="Bookings" options={{ tabBarIcon: ({ color }) => <MaterialIcons name="calendar-today" size={24} color={color} /> }}>
+    <Tab.Screen name="Bookings">
       {() => <PlaceholderScreen name="My Bookings" />}
     </Tab.Screen>
-    <Tab.Screen name="Profile" component={ProfileScreen} options={{ tabBarIcon: ({ color }) => <MaterialIcons name="account-circle" size={24} color={color} /> }} />
+    <Tab.Screen name="Profile" component={ProfileScreen} />
   </Tab.Navigator>
 );
 
@@ -77,23 +102,48 @@ const VendorSetupStack = () => (
 
 const VendorTabs = () => (
   <Tab.Navigator
-    screenOptions={{
+    screenOptions={({ route }) => ({
       tabBarActiveTintColor: theme.primary,
       tabBarInactiveTintColor: theme.systemGray,
-      tabBarStyle: { backgroundColor: theme.background, borderTopColor: theme.separator, height: 83, paddingBottom: 20 },
+      tabBarStyle: {
+        backgroundColor: theme.background,
+        borderTopColor: theme.separator,
+        height: Platform.OS === 'ios' ? 88 : 60,
+        paddingBottom: Platform.OS === 'ios' ? 28 : 10,
+        paddingTop: 8,
+      },
       headerShown: false,
-    }}
+      tabBarIcon: ({ focused, color, size }) => {
+        let iconName;
+
+        if (route.name === 'Dashboard') {
+          iconName = focused ? 'file-tray-full' : 'file-tray-full-outline';
+        } else if (route.name === 'MySalon') {
+          iconName = focused ? 'storefront' : 'storefront-outline';
+        } else if (route.name === 'Bookings') {
+          iconName = focused ? 'calendar' : 'calendar-outline';
+        } else if (route.name === 'Profile') {
+          iconName = focused ? 'person' : 'person-outline';
+        }
+
+        return <Ionicons name={iconName} size={size} color={color} />;
+      },
+      tabBarLabelStyle: {
+        fontSize: 10,
+        fontWeight: '500',
+      },
+    })}
   >
-    <Tab.Screen name="Dashboard" options={{ tabBarIcon: ({ color }) => <Ionicons name="bar-chart" size={24} color={color} /> }}>
+    <Tab.Screen name="Dashboard">
       {() => <PlaceholderScreen name="Vendor Dashboard" />}
     </Tab.Screen>
-    <Tab.Screen name="MySalon" options={{ tabBarLabel: 'My Salon', tabBarIcon: ({ color }) => <Ionicons name="storefront" size={24} color={color} /> }}>
+    <Tab.Screen name="MySalon" options={{ tabBarLabel: 'My Salon' }}>
       {() => <PlaceholderScreen name="My Salon" />}
     </Tab.Screen>
-    <Tab.Screen name="Bookings" options={{ tabBarIcon: ({ color }) => <Ionicons name="calendar" size={24} color={color} /> }}>
+    <Tab.Screen name="Bookings">
       {() => <PlaceholderScreen name="Vendor Bookings" />}
     </Tab.Screen>
-    <Tab.Screen name="Profile" component={ProfileScreen} options={{ tabBarIcon: ({ color }) => <Ionicons name="person-circle" size={24} color={color} /> }} />
+    <Tab.Screen name="Profile" component={ProfileScreen} />
   </Tab.Navigator>
 );
 

@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import {
   View, Text, TextInput, TouchableOpacity, StyleSheet,
-  SafeAreaView, StatusBar, ScrollView, Animated
+  SafeAreaView, StatusBar, ScrollView, Animated, KeyboardAvoidingView, Platform
 } from 'react-native';
 import { useNavigation } from '@react-navigation/native';
 import { Ionicons } from '@expo/vector-icons';
@@ -10,6 +10,21 @@ import { Picker } from '@react-native-picker/picker';
 import { useAuth } from '../../context/AuthContext';
 import api from '../../services/api';
 import theme from '../../constants/theme';
+
+const InputRow = ({ label, value, onChangeText, placeholder, multiline = false, ...props }) => (
+  <View style={styles.inputGroup}>
+    <Text style={styles.label}>{label}</Text>
+    <TextInput
+      style={[styles.input, multiline && styles.textArea]}
+      value={value}
+      onChangeText={onChangeText}
+      placeholder={placeholder}
+      placeholderTextColor={theme.labelTertiary}
+      multiline={multiline}
+      {...props}
+    />
+  </View>
+);
 
 const VendorCreateSalonScreen = () => {
   const navigation = useNavigation();
@@ -51,21 +66,6 @@ const VendorCreateSalonScreen = () => {
     }
   };
 
-  const InputRow = ({ label, value, onChangeText, placeholder, multiline = false, ...props }) => (
-    <View style={styles.inputGroup}>
-      <Text style={styles.label}>{label}</Text>
-      <TextInput
-        style={[styles.input, multiline && styles.textArea]}
-        value={value}
-        onChangeText={onChangeText}
-        placeholder={placeholder}
-        placeholderTextColor={theme.labelTertiary}
-        multiline={multiline}
-        {...props}
-      />
-    </View>
-  );
-
   return (
     <SafeAreaView style={styles.container}>
       <StatusBar barStyle="dark-content" />
@@ -78,7 +78,11 @@ const VendorCreateSalonScreen = () => {
         <View style={styles.headerRight} />
       </View>
 
-      <ScrollView contentContainerStyle={styles.scrollContent} showsVerticalScrollIndicator={false}>
+      <KeyboardAvoidingView
+        behavior={Platform.OS === 'ios' ? 'padding' : 'height'}
+        style={{ flex: 1 }}
+      >
+        <ScrollView contentContainerStyle={styles.scrollContent} showsVerticalScrollIndicator={false}>
         <View style={styles.formContainer}>
           <InputRow
             label="Salon Name"
@@ -146,6 +150,7 @@ const VendorCreateSalonScreen = () => {
 
         </View>
       </ScrollView>
+      </KeyboardAvoidingView>
 
       <View style={styles.footerAction}>
         <TouchableOpacity onPress={handleCreateSalon} disabled={loading} activeOpacity={0.8}>

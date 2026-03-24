@@ -13,6 +13,7 @@ import {
   Image,
   Alert,
   ActivityIndicator,
+  ScrollView,
 } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { useNavigation } from '@react-navigation/native';
@@ -24,6 +25,7 @@ import { Ionicons } from '@expo/vector-icons';
 import { useAuth } from '../../context/AuthContext';
 import api from '../../services/api';
 import theme from '../../constants/theme';
+import { config } from '../../config/appConfig';
 
 WebBrowser.maybeCompleteAuthSession();
 
@@ -39,9 +41,11 @@ const LoginScreen = () => {
   const [focusedInput, setFocusedInput] = useState(null);
 
   // Google OAuth Setup
+  // UPDATE config/appConfig.js with your Google CLIENT_ID from Google Cloud Console
+  // See OAUTH_SETUP_GUIDE.md for detailed instructions
   const [googleRequest, googleResponse, googlePromptAsync] = Google.useAuthRequest({
-    clientId: 'YOUR_GOOGLE_CLIENT_ID.apps.googleusercontent.com', // Replace with actual
-    redirectUrl: 'com.glowbook.app', // Configure with your app's redirect URI
+    clientId: config.GOOGLE_CLIENT_ID,
+    redirectUrl: config.GOOGLE_REDIRECT_URL,
   });
 
   const handleLogin = async () => {
@@ -142,30 +146,24 @@ const LoginScreen = () => {
     <SafeAreaView style={styles.safeArea}>
       <StatusBar barStyle="dark-content" />
       
-      <View style={styles.header}>
-        <TouchableOpacity 
-          style={styles.backButton} 
-          onPress={() => navigation.goBack()}
-        >
-          <Ionicons name="arrow-back" size={24} color={theme.labelPrimary} />
-        </TouchableOpacity>
-        <Text style={styles.headerTitle}>Sign In</Text>
-        <View style={{ width: 44 }} /> 
-      </View>
-
       <KeyboardAvoidingView
         behavior={Platform.OS === 'ios' ? 'padding' : 'height'}
         style={{ flex: 1 }}
       >
-        <TouchableWithoutFeedback onPress={Keyboard.dismiss}>
-          <View style={styles.content}>
-            
-            <View style={styles.heroSection}>
-              <Text style={styles.heroTitle}>Welcome Back</Text>
-              <Text style={styles.heroSubtitle}>Sign in to book your next appointment.</Text>
-            </View>
+        <ScrollView 
+          contentContainerStyle={{ flexGrow: 1 }}
+          keyboardShouldPersistTaps="handled"
+          scrollEnabled={true}
+        >
+          <TouchableWithoutFeedback onPress={Keyboard.dismiss}>
+            <View style={styles.content}>
+              
+              <View style={styles.heroSection}>
+                <Text style={styles.heroTitle}>Welcome Back</Text>
+                <Text style={styles.heroSubtitle}>Sign in to book your next appointment.</Text>
+              </View>
 
-            <View style={styles.formContainer}>
+              <View style={styles.formContainer}>
               <View style={styles.inputGroup}>
                 <Text style={styles.inputLabel}>Email</Text>
                 <TextInput
@@ -270,14 +268,18 @@ const LoginScreen = () => {
             </View>
 
             <View style={styles.footer}>
-              <Text style={styles.footerText}>Don't have an account? </Text>
               <TouchableOpacity onPress={() => navigation.navigate('Register')}>
-                <Text style={styles.footerLink}>Sign Up</Text>
+                <Text style={styles.footerText}>
+                  Don't have an account? <Text style={styles.footerLink}>Signup</Text>
+                </Text>
               </TouchableOpacity>
             </View>
 
-          </View>
-        </TouchableWithoutFeedback>
+
+
+            </View>
+          </TouchableWithoutFeedback>
+        </ScrollView>
       </KeyboardAvoidingView>
     </SafeAreaView>
   );

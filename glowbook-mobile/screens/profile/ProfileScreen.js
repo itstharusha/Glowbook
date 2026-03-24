@@ -143,17 +143,6 @@ const ProfileScreen = () => {
   return (
     <SafeAreaView style={styles.container}>
       <StatusBar barStyle="dark-content" />
-      
-      {/* Header */}
-      <View style={styles.header}>
-        <TouchableOpacity style={styles.headerButton}>
-          <MaterialIcons name="menu" size={24} color={theme.primary} />
-        </TouchableOpacity>
-        <Text style={styles.headerTitle}>Profile</Text>
-        <TouchableOpacity style={styles.headerButton}>
-          <MaterialIcons name="notifications" size={24} color={theme.primary} />
-        </TouchableOpacity>
-      </View>
 
       <ScrollView 
         showsVerticalScrollIndicator={false}

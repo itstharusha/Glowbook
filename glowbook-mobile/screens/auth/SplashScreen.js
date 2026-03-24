@@ -1,9 +1,9 @@
-import React, { useEffect } from 'react';
-import { View, Text, StyleSheet, Animated } from 'react-native';
+import React, { useEffect, useRef } from 'react';
+import { View, Text, StyleSheet, Animated, Image } from 'react-native';
 import theme from '../../constants/theme';
 
 const SplashScreen = ({ navigation }) => {
-  const fadeAnim = new Animated.Value(0);
+  const fadeAnim = useRef(new Animated.Value(0)).current;
 
   useEffect(() => {
     Animated.timing(fadeAnim, {
@@ -21,12 +21,10 @@ const SplashScreen = ({ navigation }) => {
   return (
     <View style={styles.container}>
       <Animated.View style={[styles.content, { opacity: fadeAnim }]}>
-        <View style={styles.logoContainer}>
-          {/* Simple SVG-like shape using Views for the logo */}
-          <View style={styles.logoIcon}>
-            <View style={styles.logoShape} />
-          </View>
-        </View>
+        <Image 
+          source={require('../../assets/logo.png')} 
+          style={styles.logo} 
+        />
         <Text style={styles.title}>GlowBook</Text>
       </Animated.View>
     </View>
@@ -36,7 +34,7 @@ const SplashScreen = ({ navigation }) => {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: theme.background, // iOS surface-container-lowest
+    backgroundColor: theme.background,
     justifyContent: 'center',
     alignItems: 'center',
   },
@@ -44,35 +42,16 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     gap: 24,
   },
-  logoContainer: {
-    marginBottom: theme.spacing.xl,
-  },
-  logoIcon: {
-    width: 101,
-    height: 101,
-    backgroundColor: theme.primary, // Using primary color instead of gradient
-    borderRadius: 22, // squircle-lg approx
-    justifyContent: 'center',
-    alignItems: 'center',
-    shadowColor: theme.primary,
-    shadowOffset: { width: 0, height: 10 },
-    shadowOpacity: 0.3, // Reduced for solid color
-    shadowRadius: 30,
-    elevation: 10,
-  },
-  logoShape: {
-    width: 40,
-    height: 40,
-    backgroundColor: '#FFFFFF',
-    borderRadius: 8,
-    transform: [{ rotate: '45deg' }],
+  logo: {
+    width: 220, 
+    height: 220, 
+    resizeMode: 'contain'
   },
   title: {
-    fontSize: 27, // ~20pt
-    fontWeight: '600',
-    color: theme.labelPrimary,
+    fontSize: 32,
+    fontWeight: '700',
     letterSpacing: -0.5,
-    fontFamily: theme.fontFamily,
+    color: theme.labelPrimary,
   },
 });
 

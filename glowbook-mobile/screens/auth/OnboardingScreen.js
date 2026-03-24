@@ -10,7 +10,7 @@ import {
   TouchableOpacity,
   StatusBar,
 } from 'react-native';
-import { SafeAreaView } from 'react-native-safe-area-context';
+import { SafeAreaView, useSafeAreaInsets } from 'react-native-safe-area-context';
 import theme from '../../constants/theme';
 
 const { width, height } = Dimensions.get('window');
@@ -20,23 +20,24 @@ const slides = [
     key: '1',
     title: 'Expert Services,\nTailored for You',
     description: 'Discover top-tier stylists and salons curated for your unique beauty aesthetic.',
-    image: 'https://lh3.googleusercontent.com/aida-public/AB6AXuDsHX5_H7n7W9HZNLZZYkE8sn3hR2HjoeRnmqjaUE2rHjwWeyj9_0Vbw-apzqm4swR80P25ubj9WWOEQKXJplokty52dqSd6Nu-0ItrlPy2fLJFy5nryhomwpdLEsilq-lOec7FaFS51HepRcxeJWtJBQkjUf1yXL5N3oMhKbxgh1udGyqn6tq84HxXns0i0NEoBJo3agbfSjEob5CS_w_BNcFKRO2LZupNMycrEpYWi3Tv3LMhtZ9sJELh81tFaKhy_AybBSNZcYpq',
+    image: 'https://images.unsplash.com/photo-1560869713-7d0a29430803?q=80&w=626&auto=format&fit=crop&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D',
   },
   {
     key: '2',
     title: 'Seamless Booking\nExperience',
     description: "Real-time availability and instant confirmations with the city's finest.",
-    image: 'https://lh3.googleusercontent.com/aida-public/AB6AXuDIzs44-WnXGOXY2OjjMlcNwawCIae2vUGtbCZ39f8HwHiSWiQ98irfwxX4LW7eLYh7Y2LZ5FTitfvW23EeLLIMpcTnn00tJFHQLQlnqGz6ktwOX0ZoXpA9kSnG_7gqClVk2FWzdGJaxcqCRdqK9g0C_e8zS39NSv8Q43Kl2pu7SSLmY4XlSG9yntVLhFAiIKtENGR3Ss1uwFXW1ztAQM-iDkS3YVoHG8LlnVosDNTCsJXKm1zLT98cVSgoS3_RPyAbMXuBHLEgsAuv',
+    image: 'https://images.unsplash.com/photo-1589710751893-f9a6770ad71b?q=80&w=687&auto=format&fit=crop&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D',
   },
   {
     key: '3',
     title: 'Elevate Your\nBeauty Ritual',
     description: 'Join GlowBook today and unlock exclusive rewards at your favorite spots.',
-    image: 'https://lh3.googleusercontent.com/aida-public/AB6AXuAig_rtnPlcaXfMK1GxYjq6QjKaorDi3NepIBLfEgS35_HJGHVmoLXRfAA_2vD1nVH72amsgP606IFGqM5z2B--AsyRndUMUxUpsvRRlXQnSvwKrv1tpCou7MYUIDKPYZF9Kb8K6cYydcHzsqzk0xColhrEOAUwHFkOJAw5HNxN3QpVN0anP0KNWIPFq1Ho-d63YprLfjXxGUj1Ez3e4Li96DFLYpjmZDaFLA-5BAC1U4r4dIolsNiIW2p7pxAspxpW9ZEox9ExQGQn',
+    image: 'https://images.unsplash.com/photo-1630595271375-5073a6c0638b?q=80&w=1152&auto=format&fit=crop&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D',
   },
 ];
 
 const OnboardingScreen = ({ navigation }) => {
+  const insets = useSafeAreaInsets();
   const scrollX = useRef(new Animated.Value(0)).current;
   const flatListRef = useRef(null);
   const [currentIndex, setCurrentIndex] = useState(0);
@@ -109,7 +110,7 @@ const OnboardingScreen = ({ navigation }) => {
       />
 
       {/* Bottom Controls */}
-      <View style={styles.bottomContainer}>
+      <View style={[styles.bottomContainer, { paddingBottom: theme.spacing.xl + insets.bottom }]}>
         <Indicator />
         
         <View style={styles.buttonContainer}>
@@ -182,7 +183,6 @@ const styles = StyleSheet.create({
     left: 0,
     right: 0,
     paddingHorizontal: theme.spacing.xl,
-    paddingBottom: theme.spacing.xl + 20, // ample space for safe area
     backgroundColor: theme.background,
   },
   indicatorContainer: {

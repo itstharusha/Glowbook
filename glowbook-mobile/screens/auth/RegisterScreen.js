@@ -57,17 +57,6 @@ const RegisterScreen = () => {
   return (
     <SafeAreaView style={styles.safeArea}>
       <StatusBar barStyle="dark-content" />
-      
-      <View style={styles.header}>
-        <TouchableOpacity 
-          style={styles.backButton} 
-          onPress={() => navigation.goBack()}
-        >
-          <Ionicons name="arrow-back" size={24} color={theme.labelPrimary} />
-        </TouchableOpacity>
-        <Text style={styles.headerTitle}>Sign Up</Text>
-        <View style={{ width: 44 }} />
-      </View>
 
       <KeyboardAvoidingView
         behavior={Platform.OS === 'ios' ? 'padding' : 'height'}
@@ -226,7 +215,12 @@ const RegisterScreen = () => {
 
             {/* Footnote */}
             <View style={styles.footer}>
-              <Text style={styles.footerText}>
+              <TouchableOpacity onPress={() => navigation.navigate('Login')} style={{ marginBottom: 16 }}>
+                <Text style={styles.footerText}>
+                  Already have an account? <Text style={styles.footerLink}>Login</Text>
+                </Text>
+              </TouchableOpacity>
+              <Text style={[styles.footerText, { fontSize: 12 }]}>
                 By continuing, you agree to GlowBook's{' '}
                 <Text style={styles.footerLink}>Terms of Service</Text> and{' '}
                 <Text style={styles.footerLink}>Privacy Policy</Text>.
