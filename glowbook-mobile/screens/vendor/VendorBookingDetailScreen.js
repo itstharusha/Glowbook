@@ -1,10 +1,17 @@
 import React, { useEffect, useState } from 'react';
-import { View, Text, StyleSheet, ScrollView, TouchableOpacity, StatusBar, Alert } from 'react-native';
+import { View, Text, StyleSheet, ScrollView, TouchableOpacity, StatusBar, Alert, ActivityIndicator } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { Ionicons } from '@expo/vector-icons';
 import { useRoute, useNavigation } from '@react-navigation/native';
 import api from '../../services/api';
 import theme from '../../constants/theme';
+
+const STATUS_CONFIG = {
+  Pending:   { color: '#92400E', bg: '#FEF3C7' },
+  Confirmed: { color: '#065F46', bg: '#D1FAE5' },
+  Completed: { color: theme.systemGray, bg: theme.systemGray6 },
+  Cancelled: { color: '#B91C1C', bg: '#FEE2E2' },
+};
 
 const VendorBookingDetailScreen = () => {
   const route = useRoute();
@@ -12,15 +19,15 @@ const VendorBookingDetailScreen = () => {
   const { id } = route.params;
   const [apt, setApt] = useState(null);
   const [loading, setLoading] = useState(true);
+  const [error, setError] = useState(null);
 
   const loadApt = async () => {
+    setError(null);
     try {
-      // Reusing vendor-salon since we don't have a single-get vendor booking endpoint
-      const res = await api.get('/api/appointments/vendor-salon');
-      const found = res.data.data.find(a => a._id === id);
-      setApt(found);
+      const res = await api.get(`/api/appointments/${id}`);
+      setApt(res.data.data);
     } catch (err) {
-      console.error(err);
+      setError(err.response?.data?.message || 'Failed to load booking details.');
     } finally {
       setLoading(false);
     }
@@ -42,7 +49,7 @@ const VendorBookingDetailScreen = () => {
               await api.put(`/api/appointments/${id}/status`, { status });
               loadApt();
             } catch (error) {
-              alert(`Failed to set status to ${status}`);
+              Alert.alert('Error', `Failed to update status.`);
             }
           }
         }
@@ -50,7 +57,27 @@ const VendorBookingDetailScreen = () => {
     );
   };
 
-  if (loading || !apt) return <View style={styles.center}><Text>Loading...</Text></View>;
+  if (loading || error || !apt) {
+    return (
+      <SafeAreaView style={styles.container}>
+        <View style={styles.header}>
+          <TouchableOpacity style={styles.backButton} onPress={() => navigation.goBack()}>
+            <Ionicons name="chevron-back" size={28} color={theme.primary} />
+          </TouchableOpacity>
+          <Text style={styles.headerTitle}>Booking Details</Text>
+          <View style={styles.headerRight} />
+        </View>
+        <View style={styles.center}>
+          {loading
+            ? <ActivityIndicator size="large" color={theme.primary} />
+            : <Text style={styles.errorText}>{error || 'Booking not found.'}</Text>
+          }
+        </View>
+      </SafeAreaView>
+    );
+  }
+
+  const statusCfg = STATUS_CONFIG[apt.status] || STATUS_CONFIG.Pending;
 
   return (
     <SafeAreaView style={styles.container}>
@@ -64,8 +91,8 @@ const VendorBookingDetailScreen = () => {
       </View>
 
       <ScrollView contentContainerStyle={styles.scrollContent}>
-        <View style={styles.statusBanner}>
-          <Text style={styles.statusText}>{apt.status}</Text>
+        <View style={[styles.statusBanner, { backgroundColor: statusCfg.bg }]}>
+          <Text style={[styles.statusText, { color: statusCfg.color }]}>{apt.status}</Text>
         </View>
 
         <View style={styles.section}>
@@ -120,37 +147,35 @@ const VendorBookingDetailScreen = () => {
         )}
       </ScrollView>
 
-      <View style={styles.footerAction}>
-        {apt.status === 'Pending' && (
-          <TouchableOpacity style={styles.primaryButton} onPress={() => handleStatusUpdate('Confirmed')}>
-            <Text style={styles.primaryButtonText}>Confirm Booking</Text>
-          </TouchableOpacity>
-        )}
-        {apt.status === 'Confirmed' && (
-          <TouchableOpacity style={styles.outlineButton} onPress={() => handleStatusUpdate('Completed')}>
-            <Text style={styles.outlineButtonText}>Mark as Completed</Text>
-          </TouchableOpacity>
-        )}
-        {(apt.status === 'Completed' || apt.status === 'Cancelled') && (
-          <View style={styles.disabledButton}>
-            <Text style={styles.disabledText}>No actions available</Text>
-          </View>
-        )}
-      </View>
+      {(apt.status === 'Pending' || apt.status === 'Confirmed') && (
+        <View style={styles.footerAction}>
+          {apt.status === 'Pending' && (
+            <TouchableOpacity style={styles.primaryButton} onPress={() => handleStatusUpdate('Confirmed')}>
+              <Text style={styles.primaryButtonText}>Confirm Booking</Text>
+            </TouchableOpacity>
+          )}
+          {apt.status === 'Confirmed' && (
+            <TouchableOpacity style={styles.outlineButton} onPress={() => handleStatusUpdate('Completed')}>
+              <Text style={styles.outlineButtonText}>Mark as Completed</Text>
+            </TouchableOpacity>
+          )}
+        </View>
+      )}
     </SafeAreaView>
   );
 };
 
 const styles = StyleSheet.create({
   container: { flex: 1, backgroundColor: theme.backgroundSecondary },
-  center: { flex: 1, justifyContent: 'center', alignItems: 'center' },
+  center: { flex: 1, justifyContent: 'center', alignItems: 'center', padding: 24 },
+  errorText: { fontSize: 15, color: theme.labelSecondary, textAlign: 'center' },
   header: { flexDirection: 'row', alignItems: 'center', justifyContent: 'space-between', paddingHorizontal: 8, height: 44, backgroundColor: theme.background, borderBottomWidth: 1, borderBottomColor: theme.separator },
   backButton: { padding: 8 },
   headerTitle: { fontSize: 17, fontWeight: '600', color: theme.labelPrimary },
   headerRight: { width: 44 },
   scrollContent: { padding: 16, paddingBottom: 40 },
-  statusBanner: { backgroundColor: theme.primary, padding: 12, borderRadius: 8, alignItems: 'center', marginBottom: 24, opacity: 0.9 },
-  statusText: { color: '#FFF', fontSize: 16, fontWeight: 'bold', textTransform: 'uppercase' },
+  statusBanner: { padding: 12, borderRadius: 10, alignItems: 'center', marginBottom: 24 },
+  statusText: { fontSize: 15, fontWeight: '700', textTransform: 'uppercase', letterSpacing: 0.5 },
   section: { backgroundColor: theme.background, padding: 16, borderRadius: 12, marginBottom: 16, ...theme.shadows.card },
   sectionTitle: { fontSize: 18, fontWeight: '600', color: theme.labelPrimary, marginBottom: 16 },
   infoRow: { flexDirection: 'row', alignItems: 'center', marginBottom: 12 },
@@ -158,11 +183,9 @@ const styles = StyleSheet.create({
   notesText: { fontSize: 15, color: theme.labelSecondary, lineHeight: 22 },
   footerAction: { padding: 16, backgroundColor: theme.background, borderTopWidth: 1, borderTopColor: theme.separator },
   primaryButton: { backgroundColor: theme.primary, paddingVertical: 16, borderRadius: 12, alignItems: 'center' },
-  primaryButtonText: { color: '#FFF', fontSize: 16, fontWeight: 'bold' },
-  outlineButton: { borderWidth: 1, borderColor: theme.primary, paddingVertical: 16, borderRadius: 12, alignItems: 'center' },
-  outlineButtonText: { color: theme.primary, fontSize: 16, fontWeight: 'bold' },
-  disabledButton: { backgroundColor: theme.systemGray4, paddingVertical: 16, borderRadius: 12, alignItems: 'center' },
-  disabledText: { color: theme.labelSecondary, fontSize: 16, fontWeight: 'bold' },
+  primaryButtonText: { color: '#FFF', fontSize: 16, fontWeight: '700' },
+  outlineButton: { borderWidth: 1.5, borderColor: theme.primary, paddingVertical: 16, borderRadius: 12, alignItems: 'center' },
+  outlineButtonText: { color: theme.primary, fontSize: 16, fontWeight: '600' },
 });
 
 export default VendorBookingDetailScreen;

@@ -3,16 +3,18 @@ const Salon = require('../models/Salon');
 
 exports.createService = async (req, res) => {
   try {
-    const salon = await Salon.findById(req.body.salonId);
+    const { salonId, name, category, description, price, duration, image } = req.body;
+
+    const salon = await Salon.findById(salonId);
     if (!salon) {
       return res.status(404).json({ success: false, message: 'Salon not found' });
     }
 
     if (salon.owner.toString() !== req.user._id.toString() && req.user.role !== 'admin') {
-      return res.status(403).json({ message: 'Cannot add services to another vendor\'s salon' });
+      return res.status(403).json({ success: false, message: 'Cannot add services to another vendor\'s salon' });
     }
 
-    const service = await Service.create(req.body);
+    const service = await Service.create({ salonId, name, category, description, price, duration, image });
     res.status(201).json({ success: true, data: service });
   } catch (error) {
     res.status(500).json({ success: false, message: error.message });

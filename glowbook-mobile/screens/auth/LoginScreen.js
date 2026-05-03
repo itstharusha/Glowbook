@@ -38,7 +38,6 @@ const LoginScreen = () => {
   const [isPasswordVisible, setIsPasswordVisible] = useState(false);
   const [loading, setLoading] = useState(false);
   const [socialLoading, setSocialLoading] = useState(null);
-  const [focusedInput, setFocusedInput] = useState(null);
 
   // Google OAuth Setup
   // UPDATE config/appConfig.js with your Google CLIENT_ID from Google Cloud Console
@@ -54,11 +53,11 @@ const LoginScreen = () => {
     try {
       const result = await login(email, password);
       if (!result.success) {
-        alert(result.message);
+        Alert.alert('Sign In Failed', result.message);
       }
     } catch (error) {
       console.error(error);
-      alert('An unexpected error occurred');
+      Alert.alert('Error', 'An unexpected error occurred');
     } finally {
       setLoading(false);
     }
@@ -167,18 +166,13 @@ const LoginScreen = () => {
               <View style={styles.inputGroup}>
                 <Text style={styles.inputLabel}>Email</Text>
                 <TextInput
-                  style={[
-                    styles.input, 
-                    focusedInput === 'email' && styles.inputFocused
-                  ]}
+                  style={styles.input}
                   placeholder="Enter your email"
                   placeholderTextColor={theme.labelTertiary}
                   keyboardType="email-address"
                   autoCapitalize="none"
                   value={email}
                   onChangeText={setEmail}
-                  onFocus={() => setFocusedInput('email')}
-                  onBlur={() => setFocusedInput(null)}
                 />
               </View>
 
@@ -186,18 +180,12 @@ const LoginScreen = () => {
                 <Text style={styles.inputLabel}>Password</Text>
                 <View style={styles.passwordContainer}>
                   <TextInput
-                    style={[
-                      styles.input,
-                      styles.passwordInput,
-                      focusedInput === 'password' && styles.inputFocused
-                    ]}
+                    style={[styles.input, styles.passwordInput]}
                     placeholder="Enter your password"
                     placeholderTextColor={theme.labelTertiary}
                     secureTextEntry={!isPasswordVisible}
                     value={password}
                     onChangeText={setPassword}
-                    onFocus={() => setFocusedInput('password')}
-                    onBlur={() => setFocusedInput(null)}
                   />
                   <TouchableOpacity
                     style={styles.eyeIcon}
@@ -212,9 +200,6 @@ const LoginScreen = () => {
                 </View>
               </View>
 
-              <TouchableOpacity style={styles.forgotPasswordContainer}>
-                <Text style={styles.forgotPasswordText}>Forgot Password?</Text>
-              </TouchableOpacity>
 
             </View>
 
@@ -290,24 +275,6 @@ const styles = StyleSheet.create({
     flex: 1,
     backgroundColor: theme.background,
   },
-  header: {
-    flexDirection: 'row',
-    alignItems: 'center',
-    justifyContent: 'space-between',
-    paddingHorizontal: theme.spacing.md,
-    height: 44,
-  },
-  backButton: {
-    width: 44,
-    height: 44,
-    justifyContent: 'center',
-    alignItems: 'center',
-  },
-  headerTitle: {
-    fontSize: 17,
-    fontWeight: '600',
-    color: theme.labelPrimary,
-  },
   content: {
     flex: 1,
     paddingHorizontal: theme.spacing.xl,
@@ -331,7 +298,7 @@ const styles = StyleSheet.create({
     textAlign: 'center',
   },
   formContainer: {
-    backgroundColor: '#FFFFFF',
+    backgroundColor: theme.background,
     padding: theme.spacing.md,
     borderRadius: 14,
     marginBottom: theme.spacing.md,
@@ -348,14 +315,13 @@ const styles = StyleSheet.create({
     opacity: 0.6,
   },
   input: {
-    backgroundColor: '#F3F3F8',
+    backgroundColor: theme.systemGray6,
     height: 56,
     borderRadius: 8,
     paddingHorizontal: 16,
     fontSize: 17,
     color: theme.labelPrimary,
   },
-  inputFocused: {},
   passwordContainer: {
     position: 'relative',
     justifyContent: 'center',
@@ -370,15 +336,6 @@ const styles = StyleSheet.create({
     width: 48,
     justifyContent: 'center',
     alignItems: 'center',
-  },
-  forgotPasswordContainer: {
-    alignItems: 'flex-end',
-    marginTop: -8,
-  },
-  forgotPasswordText: {
-    fontSize: 13,
-    fontWeight: '500',
-    color: theme.primary,
   },
   actionContainer: {
     marginTop: 16,

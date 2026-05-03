@@ -17,9 +17,9 @@ app.use('/api/salons', require('./routes/salonRoutes'));
 app.use('/api/services', require('./routes/serviceRoutes'));
 app.use('/api/stylists', require('./routes/stylistRoutes'));
 app.use('/api/appointments', require('./routes/appointmentRoutes'));
+app.use('/api/portfolio',    require('./routes/portfolioRoutes'));
 
-// Review placeholder since it's Member 6
-app.use('/api/reviews', require('express').Router().get('/', (req, res) => res.json({ message: 'Review routes placeholder' })));
+app.use('/api/reviews', require('./routes/reviewRoutes'));
 
 app.get('/', (req, res) => res.json({ message: 'GlowBook API running' }));
 

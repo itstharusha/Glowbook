@@ -39,4 +39,9 @@ const appointmentSchema = new mongoose.Schema({
   },
 }, { timestamps: true });
 
+appointmentSchema.index({ userId: 1 });
+appointmentSchema.index({ salonId: 1 });
+// Compound index used by the double-booking guard query
+appointmentSchema.index({ stylistId: 1, date: 1, timeSlot: 1, status: 1 });
+
 module.exports = mongoose.model('Appointment', appointmentSchema);

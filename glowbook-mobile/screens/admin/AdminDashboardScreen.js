@@ -1,17 +1,20 @@
 import React, { useEffect, useState } from 'react';
-import { View, Text, StyleSheet, ScrollView, TouchableOpacity, RefreshControl, StatusBar } from 'react-native';
+import { View, Text, StyleSheet, ScrollView, TouchableOpacity, RefreshControl, StatusBar, ActivityIndicator } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { Ionicons } from '@expo/vector-icons';
 import api from '../../services/api';
 import { useAuth } from '../../context/AuthContext';
 import theme from '../../constants/theme';
 
-const AdminDashboardScreen = () => {
+const AdminDashboardScreen = ({ navigation }) => {
   const { logout } = useAuth();
   const [stats, setStats] = useState({
     totalUsers: 0,
     totalVendors: 0,
     vendorsWithoutSalon: 0,
+    totalSalons: 0,
+    activeBookings: 0,
+    totalReviews: 0,
   });
   const [loading, setLoading] = useState(true);
   const [refreshing, setRefreshing] = useState(false);
@@ -19,9 +22,13 @@ const AdminDashboardScreen = () => {
 
   const loadAdminData = async () => {
     try {
-      // For this step, we fetch users and calculate stats
-      const res = await api.get('/api/users/all?limit=100'); // simple pagination for demo
-      const allUsers = res.data.data || [];
+      // Fetch admin stats
+      const statsRes = await api.get('/api/salons/admin/stats');
+      const adminStats = statsRes.data.data || {};
+
+      // Fetch users for derived stats
+      const usersRes = await api.get('/api/users/all?limit=100');
+      const allUsers = usersRes.data.data || [];
       
       const vendors = allUsers.filter(u => u.role === 'vendor');
       const withoutSalon = vendors.filter(v => !v.ownedSalon).length;
@@ -30,17 +37,22 @@ const AdminDashboardScreen = () => {
         totalUsers: allUsers.length,
         totalVendors: vendors.length,
         vendorsWithoutSalon: withoutSalon,
+        totalSalons: adminStats.totalSalons || 0,
+        activeBookings: adminStats.activeBookings || 0,
+        totalReviews: adminStats.totalReviews || 0,
       });
       setUsers(allUsers);
     } catch (error) {
-      console.error('Admin load error:', error);
+      console.error('Admin load error:', error.message);
     } finally {
       setLoading(false);
       setRefreshing(false);
     }
   };
 
-  useEffect(() => { loadAdminData(); }, []);
+  useEffect(() => {
+    loadAdminData();
+  }, []);
 
   const handleRefresh = () => {
     setRefreshing(true);
@@ -54,6 +66,16 @@ const AdminDashboardScreen = () => {
     </View>
   );
 
+  if (loading) {
+    return (
+      <SafeAreaView style={styles.container}>
+        <View style={styles.centerContainer}>
+          <ActivityIndicator size="large" color={theme.primary} />
+        </View>
+      </SafeAreaView>
+    );
+  }
+
   return (
     <SafeAreaView style={styles.container}>
       <StatusBar barStyle="dark-content" />
@@ -61,24 +83,39 @@ const AdminDashboardScreen = () => {
         contentContainerStyle={styles.scrollContent}
         refreshControl={<RefreshControl refreshing={refreshing} onRefresh={handleRefresh} />}
       >
-        <Text style={styles.sectionTitle}>Overview</Text>
+        <Text style={styles.sectionTitle}>Platform Overview</Text>
+        <View style={styles.statsContainer}>
+          <StatBox title="Total Salons" value={stats.totalSalons} color={theme.warning} />
+          <StatBox title="Active Bookings" value={stats.activeBookings} color={theme.success} />
+          <StatBox title="Total Reviews" value={stats.totalReviews} color={theme.primary} />
+        </View>
+
         <View style={styles.statsContainer}>
           <StatBox title="Total Users" value={stats.totalUsers} color={theme.primary} />
           <StatBox title="Total Vendors" value={stats.totalVendors} color={theme.warning} />
-          <StatBox title="No Salon Config" value={stats.vendorsWithoutSalon} color={theme.destructive} />
+          <StatBox title="Vendors No Salon" value={stats.vendorsWithoutSalon} color={theme.destructive} />
         </View>
 
         <Text style={styles.sectionTitle}>Quick Actions</Text>
         <View style={styles.actionsContainer}>
-          <TouchableOpacity style={styles.actionBtn}>
+          <TouchableOpacity 
+            style={styles.actionBtn}
+            onPress={() => navigation.navigate('AdminUsers')}
+          >
             <Ionicons name="people" size={24} color={theme.primary} />
             <Text style={styles.actionText}>Manage Users</Text>
           </TouchableOpacity>
-          <TouchableOpacity style={styles.actionBtn}>
+          <TouchableOpacity 
+            style={styles.actionBtn}
+            onPress={() => navigation.navigate('ManageSalons')}
+          >
             <Ionicons name="storefront" size={24} color={theme.primary} />
             <Text style={styles.actionText}>Manage Salons</Text>
           </TouchableOpacity>
-          <TouchableOpacity style={styles.actionBtn}>
+          <TouchableOpacity 
+            style={styles.actionBtn}
+            onPress={() => navigation.navigate('ManageAppointments')}
+          >
             <Ionicons name="calendar" size={24} color={theme.primary} />
             <Text style={styles.actionText}>All Bookings</Text>
           </TouchableOpacity>
@@ -115,9 +152,10 @@ const AdminDashboardScreen = () => {
 
 const styles = StyleSheet.create({
   container: { flex: 1, backgroundColor: theme.backgroundSecondary },
+  centerContainer: { flex: 1, justifyContent: 'center', alignItems: 'center' },
   scrollContent: { padding: 16, paddingBottom: 40 },
   sectionTitle: { fontSize: 18, fontWeight: '600', color: theme.labelPrimary, marginBottom: 12, marginTop: 16 },
-  statsContainer: { flexDirection: 'row', gap: 12 },
+  statsContainer: { flexDirection: 'row', gap: 12, marginBottom: 12 },
   statBox: { flex: 1, backgroundColor: theme.background, padding: 16, borderRadius: 12, alignItems: 'center', ...theme.shadows.card },
   statValue: { fontSize: 24, fontWeight: 'bold', marginBottom: 4 },
   statLabel: { fontSize: 12, color: theme.labelSecondary, textAlign: 'center' },

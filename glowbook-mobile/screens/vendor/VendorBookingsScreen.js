@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import { View, Text, StyleSheet, ScrollView, TouchableOpacity, StatusBar, RefreshControl } from 'react-native';
+import { View, Text, StyleSheet, ScrollView, TouchableOpacity, StatusBar, RefreshControl, Alert, ActivityIndicator } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { Ionicons } from '@expo/vector-icons';
 import { useNavigation } from '@react-navigation/native';
@@ -42,7 +42,7 @@ const VendorBookingsScreen = () => {
       await api.put(`/api/appointments/${id}/status`, { status });
       loadAppointments();
     } catch (error) {
-      alert(`Failed to mark as ${status}`);
+      Alert.alert('Error', `Failed to mark as ${status}.`);
     }
   };
 
@@ -111,7 +111,7 @@ const VendorBookingsScreen = () => {
         refreshControl={<RefreshControl refreshing={refreshing} onRefresh={handleRefresh} />}
       >
         {loading ? (
-          <View style={styles.center}><Text>Loading...</Text></View>
+          <View style={styles.center}><ActivityIndicator size="large" color={theme.primary} /></View>
         ) : filteredAppointments.length === 0 ? (
           <View style={styles.emptyState}>
             <Ionicons name="calendar-outline" size={48} color={theme.systemGray3} />
@@ -145,7 +145,7 @@ const styles = StyleSheet.create({
   avatar: { width: 32, height: 32, borderRadius: 16, backgroundColor: theme.primary, justifyContent: 'center', alignItems: 'center', marginRight: 8 },
   avatarText: { color: '#FFF', fontSize: 14, fontWeight: 'bold' },
   customerName: { fontSize: 16, fontWeight: '600', color: theme.labelPrimary },
-  timeText: { fontSize: 13, fontFamily: 'monospace', color: theme.labelSecondary },
+  timeText: { fontSize: 13, color: theme.labelSecondary },
   serviceInfo: { paddingVertical: 12, borderTopWidth: 1, borderTopColor: theme.separator, borderBottomWidth: 1, borderBottomColor: theme.separator, marginBottom: 12 },
   serviceName: { fontSize: 16, fontWeight: '500', color: theme.labelPrimary, marginBottom: 4 },
   stylistName: { fontSize: 14, color: theme.labelSecondary },

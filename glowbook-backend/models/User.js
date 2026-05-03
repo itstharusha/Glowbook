@@ -39,10 +39,6 @@ const userSchema = new mongoose.Schema({
     ref: 'Salon',
     default: null,
   },
-  createdAt: {
-    type: Date,
-    default: Date.now,
-  },
-});
+}, { timestamps: true });
 
 module.exports = mongoose.model('User', userSchema);

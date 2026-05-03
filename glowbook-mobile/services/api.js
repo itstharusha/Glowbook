@@ -2,7 +2,7 @@ import axios from 'axios';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 
 const api = axios.create({
-  baseURL: 'http://192.168.1.3:5000', // Local development IP
+  baseURL: process.env.EXPO_PUBLIC_API_BASE_URL || 'http://localhost:5000',
   timeout: 10000,
 });
 

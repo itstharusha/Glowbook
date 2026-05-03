@@ -14,14 +14,40 @@ import OnboardingScreen from '../screens/auth/OnboardingScreen';
 import LoginScreen from '../screens/auth/LoginScreen';
 import RegisterScreen from '../screens/auth/RegisterScreen';
 
-// Profile Screen
+// Profile Screen (shared — works for both customer and vendor)
 import ProfileScreen from '../screens/profile/ProfileScreen';
 
-// Vendor Screens
+// Vendor Setup Screens
 import VendorWelcomeScreen from '../screens/vendor/VendorWelcomeScreen';
 import VendorCreateSalonScreen from '../screens/vendor/VendorCreateSalonScreen';
 
-// Placeholder screens (to be filled by other members)
+// Vendor Tab Screens
+import VendorDashboardScreen from '../screens/vendor/VendorDashboardScreen';
+import VendorSalonScreen from '../screens/vendor/VendorSalonScreen';
+import VendorEditSalonScreen from '../screens/vendor/VendorEditSalonScreen';
+import VendorAddEditServiceScreen from '../screens/vendor/VendorAddEditServiceScreen';
+import VendorAddEditStylistScreen from '../screens/vendor/VendorAddEditStylistScreen';
+import VendorAddEditPortfolioScreen from '../screens/vendor/VendorAddEditPortfolioScreen';
+import VendorPortfolioScreen from '../screens/vendor/VendorPortfolioScreen';
+import VendorBookingsScreen from '../screens/vendor/VendorBookingsScreen';
+import VendorBookingDetailScreen from '../screens/vendor/VendorBookingDetailScreen';
+
+// Admin Screens
+import AdminDashboardScreen from '../screens/admin/AdminDashboardScreen';
+import ManageSalonsScreen from '../screens/admin/ManageSalonsScreen';
+import ManageAppointmentsScreen from '../screens/admin/ManageAppointmentsScreen';
+import AdminUsersScreen from '../screens/admin/AdminUsersScreen';
+
+// Customer Screens
+import CustomerHomeScreen from '../screens/customer/CustomerHomeScreen';
+import ExploreScreen from '../screens/customer/ExploreScreen';
+import SalonDetailScreen from '../screens/customer/SalonDetailScreen';
+import BookAppointmentScreen from '../screens/customer/BookAppointmentScreen';
+import CustomerBookingsScreen from '../screens/customer/CustomerBookingsScreen';
+import LeaveReviewScreen from '../screens/customer/LeaveReviewScreen';
+import CustomerPortfolioViewScreen from '../screens/customer/CustomerPortfolioViewScreen';
+
+// Placeholder for customer screens not yet implemented
 const PlaceholderScreen = ({ name }) => {
   const { logout } = useAuth();
   return (
@@ -37,12 +63,39 @@ const PlaceholderScreen = ({ name }) => {
 const Stack = createNativeStackNavigator();
 const Tab = createBottomTabNavigator();
 
+// ─── Auth Stack ──────────────────────────────────────────────────────────────
 const AuthStack = () => (
   <Stack.Navigator screenOptions={{ headerShown: false }}>
     <Stack.Screen name="Splash" component={SplashScreen} />
     <Stack.Screen name="Onboarding" component={OnboardingScreen} />
     <Stack.Screen name="Login" component={LoginScreen} />
     <Stack.Screen name="Register" component={RegisterScreen} />
+  </Stack.Navigator>
+);
+
+// ─── Customer Tabs ────────────────────────────────────────────────────────────
+const CustomerHomeStack = () => (
+  <Stack.Navigator screenOptions={{ headerShown: false }}>
+    <Stack.Screen name="CustomerHome" component={CustomerHomeScreen} />
+    <Stack.Screen name="SalonDetail" component={SalonDetailScreen} />
+    <Stack.Screen name="BookAppointment" component={BookAppointmentScreen} />
+    <Stack.Screen name="CustomerPortfolioView" component={CustomerPortfolioViewScreen} />
+  </Stack.Navigator>
+);
+
+const CustomerExploreStack = () => (
+  <Stack.Navigator screenOptions={{ headerShown: false }}>
+    <Stack.Screen name="ExploreList" component={ExploreScreen} />
+    <Stack.Screen name="SalonDetail" component={SalonDetailScreen} />
+    <Stack.Screen name="BookAppointment" component={BookAppointmentScreen} />
+    <Stack.Screen name="CustomerPortfolioView" component={CustomerPortfolioViewScreen} />
+  </Stack.Navigator>
+);
+
+const CustomerBookingsStack = () => (
+  <Stack.Navigator screenOptions={{ headerShown: false }}>
+    <Stack.Screen name="MyBookings" component={CustomerBookingsScreen} />
+    <Stack.Screen name="LeaveReview" component={LeaveReviewScreen} />
   </Stack.Navigator>
 );
 
@@ -60,39 +113,25 @@ const CustomerTabs = () => (
       },
       headerShown: false,
       tabBarIcon: ({ focused, color, size }) => {
-        let iconName;
-
-        if (route.name === 'Home') {
-          iconName = focused ? 'home' : 'home-outline';
-        } else if (route.name === 'Explore') {
-          iconName = focused ? 'search' : 'search-outline';
-        } else if (route.name === 'Bookings') {
-          iconName = focused ? 'calendar' : 'calendar-outline';
-        } else if (route.name === 'Profile') {
-          iconName = focused ? 'person' : 'person-outline';
-        }
-
-        return <Ionicons name={iconName} size={size} color={color} />;
+        const icons = {
+          Home: focused ? 'home' : 'home-outline',
+          Explore: focused ? 'search' : 'search-outline',
+          Bookings: focused ? 'calendar' : 'calendar-outline',
+          Profile: focused ? 'person' : 'person-outline',
+        };
+        return <Ionicons name={icons[route.name]} size={size} color={color} />;
       },
-      tabBarLabelStyle: {
-        fontSize: 10,
-        fontWeight: '500',
-      },
+      tabBarLabelStyle: { fontSize: 10, fontWeight: '500' },
     })}
   >
-    <Tab.Screen name="Home">
-      {() => <PlaceholderScreen name="Customer Home" />}
-    </Tab.Screen>
-    <Tab.Screen name="Explore">
-      {() => <PlaceholderScreen name="Explore Salons" />}
-    </Tab.Screen>
-    <Tab.Screen name="Bookings">
-      {() => <PlaceholderScreen name="My Bookings" />}
-    </Tab.Screen>
+    <Tab.Screen name="Home" component={CustomerHomeStack} />
+    <Tab.Screen name="Explore" component={CustomerExploreStack} />
+    <Tab.Screen name="Bookings" component={CustomerBookingsStack} />
     <Tab.Screen name="Profile" component={ProfileScreen} />
   </Tab.Navigator>
 );
 
+// ─── Vendor Setup Stack (no tabs — must complete setup) ───────────────────────
 const VendorSetupStack = () => (
   <Stack.Navigator screenOptions={{ headerShown: false }}>
     <Stack.Screen name="VendorWelcome" component={VendorWelcomeScreen} />
@@ -100,6 +139,34 @@ const VendorSetupStack = () => (
   </Stack.Navigator>
 );
 
+// ─── MySalon nested stack ─────────────────────────────────────────────────────
+const MySalonStack = () => (
+  <Stack.Navigator screenOptions={{ headerShown: false }}>
+    <Stack.Screen name="VendorSalon" component={VendorSalonScreen} />
+    <Stack.Screen name="VendorEditSalon" component={VendorEditSalonScreen} />
+    <Stack.Screen name="VendorAddEditService" component={VendorAddEditServiceScreen} />
+    <Stack.Screen name="VendorAddEditStylist" component={VendorAddEditStylistScreen} />
+    <Stack.Screen name="VendorAddEditPortfolio" component={VendorAddEditPortfolioScreen} />
+    <Stack.Screen name="VendorPortfolio" component={VendorPortfolioScreen} />
+  </Stack.Navigator>
+);
+
+// ─── Vendor Dashboard nested stack ────────────────────────────────────────────
+const VendorDashboardStack = () => (
+  <Stack.Navigator screenOptions={{ headerShown: false }}>
+    <Stack.Screen name="VendorDashboard" component={VendorDashboardScreen} />
+  </Stack.Navigator>
+);
+
+// ─── Vendor Bookings nested stack ─────────────────────────────────────────────
+const VendorBookingsStack = () => (
+  <Stack.Navigator screenOptions={{ headerShown: false }}>
+    <Stack.Screen name="VendorBookings" component={VendorBookingsScreen} />
+    <Stack.Screen name="VendorBookingDetail" component={VendorBookingDetailScreen} />
+  </Stack.Navigator>
+);
+
+// ─── Vendor Tabs ──────────────────────────────────────────────────────────────
 const VendorTabs = () => (
   <Tab.Navigator
     screenOptions={({ route }) => ({
@@ -114,47 +181,41 @@ const VendorTabs = () => (
       },
       headerShown: false,
       tabBarIcon: ({ focused, color, size }) => {
-        let iconName;
-
-        if (route.name === 'Dashboard') {
-          iconName = focused ? 'file-tray-full' : 'file-tray-full-outline';
-        } else if (route.name === 'MySalon') {
-          iconName = focused ? 'storefront' : 'storefront-outline';
-        } else if (route.name === 'Bookings') {
-          iconName = focused ? 'calendar' : 'calendar-outline';
-        } else if (route.name === 'Profile') {
-          iconName = focused ? 'person' : 'person-outline';
-        }
-
-        return <Ionicons name={iconName} size={size} color={color} />;
+        const icons = {
+          Dashboard: focused ? 'file-tray-full' : 'file-tray-full-outline',
+          MySalon:   focused ? 'storefront'     : 'storefront-outline',
+          Bookings:  focused ? 'calendar'        : 'calendar-outline',
+          Profile:   focused ? 'person'          : 'person-outline',
+        };
+        return <Ionicons name={icons[route.name]} size={size} color={color} />;
       },
-      tabBarLabelStyle: {
-        fontSize: 10,
-        fontWeight: '500',
-      },
+      tabBarLabelStyle: { fontSize: 10, fontWeight: '500' },
     })}
   >
-    <Tab.Screen name="Dashboard">
-      {() => <PlaceholderScreen name="Vendor Dashboard" />}
-    </Tab.Screen>
-    <Tab.Screen name="MySalon" options={{ tabBarLabel: 'My Salon' }}>
-      {() => <PlaceholderScreen name="My Salon" />}
-    </Tab.Screen>
-    <Tab.Screen name="Bookings">
-      {() => <PlaceholderScreen name="Vendor Bookings" />}
-    </Tab.Screen>
+    <Tab.Screen name="Dashboard" component={VendorDashboardStack} />
+    <Tab.Screen name="MySalon" component={MySalonStack} options={{ tabBarLabel: 'My Salon' }} />
+    <Tab.Screen name="Bookings" component={VendorBookingsStack} />
     <Tab.Screen name="Profile" component={ProfileScreen} />
   </Tab.Navigator>
 );
 
-import AdminDashboardScreen from '../screens/admin/AdminDashboardScreen';
-
+// ─── Admin Stack ──────────────────────────────────────────────────────────────
 const AdminStack = () => (
-  <Stack.Navigator screenOptions={{ headerShown: true, headerStyle: { backgroundColor: theme.background }, headerTintColor: theme.labelPrimary }}>
+  <Stack.Navigator
+    screenOptions={{
+      headerShown: true,
+      headerStyle: { backgroundColor: theme.background },
+      headerTintColor: theme.labelPrimary,
+    }}
+  >
     <Stack.Screen name="AdminDashboard" component={AdminDashboardScreen} options={{ title: 'Admin Dashboard' }} />
+    <Stack.Screen name="ManageSalons" component={ManageSalonsScreen} options={{ title: 'Manage Salons' }} />
+    <Stack.Screen name="ManageAppointments" component={ManageAppointmentsScreen} options={{ title: 'Manage Appointments' }} />
+    <Stack.Screen name="AdminUsers" component={AdminUsersScreen} options={{ title: 'Manage Users' }} />
   </Stack.Navigator>
 );
 
+// ─── Root Navigator ────────────────────────────────────────────────────────────
 const AppNavigator = () => {
   const { user, loading } = useAuth();
 
@@ -168,7 +229,9 @@ const AppNavigator = () => {
 
   if (!user) return <NavigationContainer><AuthStack /></NavigationContainer>;
 
-  if (user.role === 'customer' || user.role === 'user') return <NavigationContainer><CustomerTabs /></NavigationContainer>;
+  if (user.role === 'customer' || user.role === 'user') {
+    return <NavigationContainer><CustomerTabs /></NavigationContainer>;
+  }
 
   if (user.role === 'vendor') {
     if (!user.ownedSalon) return <NavigationContainer><VendorSetupStack /></NavigationContainer>;
@@ -177,7 +240,6 @@ const AppNavigator = () => {
 
   if (user.role === 'admin') return <NavigationContainer><AdminStack /></NavigationContainer>;
 
-  // Fallback
   return <NavigationContainer><AuthStack /></NavigationContainer>;
 };
 

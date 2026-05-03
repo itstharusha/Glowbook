@@ -150,7 +150,7 @@ const login = async (req, res) => {
 // @public
 const googleAuth = async (req, res) => {
   try {
-    const { accessToken } = req.body;
+    const { accessToken, role } = req.body;
 
     if (!accessToken) {
       return res.status(400).json({
@@ -173,16 +173,18 @@ const googleAuth = async (req, res) => {
       });
     }
 
+    const allowedRoles = ['customer', 'vendor'];
+    const assignedRole = (role && allowedRoles.includes(role)) ? role : 'customer';
+
     let user = await User.findOne({ email });
 
     if (!user) {
-      // Create new user from Google profile
       user = await User.create({
         name: name || email.split('@')[0],
         email,
         profilePhoto: picture || '',
-        password: 'oauth_' + Math.random().toString(36).slice(2), // OAuth users don't use password
-        role: 'customer',
+        password: 'oauth_' + Math.random().toString(36).slice(2),
+        role: assignedRole,
       });
     }
 
@@ -215,12 +217,23 @@ const googleAuth = async (req, res) => {
   }
 };
 
+// Fetch Apple's public keys and return the one matching the token's kid
+const getApplePublicKey = async (kid) => {
+  const { data } = await axios.get('https://appleid.apple.com/auth/keys');
+  const key = data.keys.find((k) => k.kid === kid);
+  if (!key) throw new Error('Apple public key not found for kid: ' + kid);
+
+  // Convert JWK to PEM-compatible format using jsonwebtoken's built-in support
+  // jwt.verify accepts a JWK object directly as of jsonwebtoken v9
+  return key;
+};
+
 // @route   POST /api/auth/apple
 // @desc    Verify Apple OAuth token and login/register user
 // @public
 const appleAuth = async (req, res) => {
   try {
-    const { identityToken, user, email, name } = req.body;
+    const { identityToken, email, name } = req.body;
 
     if (!identityToken) {
       return res.status(400).json({
@@ -229,27 +242,44 @@ const appleAuth = async (req, res) => {
       });
     }
 
-    // Apple user identifier
-    const appleUserId = user || identityToken.split('.')[1];
+    // Decode header to get kid + alg (without verifying yet)
+    const tokenParts = identityToken.split('.');
+    if (tokenParts.length !== 3) {
+      return res.status(400).json({ success: false, message: 'Malformed identity token' });
+    }
+    const header = JSON.parse(Buffer.from(tokenParts[0], 'base64').toString('utf8'));
 
-    // Use email from request (Apple provides email on first sign-in)
-    const userEmail = email || `apple_user_${appleUserId}@glowbook.app`;
+    // Fetch Apple's matching public key
+    const appleKey = await getApplePublicKey(header.kid);
+
+    // Verify the JWT signature and claims against Apple's public key
+    let payload;
+    try {
+      payload = jwt.verify(identityToken, jwt.createPublicKey({ key: appleKey, format: 'jwk' }), {
+        algorithms: [header.alg || 'RS256'],
+        issuer: 'https://appleid.apple.com',
+      });
+    } catch (verifyErr) {
+      return res.status(401).json({ success: false, message: 'Apple identity token verification failed' });
+    }
+
+    // Apple provides email in the token payload (sub is the stable unique user ID)
+    const appleUserId = payload.sub;
+    const userEmail = email || payload.email || `apple_${appleUserId}@privaterelay.appleid.com`;
     const userName = name?.givenName || 'Apple User';
 
     let dbUser = await User.findOne({ email: userEmail });
 
     if (!dbUser) {
-      // Create new user from Apple profile
       dbUser = await User.create({
         name: userName,
         email: userEmail,
         profilePhoto: '',
-        password: 'oauth_' + Math.random().toString(36).slice(2), // OAuth users don't use password
+        password: 'oauth_' + Math.random().toString(36).slice(2),
         role: 'customer',
       });
     }
 
-    // Generate token
     const token = generateToken(dbUser._id);
 
     const userResponse = {

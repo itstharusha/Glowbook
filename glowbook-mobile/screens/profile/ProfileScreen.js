@@ -12,22 +12,50 @@ import {
   ActivityIndicator,
   Alert,
 } from 'react-native';
-import { SafeAreaView } from 'react-native-safe-area-context';
+
+import { SafeAreaView, useSafeAreaInsets } from 'react-native-safe-area-context';
 import { MaterialIcons } from '@expo/vector-icons';
 import * as ImagePicker from 'expo-image-picker';
 import { useAuth } from '../../context/AuthContext';
 import api from '../../services/api';
 import theme from '../../constants/theme';
 
-const ProfileScreen = () => {
-  const { user, logout, refreshProfile, updateUser } = useAuth();
+const InitialsAvatar = ({ name, uri, size, style }) => {
+  if (uri) {
+    return <Image source={{ uri }} style={[{ width: size, height: size, borderRadius: size / 2 }, style]} />;
+  }
+  const initials = name
+    ? name.split(' ').slice(0, 2).map(w => w[0]).join('').toUpperCase()
+    : '?';
+  return (
+    <View style={[{ width: size, height: size, borderRadius: size / 2, backgroundColor: theme.primary, justifyContent: 'center', alignItems: 'center' }, style]}>
+      <Text style={{ color: '#fff', fontSize: size * 0.36, fontWeight: '700' }}>{initials}</Text>
+    </View>
+  );
+};
+
+const ProfileScreen = ({ navigation }) => {
+  const { user, logout, refreshProfile } = useAuth();
+  const insets = useSafeAreaInsets();
   const [editModalVisible, setEditModalVisible] = useState(false);
   const [editedName, setEditedName] = useState(user?.name || '');
   const [selectedImage, setSelectedImage] = useState(null);
   const [isLoading, setIsLoading] = useState(false);
+  const [stats, setStats] = useState({ completed: 0, upcoming: 0 });
 
   useEffect(() => {
     refreshProfile();
+    if (user?.role === 'customer' || user?.role === 'user') {
+      api.get('/api/appointments/my')
+        .then(res => {
+          const apts = res.data.data || [];
+          setStats({
+            completed: apts.filter(a => a.status === 'Completed').length,
+            upcoming: apts.filter(a => ['Pending', 'Confirmed'].includes(a.status)).length,
+          });
+        })
+        .catch(() => {});
+    }
   }, []);
 
   useEffect(() => {
@@ -153,11 +181,13 @@ const ProfileScreen = () => {
         {/* Profile Card */}
         <View style={styles.profileCard}>
           <View style={styles.avatarContainer}>
-            <Image
-              source={{ uri: selectedImage?.uri || user?.profilePhoto || 'https://via.placeholder.com/150' }}
+            <InitialsAvatar
+              name={user?.name}
+              uri={selectedImage?.uri || user?.profilePhoto}
+              size={80}
               style={styles.avatar}
             />
-            <TouchableOpacity 
+            <TouchableOpacity
               style={styles.editBadge}
               onPress={() => setEditModalVisible(true)}
             >
@@ -173,34 +203,31 @@ const ProfileScreen = () => {
           </View>
         </View>
 
-        {/* Stats Row */}
-        <View style={styles.statsRow}>
-          <View style={styles.statBox}>
-            <Text style={styles.statValue}>12</Text>
-            <Text style={styles.statLabel}>VISITS</Text>
+        {/* Stats Row — customer only */}
+        {(user?.role === 'customer' || user?.role === 'user') && (
+          <View style={styles.statsRow}>
+            <View style={styles.statBox}>
+              <Text style={styles.statValue}>{stats.completed}</Text>
+              <Text style={styles.statLabel}>VISITS</Text>
+            </View>
+            <View style={styles.statBox}>
+              <Text style={styles.statValue}>{stats.upcoming}</Text>
+              <Text style={styles.statLabel}>UPCOMING</Text>
+            </View>
           </View>
-          <View style={styles.statBox}>
-            <Text style={styles.statValue}>4</Text>
-            <Text style={styles.statLabel}>REVIEWS</Text>
-          </View>
-          <View style={styles.statBox}>
-            <Text style={styles.statValue}>28</Text>
-            <Text style={styles.statLabel}>SAVED</Text>
-          </View>
-        </View>
+        )}
 
         {/* Menu Sections */}
-        <View style={styles.menuSection}>
-          <MenuItem icon="calendar-today" label="My Bookings" />
-          <MenuItem icon="favorite" label="Saved Salons" />
-          <MenuItem icon="notifications" label="Notifications" isLast />
-        </View>
-
-        <View style={styles.menuSection}>
-          <MenuItem icon="help" label="Help" />
-          <MenuItem icon="lock" label="Privacy" />
-          <MenuItem icon="description" label="Terms" isLast />
-        </View>
+        {(user?.role === 'customer' || user?.role === 'user') && (
+          <View style={styles.menuSection}>
+            <MenuItem
+              icon="calendar-today"
+              label="My Bookings"
+              onPress={() => navigation.navigate('Bookings')}
+              isLast
+            />
+          </View>
+        )}
 
         {/* Sign Out */}
         <TouchableOpacity 
@@ -217,15 +244,14 @@ const ProfileScreen = () => {
       {/* Edit Profile Modal */}
       <Modal
         visible={editModalVisible}
-        transparent
         animationType="slide"
         onRequestClose={() => !isLoading && setEditModalVisible(false)}
       >
-        <SafeAreaView style={styles.modalContainer}>
+        <View style={styles.modalContainer}>
           <StatusBar barStyle="dark-content" />
-          
+
           {/* Modal Header */}
-          <View style={styles.modalHeader}>
+          <View style={[styles.modalHeader, { paddingTop: insets.top }]}>
             <TouchableOpacity 
               onPress={() => !isLoading && setEditModalVisible(false)}
               disabled={isLoading}
@@ -253,9 +279,10 @@ const ProfileScreen = () => {
             <View style={styles.photoSection}>
               <Text style={styles.sectionTitle}>Profile Photo</Text>
               <View style={styles.photoContainer}>
-                <Image
-                  source={{ uri: selectedImage?.uri || user?.profilePhoto || 'https://via.placeholder.com/150' }}
-                  style={styles.largeAvatar}
+                <InitialsAvatar
+                  name={user?.name}
+                  uri={selectedImage?.uri || user?.profilePhoto}
+                  size={120}
                 />
               </View>
               <TouchableOpacity 
@@ -303,7 +330,7 @@ const ProfileScreen = () => {
               </View>
             )}
           </ScrollView>
-        </SafeAreaView>
+        </View>
       </Modal>
     </SafeAreaView>
   );
@@ -313,27 +340,6 @@ const styles = StyleSheet.create({
   container: {
     flex: 1,
     backgroundColor: theme.backgroundSecondary,
-  },
-  header: {
-    height: 44,
-    flexDirection: 'row',
-    alignItems: 'center',
-    justifyContent: 'between',
-    paddingHorizontal: 16,
-    backgroundColor: theme.background,
-  },
-  headerButton: {
-    width: 40,
-    height: 40,
-    justifyContent: 'center',
-    alignItems: 'center',
-  },
-  headerTitle: {
-    flex: 1,
-    textAlign: 'center',
-    fontSize: 17,
-    fontWeight: '600',
-    color: theme.labelPrimary,
   },
   scrollContent: {
     paddingHorizontal: 16,
@@ -361,9 +367,6 @@ const styles = StyleSheet.create({
     marginRight: 16,
   },
   avatar: {
-    width: 80,
-    height: 80,
-    borderRadius: 40,
     backgroundColor: theme.systemGray6,
   },
   editBadge: {
@@ -483,11 +486,11 @@ const styles = StyleSheet.create({
     backgroundColor: theme.backgroundSecondary,
   },
   modalHeader: {
-    height: 56,
     flexDirection: 'row',
     alignItems: 'center',
     justifyContent: 'space-between',
     paddingHorizontal: 16,
+    paddingBottom: 14,
     borderBottomWidth: 1,
     borderBottomColor: theme.separator,
     backgroundColor: theme.background,
@@ -530,12 +533,6 @@ const styles = StyleSheet.create({
     shadowOpacity: 0.1,
     shadowRadius: 8,
     elevation: 3,
-  },
-  largeAvatar: {
-    width: 120,
-    height: 120,
-    borderRadius: 60,
-    backgroundColor: theme.systemGray6,
   },
   changePhotoButton: {
     flexDirection: 'row',

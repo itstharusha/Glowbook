@@ -1,11 +1,23 @@
 import React, { useEffect, useState } from 'react';
-import { View, Text, StyleSheet, ScrollView, TouchableOpacity, RefreshControl, StatusBar } from 'react-native';
+import { View, Text, StyleSheet, ScrollView, TouchableOpacity, RefreshControl, StatusBar, Alert, ActivityIndicator } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { Ionicons } from '@expo/vector-icons';
 import { useNavigation } from '@react-navigation/native';
 import api from '../../services/api';
 import { useAuth } from '../../context/AuthContext';
 import theme from '../../constants/theme';
+
+const APPOINTMENT_STATUS = {
+  Pending:   { color: '#92400E', bg: '#FEF3C7' },
+  Confirmed: { color: '#065F46', bg: '#D1FAE5' },
+};
+
+const getGreeting = () => {
+  const h = new Date().getHours();
+  if (h < 12) return 'Good morning';
+  if (h < 17) return 'Good afternoon';
+  return 'Good evening';
+};
 
 const VendorDashboardScreen = () => {
   const { user } = useAuth();
@@ -45,7 +57,7 @@ const VendorDashboardScreen = () => {
       await api.put(`/api/appointments/${id}/status`, { status: 'Confirmed' });
       loadDashboardData(); // Refresh list
     } catch (error) {
-      alert('Failed to confirm booking');
+      Alert.alert('Error', 'Failed to confirm booking.');
     }
   };
 
@@ -58,7 +70,13 @@ const VendorDashboardScreen = () => {
   const pendingCount = appointments.filter(a => a.status === 'Pending').length;
 
   if (loading) {
-    return <View style={styles.center}><Text>Loading Dashboard...</Text></View>;
+    return (
+      <SafeAreaView style={styles.container}>
+        <View style={styles.center}>
+          <ActivityIndicator size="large" color={theme.primary} />
+        </View>
+      </SafeAreaView>
+    );
   }
 
   return (
@@ -69,7 +87,7 @@ const VendorDashboardScreen = () => {
         refreshControl={<RefreshControl refreshing={refreshing} onRefresh={handleRefresh} />}
       >
         <View style={styles.header}>
-          <Text style={styles.greeting}>Good morning, {user?.name}</Text>
+          <Text style={styles.greeting}>{getGreeting()}, {user?.name?.split(' ')[0]}</Text>
           <Text style={styles.salonName}>{salon?.name || 'Your Salon'}</Text>
         </View>
 
@@ -89,16 +107,24 @@ const VendorDashboardScreen = () => {
         </View>
 
         <View style={styles.actionsRow}>
-          {/* We'll just alert for now, full screens can be added later */}
-          <TouchableOpacity style={styles.actionBtn} onPress={() => alert('Navigate to Edit Salon')}>
+          <TouchableOpacity
+            style={styles.actionBtn}
+            onPress={() => navigation.navigate('MySalon', { screen: 'VendorEditSalon' })}
+          >
             <Ionicons name="create-outline" size={20} color={theme.primary} />
             <Text style={styles.actionText}>Edit Salon</Text>
           </TouchableOpacity>
-          <TouchableOpacity style={styles.actionBtn} onPress={() => alert('Navigate to Add Service')}>
+          <TouchableOpacity
+            style={styles.actionBtn}
+            onPress={() => navigation.navigate('MySalon', { screen: 'VendorAddEditService' })}
+          >
             <Ionicons name="add-circle-outline" size={20} color={theme.primary} />
             <Text style={styles.actionText}>Add Service</Text>
           </TouchableOpacity>
-          <TouchableOpacity style={styles.actionBtn} onPress={() => alert('Navigate to Add Stylist')}>
+          <TouchableOpacity
+            style={styles.actionBtn}
+            onPress={() => navigation.navigate('MySalon', { screen: 'VendorAddEditStylist' })}
+          >
             <Ionicons name="person-add-outline" size={20} color={theme.primary} />
             <Text style={styles.actionText}>Add Stylist</Text>
           </TouchableOpacity>
@@ -119,8 +145,8 @@ const VendorDashboardScreen = () => {
                 <View style={styles.aptInfo}>
                   <Text style={styles.aptCustomer}>{apt.userId?.name}</Text>
                   <Text style={styles.aptDetails}>{apt.serviceId?.name} • {apt.timeSlot}</Text>
-                  <View style={[styles.statusChip, { backgroundColor: apt.status === 'Pending' ? '#FFF3CD' : '#D4EDDA' }]}>
-                    <Text style={[styles.statusText, { color: apt.status === 'Pending' ? '#856404' : '#155724' }]}>
+                  <View style={[styles.statusChip, { backgroundColor: (APPOINTMENT_STATUS[apt.status] || APPOINTMENT_STATUS.Pending).bg }]}>
+                    <Text style={[styles.statusText, { color: (APPOINTMENT_STATUS[apt.status] || APPOINTMENT_STATUS.Pending).color }]}>
                       {apt.status}
                     </Text>
                   </View>
@@ -144,11 +170,11 @@ const styles = StyleSheet.create({
   center: { flex: 1, justifyContent: 'center', alignItems: 'center' },
   scrollContent: { padding: 16 },
   header: { marginBottom: 24 },
-  greeting: { fontSize: 24, fontWeight: 'bold', color: theme.labelPrimary },
+  greeting: { fontSize: 24, fontWeight: '700', color: theme.labelPrimary },
   salonName: { fontSize: 16, color: theme.labelSecondary, marginTop: 4 },
   statsRow: { flexDirection: 'row', gap: 12, marginBottom: 24 },
   statCard: { flex: 1, backgroundColor: theme.background, padding: 16, borderRadius: 12, alignItems: 'center', ...theme.shadows.card },
-  statValue: { fontSize: 24, fontWeight: 'bold', color: theme.labelPrimary, marginBottom: 4 },
+  statValue: { fontSize: 24, fontWeight: '700', color: theme.labelPrimary, marginBottom: 4 },
   statLabel: { fontSize: 12, color: theme.labelSecondary, textAlign: 'center' },
   actionsRow: { flexDirection: 'row', gap: 12, marginBottom: 24 },
   actionBtn: { flex: 1, backgroundColor: theme.background, padding: 12, borderRadius: 12, alignItems: 'center', ...theme.shadows.card },
@@ -165,7 +191,7 @@ const styles = StyleSheet.create({
   statusChip: { alignSelf: 'flex-start', paddingHorizontal: 8, paddingVertical: 4, borderRadius: 4 },
   statusText: { fontSize: 12, fontWeight: '600' },
   confirmBtn: { backgroundColor: theme.primary, paddingHorizontal: 16, paddingVertical: 8, borderRadius: 8 },
-  confirmBtnText: { color: '#FFF', fontWeight: 'bold', fontSize: 14 },
+  confirmBtnText: { color: '#FFF', fontWeight: '700', fontSize: 14 },
 });
 
 export default VendorDashboardScreen;

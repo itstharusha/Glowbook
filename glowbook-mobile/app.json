@@ -11,7 +11,6 @@
       "resizeMode": "contain",
       "backgroundColor": "#ffffff"
     },
-    "runtimeVersion": "1.0.0",
     "assetBundlePatterns": [
       "**/*"
     ],
@@ -30,9 +29,6 @@
         "backgroundColor": "#ffffff"
       },
       "package": "com.glowbook.app"
-    },
-    "web": {
-      "favicon": "./assets/favicon.png"
     },
     "plugins": [
       "expo-web-browser"

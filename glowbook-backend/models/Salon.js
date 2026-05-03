@@ -42,6 +42,13 @@ const salonSchema = new mongoose.Schema({
     ref: 'User',
     required: true,
   },
+  isVerified: {
+    type: Boolean,
+    default: false,
+  },
 }, { timestamps: true });
+
+salonSchema.index({ owner: 1 });
+salonSchema.index({ category: 1 });
 
 module.exports = mongoose.model('Salon', salonSchema);
