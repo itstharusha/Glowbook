@@ -208,10 +208,10 @@ const AdminStack = () => (
       headerTintColor: theme.labelPrimary,
     }}
   >
-    <Stack.Screen name="AdminDashboard" component={AdminDashboardScreen} options={{ title: 'Admin Dashboard' }} />
-    <Stack.Screen name="ManageSalons" component={ManageSalonsScreen} options={{ title: 'Manage Salons' }} />
-    <Stack.Screen name="ManageAppointments" component={ManageAppointmentsScreen} options={{ title: 'Manage Appointments' }} />
-    <Stack.Screen name="AdminUsers" component={AdminUsersScreen} options={{ title: 'Manage Users' }} />
+    <Stack.Screen name="AdminDashboard" component={AdminDashboardScreen} options={{ headerShown: false }} />
+    <Stack.Screen name="ManageSalons" component={ManageSalonsScreen} options={{ headerShown: false }} />
+    <Stack.Screen name="ManageAppointments" component={ManageAppointmentsScreen} options={{ headerShown: false }} />
+    <Stack.Screen name="AdminUsers" component={AdminUsersScreen} options={{ headerShown: false }} />
   </Stack.Navigator>
 );
 

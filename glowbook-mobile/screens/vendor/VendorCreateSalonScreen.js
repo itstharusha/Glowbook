@@ -1,8 +1,9 @@
 import React, { useState } from 'react';
 import {
   View, Text, TextInput, TouchableOpacity, StyleSheet,
-  SafeAreaView, StatusBar, ScrollView, Animated, KeyboardAvoidingView, Platform
+  Alert, StatusBar, ScrollView, KeyboardAvoidingView, Platform
 } from 'react-native';
+import { SafeAreaView, useSafeAreaInsets } from 'react-native-safe-area-context';
 import { useNavigation } from '@react-navigation/native';
 import { Ionicons } from '@expo/vector-icons';
 import { LinearGradient } from 'expo-linear-gradient';
@@ -28,6 +29,7 @@ const InputRow = ({ label, value, onChangeText, placeholder, multiline = false, 
 
 const VendorCreateSalonScreen = () => {
   const navigation = useNavigation();
+  const insets = useSafeAreaInsets();
   const { updateUser } = useAuth();
   const [loading, setLoading] = useState(false);
 
@@ -41,26 +43,38 @@ const VendorCreateSalonScreen = () => {
   });
 
   const handleCreateSalon = async () => {
-    // Basic validation
-    if (!salonData.name || !salonData.description || !salonData.location || !salonData.phoneNumber || !salonData.openingHours) {
-      alert('Please fill all required fields');
+    if (!salonData.name.trim()) {
+      Alert.alert('Missing Information', 'Please enter your salon name.');
+      return;
+    }
+    if (!salonData.description.trim()) {
+      Alert.alert('Missing Information', 'Please add a short description of your salon.');
+      return;
+    }
+    if (!salonData.location.trim()) {
+      Alert.alert('Missing Information', 'Please enter your salon\'s address or location.');
+      return;
+    }
+    if (!salonData.phoneNumber.trim()) {
+      Alert.alert('Missing Information', 'Please enter a contact phone number for your salon.');
+      return;
+    }
+    if (!salonData.openingHours.trim()) {
+      Alert.alert('Missing Information', 'Please enter your salon\'s opening hours (e.g. Mon–Sat 9AM–8PM).');
       return;
     }
 
     setLoading(true);
     try {
       const response = await api.post('/api/salons', salonData);
-      
+
       if (response.data.success) {
-        // Update user context which will automatically switch AppNavigator branch
         await updateUser({ ownedSalon: response.data.data._id });
-        // No manual navigation needed, AppNavigator re-renders!
       } else {
-        alert(response.data.message || 'Failed to create salon');
+        Alert.alert('Something Went Wrong', 'We could not create your salon. Please try again.');
       }
     } catch (error) {
-      console.error(error);
-      alert(error.response?.data?.message || 'Server error occurred');
+      Alert.alert('Something Went Wrong', 'We could not create your salon. Please check your connection and try again.');
     } finally {
       setLoading(false);
     }
@@ -140,19 +154,11 @@ const VendorCreateSalonScreen = () => {
             onChangeText={(text) => setSalonData({ ...salonData, openingHours: text })}
           />
 
-          <TouchableOpacity
-            style={styles.imageUploadBtn}
-            onPress={() => alert('Image picker placeholder')}
-          >
-            <Ionicons name="images" size={24} color={theme.primary} />
-            <Text style={styles.imageUploadText}>Add Gallery Images (Up to 5)</Text>
-          </TouchableOpacity>
-
         </View>
       </ScrollView>
       </KeyboardAvoidingView>
 
-      <View style={styles.footerAction}>
+      <View style={[styles.footerAction, { paddingBottom: 16 + insets.bottom }]}>
         <TouchableOpacity onPress={handleCreateSalon} disabled={loading} activeOpacity={0.8}>
           <LinearGradient
             colors={[theme.primary, '#E40E5A']}

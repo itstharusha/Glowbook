@@ -1,9 +1,10 @@
-import React, { useEffect, useState } from 'react';
+import React, { useCallback, useState } from 'react';
 import {
   View, Text, StyleSheet, ScrollView, TouchableOpacity,
   RefreshControl, StatusBar, Alert, FlatList, Image, ActivityIndicator,
 } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
+import { useFocusEffect } from '@react-navigation/native';
 import { Ionicons } from '@expo/vector-icons';
 import api from '../../services/api';
 import theme from '../../constants/theme';
@@ -42,7 +43,7 @@ const VendorSalonScreen = ({ navigation }) => {
     }
   };
 
-  useEffect(() => { loadData(); }, []);
+  useFocusEffect(useCallback(() => { loadData(); }, []));
 
   const handleRefresh = () => {
     setRefreshing(true);
@@ -104,9 +105,10 @@ const VendorSalonScreen = ({ navigation }) => {
 
         <View style={styles.infoSection}>
           <Text style={styles.salonName}>{salon?.name}</Text>
-          <Text style={styles.location}>
-            <Ionicons name="location-outline" size={14} /> {salon?.location}
-          </Text>
+          <View style={{ flexDirection: 'row', alignItems: 'center', marginBottom: 12 }}>
+            <Ionicons name="location-outline" size={14} color={theme.labelSecondary} />
+            <Text style={[styles.location, { marginBottom: 0, marginLeft: 4 }]}>{salon?.location}</Text>
+          </View>
           <Text style={styles.description}>{salon?.description}</Text>
         </View>
 
@@ -146,7 +148,7 @@ const VendorSalonScreen = ({ navigation }) => {
                 <TouchableOpacity
                   key={s._id}
                   style={styles.listItem}
-                  onPress={() => navigation.navigate('VendorAddEditService', { id: s._id })}
+                  onPress={() => navigation.navigate('VendorAddEditService', { id: s._id, service: s })}
                 >
                   <View style={styles.listInfo}>
                     <Text style={styles.listTitle}>{s.name}</Text>
@@ -173,7 +175,7 @@ const VendorSalonScreen = ({ navigation }) => {
                 <TouchableOpacity
                   key={s._id}
                   style={styles.listItem}
-                  onPress={() => navigation.navigate('VendorAddEditStylist', { id: s._id })}
+                  onPress={() => navigation.navigate('VendorAddEditStylist', { id: s._id, stylist: s })}
                 >
                   <View style={styles.listInfo}>
                     <Text style={styles.listTitle}>{s.name}</Text>

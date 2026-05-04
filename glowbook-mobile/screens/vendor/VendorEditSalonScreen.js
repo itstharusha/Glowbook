@@ -1,17 +1,36 @@
 import React, { useState, useEffect } from 'react';
 import {
   View, Text, TextInput, TouchableOpacity, StyleSheet,
-  SafeAreaView, StatusBar, ScrollView
+  Alert, StatusBar, ScrollView, Image, ActivityIndicator, Platform,
 } from 'react-native';
+import { SafeAreaView, useSafeAreaInsets } from 'react-native-safe-area-context';
 import { useNavigation } from '@react-navigation/native';
 import { Ionicons } from '@expo/vector-icons';
 import { LinearGradient } from 'expo-linear-gradient';
 import { Picker } from '@react-native-picker/picker';
+import * as ImagePicker from 'expo-image-picker';
 import api from '../../services/api';
 import theme from '../../constants/theme';
 
+const MAX_IMAGES = 5;
+
+const InputRow = ({ label, value, onChangeText, multiline = false, ...props }) => (
+  <View style={styles.inputGroup}>
+    <Text style={styles.label}>{label}</Text>
+    <TextInput
+      style={[styles.input, multiline && styles.textArea]}
+      value={value}
+      onChangeText={onChangeText}
+      placeholderTextColor={theme.labelTertiary}
+      multiline={multiline}
+      {...props}
+    />
+  </View>
+);
+
 const VendorEditSalonScreen = () => {
   const navigation = useNavigation();
+  const insets = useSafeAreaInsets();
   const [loading, setLoading] = useState(false);
   const [salonId, setSalonId] = useState(null);
 
@@ -23,6 +42,10 @@ const VendorEditSalonScreen = () => {
     category: 'Hair',
     openingHours: '',
   });
+
+  const [existingImages, setExistingImages] = useState([]);
+  const [newImages, setNewImages] = useState([]);
+  const [removingImage, setRemovingImage] = useState(null);
 
   useEffect(() => {
     const loadSalon = async () => {
@@ -39,6 +62,7 @@ const VendorEditSalonScreen = () => {
             category: s.category || 'Hair',
             openingHours: s.openingHours || '',
           });
+          setExistingImages(s.images || []);
         }
       } catch (err) {
         console.error(err);
@@ -47,41 +71,87 @@ const VendorEditSalonScreen = () => {
     loadSalon();
   }, []);
 
+  const totalImages = existingImages.length + newImages.length;
+
+  const pickImages = async () => {
+    if (totalImages >= MAX_IMAGES) {
+      Alert.alert('Limit reached', `You can add up to ${MAX_IMAGES} photos.`);
+      return;
+    }
+    const permission = await ImagePicker.requestMediaLibraryPermissionsAsync();
+    if (!permission.granted) {
+      Alert.alert('Permission required', 'Please allow access to your photo library.');
+      return;
+    }
+    const remaining = MAX_IMAGES - totalImages;
+    const result = await ImagePicker.launchImageLibraryAsync({
+      mediaTypes: ImagePicker.MediaTypeOptions.Images,
+      allowsMultipleSelection: true,
+      selectionLimit: remaining,
+      quality: 0.8,
+    });
+    if (!result.canceled && result.assets.length > 0) {
+      setNewImages(prev => [...prev, ...result.assets.slice(0, remaining)]);
+    }
+  };
+
+  const removeNewImage = (index) => {
+    setNewImages(prev => prev.filter((_, i) => i !== index));
+  };
+
+  const removeExistingImage = async (imageUrl) => {
+    if (!salonId) return;
+    setRemovingImage(imageUrl);
+    try {
+      await api.delete(`/api/salons/${salonId}/images`, { data: { imageUrl } });
+      setExistingImages(prev => prev.filter(url => url !== imageUrl));
+    } catch {
+      Alert.alert('Could Not Remove Photo', 'We could not remove that photo. Please try again.');
+    } finally {
+      setRemovingImage(null);
+    }
+  };
+
   const handleUpdateSalon = async () => {
     if (!salonId) return;
+    if (!salonData.name.trim()) {
+      Alert.alert('Missing Information', 'Your salon must have a name.');
+      return;
+    }
     setLoading(true);
     try {
+      if (newImages.length > 0) {
+        const formData = new FormData();
+        newImages.forEach((img, i) => {
+          formData.append('images', {
+            uri: img.uri,
+            type: 'image/jpeg',
+            name: `salon_${Date.now()}_${i}.jpg`,
+          });
+        });
+        await api.post(`/api/salons/${salonId}/images`, formData, {
+          headers: { 'Content-Type': 'multipart/form-data' },
+        });
+        setNewImages([]);
+      }
+
       const response = await api.put(`/api/salons/${salonId}`, salonData);
       if (response.data.success) {
         navigation.goBack();
       } else {
-        alert(response.data.message || 'Failed to update salon');
+        Alert.alert('Something Went Wrong', 'We could not save your changes. Please try again.');
       }
     } catch (error) {
-      alert(error.response?.data?.message || 'Server error occurred');
+      Alert.alert('Something Went Wrong', 'We could not save your changes. Please check your connection and try again.');
     } finally {
       setLoading(false);
     }
   };
 
-  const InputRow = ({ label, value, onChangeText, multiline = false, ...props }) => (
-    <View style={styles.inputGroup}>
-      <Text style={styles.label}>{label}</Text>
-      <TextInput
-        style={[styles.input, multiline && styles.textArea]}
-        value={value}
-        onChangeText={onChangeText}
-        placeholderTextColor={theme.labelTertiary}
-        multiline={multiline}
-        {...props}
-      />
-    </View>
-  );
-
   return (
     <SafeAreaView style={styles.container}>
       <StatusBar barStyle="dark-content" />
-      
+
       <View style={styles.header}>
         <TouchableOpacity style={styles.backButton} onPress={() => navigation.goBack()}>
           <Ionicons name="chevron-back" size={28} color={theme.primary} />
@@ -90,7 +160,51 @@ const VendorEditSalonScreen = () => {
         <View style={styles.headerRight} />
       </View>
 
-      <ScrollView contentContainerStyle={styles.scrollContent} showsVerticalScrollIndicator={false}>
+      <ScrollView
+        contentContainerStyle={styles.scrollContent}
+        showsVerticalScrollIndicator={false}
+        keyboardShouldPersistTaps="handled"
+      >
+        {/* Photos section */}
+        <View style={styles.section}>
+          <Text style={styles.sectionLabel}>Photos ({totalImages}/{MAX_IMAGES})</Text>
+          <ScrollView horizontal showsHorizontalScrollIndicator={false} style={styles.imagesRow}>
+            {existingImages.map((url) => (
+              <View key={url} style={styles.thumbContainer}>
+                <Image source={{ uri: url }} style={styles.thumb} resizeMode="cover" />
+                <TouchableOpacity
+                  style={styles.removeThumb}
+                  onPress={() => removeExistingImage(url)}
+                  disabled={removingImage === url}
+                >
+                  {removingImage === url
+                    ? <ActivityIndicator size="small" color={theme.destructive} />
+                    : <Ionicons name="close-circle" size={22} color={theme.destructive} />
+                  }
+                </TouchableOpacity>
+              </View>
+            ))}
+            {newImages.map((img, index) => (
+              <View key={`new-${index}`} style={styles.thumbContainer}>
+                <Image source={{ uri: img.uri }} style={styles.thumb} resizeMode="cover" />
+                <TouchableOpacity style={styles.removeThumb} onPress={() => removeNewImage(index)}>
+                  <Ionicons name="close-circle" size={22} color={theme.destructive} />
+                </TouchableOpacity>
+                <View style={styles.newBadge}>
+                  <Text style={styles.newBadgeText}>New</Text>
+                </View>
+              </View>
+            ))}
+            {totalImages < MAX_IMAGES && (
+              <TouchableOpacity style={styles.addImageBtn} onPress={pickImages}>
+                <Ionicons name="add" size={28} color={theme.primary} />
+                <Text style={styles.addImageText}>Add</Text>
+              </TouchableOpacity>
+            )}
+          </ScrollView>
+        </View>
+
+        {/* Text fields */}
         <View style={styles.formContainer}>
           <InputRow label="Salon Name" value={salonData.name} onChangeText={(t) => setSalonData({ ...salonData, name: t })} />
 
@@ -119,7 +233,7 @@ const VendorEditSalonScreen = () => {
         </View>
       </ScrollView>
 
-      <View style={styles.footerAction}>
+      <View style={[styles.footerAction, { paddingBottom: 16 + insets.bottom }]}>
         <TouchableOpacity onPress={handleUpdateSalon} disabled={loading} activeOpacity={0.8}>
           <LinearGradient
             colors={[theme.primary, '#E40E5A']}
@@ -127,9 +241,10 @@ const VendorEditSalonScreen = () => {
             end={{ x: 1, y: 0 }}
             style={styles.submitButton}
           >
-            <Text style={styles.submitButtonText}>
-              {loading ? 'Saving Changes...' : 'Save Changes'}
-            </Text>
+            {loading
+              ? <ActivityIndicator color="#fff" />
+              : <Text style={styles.submitButtonText}>Save Changes</Text>
+            }
           </LinearGradient>
         </TouchableOpacity>
       </View>
@@ -144,6 +259,16 @@ const styles = StyleSheet.create({
   headerTitle: { fontSize: 17, fontWeight: '600', color: theme.labelPrimary },
   headerRight: { width: 44 },
   scrollContent: { padding: 16, paddingBottom: 40 },
+  section: { backgroundColor: theme.background, borderRadius: 12, padding: 14, marginBottom: 12, ...theme.shadows.card },
+  sectionLabel: { fontSize: 13, fontWeight: '600', color: theme.labelSecondary, marginBottom: 10, textTransform: 'uppercase', letterSpacing: 0.4 },
+  imagesRow: { flexDirection: 'row' },
+  thumbContainer: { position: 'relative', marginRight: 10 },
+  thumb: { width: 80, height: 80, borderRadius: 10 },
+  removeThumb: { position: 'absolute', top: -6, right: -6, backgroundColor: '#fff', borderRadius: 11 },
+  newBadge: { position: 'absolute', bottom: 4, left: 4, backgroundColor: theme.primary, borderRadius: 4, paddingHorizontal: 5, paddingVertical: 1 },
+  newBadgeText: { color: '#fff', fontSize: 9, fontWeight: '700' },
+  addImageBtn: { width: 80, height: 80, borderRadius: 10, borderWidth: 1.5, borderColor: theme.primary, borderStyle: 'dashed', justifyContent: 'center', alignItems: 'center', backgroundColor: '#FFF0F4' },
+  addImageText: { fontSize: 11, color: theme.primary, fontWeight: '600', marginTop: 2 },
   formContainer: { backgroundColor: theme.background, borderRadius: 12, padding: 16, ...theme.shadows.card },
   inputGroup: { marginBottom: 20 },
   label: { fontSize: 14, fontWeight: '500', color: theme.labelSecondary, marginBottom: 8 },

@@ -77,9 +77,12 @@ const AdminDashboardScreen = ({ navigation }) => {
   }
 
   return (
-    <SafeAreaView style={styles.container}>
-      <StatusBar barStyle="dark-content" />
-      <ScrollView 
+    <SafeAreaView style={styles.container} edges={['top', 'left', 'right']}>
+      <StatusBar barStyle="dark-content" backgroundColor={theme.background} />
+      <View style={styles.header}>
+        <Text style={styles.headerTitle}>Admin Dashboard</Text>
+      </View>
+      <ScrollView
         contentContainerStyle={styles.scrollContent}
         refreshControl={<RefreshControl refreshing={refreshing} onRefresh={handleRefresh} />}
       >
@@ -153,6 +156,8 @@ const AdminDashboardScreen = ({ navigation }) => {
 const styles = StyleSheet.create({
   container: { flex: 1, backgroundColor: theme.backgroundSecondary },
   centerContainer: { flex: 1, justifyContent: 'center', alignItems: 'center' },
+  header: { backgroundColor: theme.background, paddingHorizontal: 16, paddingVertical: 14, borderBottomWidth: StyleSheet.hairlineWidth, borderBottomColor: theme.separator },
+  headerTitle: { fontSize: 22, fontWeight: '700', color: theme.labelPrimary },
   scrollContent: { padding: 16, paddingBottom: 40 },
   sectionTitle: { fontSize: 18, fontWeight: '600', color: theme.labelPrimary, marginBottom: 12, marginTop: 16 },
   statsContainer: { flexDirection: 'row', gap: 12, marginBottom: 12 },

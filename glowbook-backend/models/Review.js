@@ -11,6 +11,11 @@ const reviewSchema = new mongoose.Schema({
     ref: 'User',
     required: true,
   },
+  appointmentId: {
+    type: mongoose.Schema.Types.ObjectId,
+    ref: 'Appointment',
+    required: true,
+  },
   rating: {
     type: Number,
     required: true,
@@ -23,6 +28,6 @@ const reviewSchema = new mongoose.Schema({
 }, { timestamps: true });
 
 reviewSchema.index({ salonId: 1 });
-reviewSchema.index({ userId: 1, salonId: 1 }, { unique: true });
+reviewSchema.index({ userId: 1, appointmentId: 1 }, { unique: true });
 
 module.exports = mongoose.model('Review', reviewSchema);

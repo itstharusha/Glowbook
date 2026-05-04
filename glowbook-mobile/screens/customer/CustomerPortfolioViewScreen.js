@@ -10,7 +10,7 @@ import {
   ScrollView,
   Dimensions,
 } from 'react-native';
-import { SafeAreaView } from 'react-native-safe-area-context';
+import { SafeAreaView, useSafeAreaInsets } from 'react-native-safe-area-context';
 import { Ionicons } from '@expo/vector-icons';
 import theme from '../../constants/theme';
 
@@ -18,6 +18,7 @@ const { width: SCREEN_WIDTH } = Dimensions.get('window');
 
 const CustomerPortfolioViewScreen = ({ navigation, route }) => {
   const { item } = route.params;
+  const insets = useSafeAreaInsets();
   const [activeIndex, setActiveIndex] = useState(0);
   const flatListRef = useRef(null);
 
@@ -32,8 +33,8 @@ const CustomerPortfolioViewScreen = ({ navigation, route }) => {
     <SafeAreaView style={styles.container}>
       <StatusBar barStyle="light-content" backgroundColor="transparent" translucent />
 
-      {/* Back button overlaid on carousel */}
-      <TouchableOpacity style={styles.backBtn} onPress={() => navigation.goBack()}>
+      {/* Back button overlaid on carousel — positioned below the status bar */}
+      <TouchableOpacity style={[styles.backBtn, { top: insets.top + 8 }]} onPress={() => navigation.goBack()}>
         <View style={styles.backBtnInner}>
           <Ionicons name="chevron-back" size={22} color="#fff" />
         </View>
@@ -116,17 +117,6 @@ const CustomerPortfolioViewScreen = ({ navigation, route }) => {
           )}
         </View>
 
-        {/* Book Now CTA */}
-        <View style={styles.ctaContainer}>
-          <TouchableOpacity
-            style={styles.ctaBtn}
-            onPress={() => navigation.navigate('Home')}
-          >
-            <Ionicons name="calendar-outline" size={20} color="#fff" style={{ marginRight: 8 }} />
-            <Text style={styles.ctaText}>Book an Appointment</Text>
-          </TouchableOpacity>
-        </View>
-
         <View style={{ height: 32 }} />
       </ScrollView>
     </SafeAreaView>
@@ -140,7 +130,6 @@ const styles = StyleSheet.create({
   },
   backBtn: {
     position: 'absolute',
-    top: 52,
     left: 16,
     zIndex: 10,
   },
@@ -247,23 +236,7 @@ const styles = StyleSheet.create({
     fontSize: 13,
     color: theme.labelSecondary,
   },
-  ctaContainer: {
-    paddingHorizontal: 20,
-    paddingTop: 8,
-  },
-  ctaBtn: {
-    backgroundColor: theme.primary,
-    borderRadius: 14,
-    height: 50,
-    flexDirection: 'row',
-    justifyContent: 'center',
-    alignItems: 'center',
-  },
-  ctaText: {
-    color: '#fff',
-    fontSize: 17,
-    fontWeight: '600',
-  },
+
 });
 
 export default CustomerPortfolioViewScreen;

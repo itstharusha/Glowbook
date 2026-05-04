@@ -2,6 +2,7 @@ import React, { useState, useEffect } from 'react';
 import {
   View, Text, StyleSheet, ScrollView, TouchableOpacity,
   StatusBar, TextInput, Alert, ActivityIndicator, Platform,
+  KeyboardAvoidingView,
 } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { Ionicons } from '@expo/vector-icons';
@@ -55,11 +56,11 @@ const BookAppointmentScreen = ({ navigation, route }) => {
 
   const handleConfirm = async () => {
     if (!selectedStylist) {
-      Alert.alert('Required', 'Please select a stylist.');
+      Alert.alert('Select a Stylist', 'Please choose a stylist before confirming your booking.');
       return;
     }
     if (!selectedSlot) {
-      Alert.alert('Required', 'Please choose a time slot.');
+      Alert.alert('Select a Time', 'Please choose a time slot for your appointment.');
       return;
     }
 
@@ -76,12 +77,15 @@ const BookAppointmentScreen = ({ navigation, route }) => {
 
       Alert.alert(
         'Booking Confirmed!',
-        `Your appointment at ${salon.name} is pending confirmation.`,
+        `Your appointment at ${salon.name} has been submitted and is pending confirmation.`,
         [{ text: 'View Bookings', onPress: () => navigation.navigate('Bookings') }]
       );
     } catch (err) {
-      const msg = err.response?.data?.message || 'Failed to book appointment.';
-      Alert.alert('Error', msg);
+      const raw = err.response?.data?.message?.toLowerCase() || '';
+      const msg = raw.includes('slot') || raw.includes('already booked') || raw.includes('unavailable')
+        ? 'This time slot is no longer available. Please choose a different time.'
+        : 'We could not complete your booking. Please check your connection and try again.';
+      Alert.alert('Booking Failed', msg);
     } finally {
       setLoading(false);
     }
@@ -99,6 +103,10 @@ const BookAppointmentScreen = ({ navigation, route }) => {
         <View style={{ width: 40 }} />
       </View>
 
+      <KeyboardAvoidingView
+        behavior={Platform.OS === 'ios' ? 'padding' : 'height'}
+        style={{ flex: 1 }}
+      >
       <ScrollView showsVerticalScrollIndicator={false} contentContainerStyle={styles.scrollContent}>
 
         {/* Service Summary */}
@@ -231,6 +239,7 @@ const BookAppointmentScreen = ({ navigation, route }) => {
 
         <View style={{ height: 32 }} />
       </ScrollView>
+      </KeyboardAvoidingView>
     </SafeAreaView>
   );
 };

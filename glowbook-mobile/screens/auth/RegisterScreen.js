@@ -8,8 +8,7 @@ import {
   StatusBar,
   KeyboardAvoidingView,
   Platform,
-  TouchableWithoutFeedback,
-  Keyboard,
+  Alert,
   ScrollView,
 } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
@@ -25,7 +24,6 @@ const RegisterScreen = () => {
 
   const [name, setName] = useState('');
   const [email, setEmail] = useState('');
-  const [phone, setPhone] = useState('');
   const [password, setPassword] = useState('');
   const [confirmPassword, setConfirmPassword] = useState('');
   const [isPasswordVisible, setIsPasswordVisible] = useState(false);
@@ -33,22 +31,46 @@ const RegisterScreen = () => {
   const [loading, setLoading] = useState(false);
 
   const handleRegister = async () => {
-    if (!name || !email || !password || !confirmPassword) return;
+    if (!name.trim()) {
+      Alert.alert('Missing Information', 'Please enter your full name.');
+      return;
+    }
+    if (!email.trim()) {
+      Alert.alert('Missing Information', 'Please enter your email address.');
+      return;
+    }
+    const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+    if (!emailRegex.test(email.trim())) {
+      Alert.alert('Invalid Email', 'Please enter a valid email address (e.g. you@example.com).');
+      return;
+    }
+    if (!password) {
+      Alert.alert('Missing Information', 'Please choose a password.');
+      return;
+    }
+    if (password.length < 6) {
+      Alert.alert('Password Too Short', 'Your password must be at least 6 characters long.');
+      return;
+    }
+    if (!confirmPassword) {
+      Alert.alert('Missing Information', 'Please confirm your password.');
+      return;
+    }
     if (password !== confirmPassword) {
-      // Show simple alert or toast
-      console.warn("Passwords don't match");
+      Alert.alert('Passwords Do Not Match', 'The passwords you entered do not match. Please try again.');
       return;
     }
     setLoading(true);
     try {
-      // Pass phone if backend supports it, otherwise just name/email/pass/role
-      const result = await register(name, email, password, selectedRole); 
+      const result = await register(name.trim(), email.trim(), password, selectedRole);
       if (!result.success) {
-        alert(result.message);
+        const msg = result.message?.toLowerCase().includes('already')
+          ? 'An account with this email already exists. Try signing in instead.'
+          : 'We could not create your account. Please try again.';
+        Alert.alert('Registration Failed', msg);
       }
     } catch (error) {
-      console.error(error);
-      alert('An unexpected error occurred');
+      Alert.alert('Something Went Wrong', 'We could not create your account. Please try again.');
     } finally {
       setLoading(false);
     }
@@ -94,17 +116,6 @@ const RegisterScreen = () => {
                   autoCapitalize="none"
                   value={email}
                   onChangeText={setEmail}
-                />
-              </View>
-              <View style={styles.inputGroup}>
-                <Text style={styles.inputLabel}>Phone</Text>
-                <TextInput
-                  style={styles.input}
-                  placeholder="(555) 000-0000"
-                  placeholderTextColor={theme.labelTertiary}
-                  keyboardType="phone-pad"
-                  value={phone}
-                  onChangeText={setPhone}
                 />
               </View>
             </View>

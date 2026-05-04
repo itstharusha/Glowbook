@@ -2,6 +2,7 @@ import React, { useState } from 'react';
 import {
   View, Text, StyleSheet, TouchableOpacity, TextInput,
   StatusBar, Alert, ActivityIndicator, Platform,
+  KeyboardAvoidingView, ScrollView,
 } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { Ionicons } from '@expo/vector-icons';
@@ -12,26 +13,29 @@ import theme from '../../constants/theme';
 const STAR_LABELS = ['', 'Poor', 'Fair', 'Good', 'Very Good', 'Excellent'];
 
 const LeaveReviewScreen = ({ navigation, route }) => {
-  const { salonId, salonName } = route.params;
+  const { salonId, salonName, appointmentId } = route.params;
   const [rating, setRating] = useState(0);
   const [comment, setComment] = useState('');
   const [loading, setLoading] = useState(false);
 
   const handleSubmit = async () => {
     if (rating === 0) {
-      Alert.alert('Rating required', 'Please select a star rating before submitting.');
+      Alert.alert('Select a Rating', 'Please tap a star to rate your experience before submitting.');
       return;
     }
 
     setLoading(true);
     try {
-      await api.post('/api/reviews', { salonId, rating, comment: comment.trim() });
+      await api.post('/api/reviews', { salonId, appointmentId, rating, comment: comment.trim() });
       Alert.alert('Thank you!', 'Your review has been submitted.', [
         { text: 'OK', onPress: () => navigation.goBack() },
       ]);
     } catch (err) {
-      const msg = err.response?.data?.message || 'Failed to submit review.';
-      Alert.alert('Error', msg);
+      const raw = err.response?.data?.message?.toLowerCase() || '';
+      const msg = raw.includes('already')
+        ? 'You have already submitted a review for this visit.'
+        : 'We could not submit your review. Please try again.';
+      Alert.alert('Submission Failed', msg);
     } finally {
       setLoading(false);
     }
@@ -49,7 +53,11 @@ const LeaveReviewScreen = ({ navigation, route }) => {
         <View style={{ width: 40 }} />
       </View>
 
-      <View style={styles.content}>
+      <KeyboardAvoidingView
+        behavior={Platform.OS === 'ios' ? 'padding' : 'height'}
+        style={{ flex: 1 }}
+      >
+      <ScrollView contentContainerStyle={styles.content} showsVerticalScrollIndicator={false}>
         {/* Salon name */}
         <View style={styles.salonCard}>
           <View style={styles.salonIconWrap}>
@@ -122,7 +130,8 @@ const LeaveReviewScreen = ({ navigation, route }) => {
               )}
           </LinearGradient>
         </TouchableOpacity>
-      </View>
+      </ScrollView>
+      </KeyboardAvoidingView>
     </SafeAreaView>
   );
 };

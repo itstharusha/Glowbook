@@ -52,13 +52,25 @@ const VendorDashboardScreen = () => {
     loadDashboardData();
   };
 
-  const handleConfirm = async (id) => {
-    try {
-      await api.put(`/api/appointments/${id}/status`, { status: 'Confirmed' });
-      loadDashboardData(); // Refresh list
-    } catch (error) {
-      Alert.alert('Error', 'Failed to confirm booking.');
-    }
+  const handleConfirm = (id) => {
+    Alert.alert(
+      'Confirm Booking',
+      'Mark this appointment as Confirmed?',
+      [
+        { text: 'Cancel', style: 'cancel' },
+        {
+          text: 'Confirm',
+          onPress: async () => {
+            try {
+              await api.put(`/api/appointments/${id}/status`, { status: 'Confirmed' });
+              loadDashboardData();
+            } catch (error) {
+              Alert.alert('Error', 'Failed to confirm booking.');
+            }
+          },
+        },
+      ]
+    );
   };
 
   const today = new Date().setHours(0,0,0,0);

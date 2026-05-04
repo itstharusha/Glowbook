@@ -59,9 +59,10 @@ const PortfolioCard = ({ item, onPress, showActions = false, onEdit, onDelete })
         ) : null}
 
         {item.stylistId?.name ? (
-          <Text style={styles.stylist}>
-            <Ionicons name="person-outline" size={12} color={theme.labelSecondary} /> By {item.stylistId.name}
-          </Text>
+          <View style={styles.stylistRow}>
+            <Ionicons name="person-outline" size={12} color={theme.labelSecondary} />
+            <Text style={styles.stylist}> By {item.stylistId.name}</Text>
+          </View>
         ) : null}
 
         {item.tags && item.tags.length > 0 && (
@@ -182,10 +183,14 @@ const styles = StyleSheet.create({
     lineHeight: 18,
     marginBottom: 6,
   },
+  stylistRow: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    marginBottom: 6,
+  },
   stylist: {
     fontSize: 12,
     color: theme.labelSecondary,
-    marginBottom: 6,
   },
   tagsRow: {
     flexDirection: 'row',

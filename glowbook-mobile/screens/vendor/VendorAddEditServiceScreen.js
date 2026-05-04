@@ -1,5 +1,5 @@
-import React, { useState, useEffect } from 'react';
-import { View, Text, TextInput, TouchableOpacity, StyleSheet, StatusBar, ScrollView, Switch } from 'react-native';
+import React, { useState } from 'react';
+import { View, Text, TextInput, TouchableOpacity, StyleSheet, StatusBar, ScrollView, Switch, Alert } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { useNavigation, useRoute } from '@react-navigation/native';
 import { Ionicons } from '@expo/vector-icons';
@@ -9,36 +9,61 @@ import api from '../../services/api';
 import { useAuth } from '../../context/AuthContext';
 import theme from '../../constants/theme';
 
+const InputRow = ({ label, value, onChangeText, multiline = false, ...props }) => (
+  <View style={styles.inputGroup}>
+    <Text style={styles.label}>{label}</Text>
+    <TextInput
+      style={[styles.input, multiline && styles.textArea]}
+      value={value}
+      onChangeText={onChangeText}
+      placeholderTextColor={theme.labelTertiary}
+      multiline={multiline}
+      {...props}
+    />
+  </View>
+);
+
 const VendorAddEditServiceScreen = () => {
   const navigation = useNavigation();
   const route = useRoute();
   const { user } = useAuth();
-  
-  // Try to get service ID from route params for editing
-  // If not there, it's a create
+
   const editId = route.params?.id || null;
-  
+  const editService = route.params?.service || null;
+
   const [loading, setLoading] = useState(false);
   const [serviceData, setServiceData] = useState({
-    name: '',
-    description: '',
-    category: 'Hair',
-    price: '',
-    duration: '',
-    isActive: true,
+    name: editService?.name || '',
+    description: editService?.description || '',
+    category: editService?.category || 'Hair',
+    price: editService?.price?.toString() || '',
+    duration: editService?.duration?.toString() || '',
+    isActive: editService?.isActive ?? true,
   });
 
-  useEffect(() => {
-    if (editId) {
-      // Load existing service if editing
-      // Note: we don't have a single-get service endpoint right now 
-      // but in a real app we'd fetch it here.
-      // For blueprint scope, setting up the framework.
-    }
-  }, [editId]);
-
   const handleSubmit = async () => {
-    if (!serviceData.name || !serviceData.price || !serviceData.duration) return;
+    if (!serviceData.name.trim()) {
+      Alert.alert('Missing Information', 'Please enter a name for this service.');
+      return;
+    }
+    if (!serviceData.price) {
+      Alert.alert('Missing Information', 'Please enter a price for this service.');
+      return;
+    }
+    const priceNum = parseFloat(serviceData.price);
+    if (isNaN(priceNum) || priceNum <= 0) {
+      Alert.alert('Invalid Price', 'Please enter a valid price greater than $0.');
+      return;
+    }
+    if (!serviceData.duration) {
+      Alert.alert('Missing Information', 'Please enter the duration of this service in minutes.');
+      return;
+    }
+    const durationNum = parseInt(serviceData.duration, 10);
+    if (isNaN(durationNum) || durationNum <= 0) {
+      Alert.alert('Invalid Duration', 'Please enter a valid duration in minutes (e.g. 30, 60).');
+      return;
+    }
     setLoading(true);
     try {
       if (editId) {
@@ -48,25 +73,11 @@ const VendorAddEditServiceScreen = () => {
       }
       navigation.goBack();
     } catch (error) {
-      alert(error.response?.data?.message || 'Failed to save service');
+      Alert.alert('Something Went Wrong', 'We could not save this service. Please try again.');
     } finally {
       setLoading(false);
     }
   };
-
-  const InputRow = ({ label, value, onChangeText, multiline = false, ...props }) => (
-    <View style={styles.inputGroup}>
-      <Text style={styles.label}>{label}</Text>
-      <TextInput
-        style={[styles.input, multiline && styles.textArea]}
-        value={value}
-        onChangeText={onChangeText}
-        placeholderTextColor={theme.labelTertiary}
-        multiline={multiline}
-        {...props}
-      />
-    </View>
-  );
 
   return (
     <SafeAreaView style={styles.container}>
@@ -79,7 +90,7 @@ const VendorAddEditServiceScreen = () => {
         <View style={styles.headerRight} />
       </View>
 
-      <ScrollView contentContainerStyle={styles.scrollContent} showsVerticalScrollIndicator={false}>
+      <ScrollView contentContainerStyle={styles.scrollContent} showsVerticalScrollIndicator={false} keyboardShouldPersistTaps="handled">
         <View style={styles.formContainer}>
           <InputRow label="Service Name" value={serviceData.name} onChangeText={(t) => setServiceData({ ...serviceData, name: t })} placeholder="e.g. Women's Haircut" />
 

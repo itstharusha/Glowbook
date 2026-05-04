@@ -1,5 +1,5 @@
-import React, { useState, useEffect } from 'react';
-import { View, Text, TextInput, TouchableOpacity, StyleSheet, StatusBar, ScrollView } from 'react-native';
+import React, { useState } from 'react';
+import { View, Text, TextInput, TouchableOpacity, StyleSheet, StatusBar, ScrollView, Alert } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { useNavigation, useRoute } from '@react-navigation/native';
 import { Ionicons } from '@expo/vector-icons';
@@ -8,26 +8,45 @@ import api from '../../services/api';
 import { useAuth } from '../../context/AuthContext';
 import theme from '../../constants/theme';
 
+const InputRow = ({ label, value, onChangeText, multiline = false, ...props }) => (
+  <View style={styles.inputGroup}>
+    <Text style={styles.label}>{label}</Text>
+    <TextInput
+      style={[styles.input, multiline && styles.textArea]}
+      value={value}
+      onChangeText={onChangeText}
+      placeholderTextColor={theme.labelTertiary}
+      multiline={multiline}
+      {...props}
+    />
+  </View>
+);
+
 const VendorAddEditStylistScreen = () => {
   const navigation = useNavigation();
   const route = useRoute();
   const { user } = useAuth();
-  
+
   const editId = route.params?.id || null;
+  const editStylist = route.params?.stylist || null;
+
   const [loading, setLoading] = useState(false);
   const [stylistData, setStylistData] = useState({
-    name: '',
-    bio: '',
-    specializations: '', // will split by comma
+    name: editStylist?.name || '',
+    bio: editStylist?.bio || '',
+    specializations: editStylist?.specializations?.join(', ') || '',
   });
 
   const handleSubmit = async () => {
-    if (!stylistData.name) return;
+    if (!stylistData.name.trim()) {
+      Alert.alert('Missing Information', 'Please enter the stylist\'s name.');
+      return;
+    }
     setLoading(true);
-    
+
     const payload = {
       ...stylistData,
-      specializations: stylistData.specializations ? stylistData.specializations.split(',').map(s => s.trim()) : [],
+      specializations: stylistData.specializations ? stylistData.specializations.split(',').map(s => s.trim()).filter(Boolean) : [],
     };
 
     try {
@@ -38,25 +57,11 @@ const VendorAddEditStylistScreen = () => {
       }
       navigation.goBack();
     } catch (error) {
-      alert(error.response?.data?.message || 'Failed to save stylist');
+      Alert.alert('Something Went Wrong', 'We could not save this stylist. Please try again.');
     } finally {
       setLoading(false);
     }
   };
-
-  const InputRow = ({ label, value, onChangeText, multiline = false, ...props }) => (
-    <View style={styles.inputGroup}>
-      <Text style={styles.label}>{label}</Text>
-      <TextInput
-        style={[styles.input, multiline && styles.textArea]}
-        value={value}
-        onChangeText={onChangeText}
-        placeholderTextColor={theme.labelTertiary}
-        multiline={multiline}
-        {...props}
-      />
-    </View>
-  );
 
   return (
     <SafeAreaView style={styles.container}>
@@ -69,7 +74,7 @@ const VendorAddEditStylistScreen = () => {
         <View style={styles.headerRight} />
       </View>
 
-      <ScrollView contentContainerStyle={styles.scrollContent} showsVerticalScrollIndicator={false}>
+      <ScrollView contentContainerStyle={styles.scrollContent} showsVerticalScrollIndicator={false} keyboardShouldPersistTaps="handled">
         <View style={styles.formContainer}>
           <InputRow label="Stylist Name" value={stylistData.name} onChangeText={(t) => setStylistData({ ...stylistData, name: t })} placeholder="Full Name" />
           <InputRow label="Bio" value={stylistData.bio} onChangeText={(t) => setStylistData({ ...stylistData, bio: t })} multiline placeholder="Tell us about the stylist" />

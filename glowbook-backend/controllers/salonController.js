@@ -5,6 +5,7 @@ const Appointment = require('../models/Appointment');
 const Review = require('../models/Review');
 const User = require('../models/User');
 const PortfolioItem = require('../models/PortfolioItem');
+const { cloudinary } = require('../config/cloudinary');
 
 exports.createSalon = async (req, res) => {
   try {
@@ -163,6 +164,51 @@ exports.getAdminStats = async (req, res) => {
         vendorCount,
       },
     });
+  } catch (error) {
+    res.status(500).json({ success: false, message: error.message });
+  }
+};
+
+exports.addImagesToSalon = async (req, res) => {
+  try {
+    const salon = await Salon.findById(req.params.id);
+    if (!salon) return res.status(404).json({ success: false, message: 'Salon not found' });
+    if (salon.owner.toString() !== req.user._id.toString() && req.user.role !== 'admin') {
+      return res.status(403).json({ success: false, message: 'Access denied' });
+    }
+
+    const newUrls = (req.files || []).map(f => f.path);
+    salon.images = [...(salon.images || []), ...newUrls];
+    await salon.save();
+
+    res.status(200).json({ success: true, data: salon });
+  } catch (error) {
+    res.status(500).json({ success: false, message: error.message });
+  }
+};
+
+exports.removeImageFromSalon = async (req, res) => {
+  try {
+    const { imageUrl } = req.body;
+    if (!imageUrl) return res.status(400).json({ success: false, message: 'imageUrl is required' });
+
+    const salon = await Salon.findById(req.params.id);
+    if (!salon) return res.status(404).json({ success: false, message: 'Salon not found' });
+    if (salon.owner.toString() !== req.user._id.toString() && req.user.role !== 'admin') {
+      return res.status(403).json({ success: false, message: 'Access denied' });
+    }
+
+    try {
+      const parts = imageUrl.split('/');
+      const filename = parts[parts.length - 1].split('.')[0];
+      const folder = parts[parts.length - 2];
+      await cloudinary.uploader.destroy(`${folder}/${filename}`);
+    } catch (_) { /* non-fatal */ }
+
+    salon.images = (salon.images || []).filter(url => url !== imageUrl);
+    await salon.save();
+
+    res.status(200).json({ success: true, data: salon });
   } catch (error) {
     res.status(500).json({ success: false, message: error.message });
   }

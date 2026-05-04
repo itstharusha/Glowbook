@@ -85,7 +85,7 @@ exports.getMyAppointments = async (req, res) => {
       .populate('salonId', 'name location images')
       .populate('serviceId', 'name price duration')
       .populate('stylistId', 'name')
-      .sort({ date: -1 });
+      .sort({ createdAt: -1 });
 
     res.json({ success: true, data: appointments });
   } catch (error) {
@@ -247,6 +247,20 @@ exports.getAllAppointments = async (req, res) => {
       },
       data: appointments,
     });
+  } catch (error) {
+    res.status(500).json({ success: false, message: error.message });
+  }
+};
+
+// @desc    Delete an appointment (admin only)
+// @route   DELETE /api/appointments/:id
+// @access  Private/Admin
+exports.deleteAppointment = async (req, res) => {
+  try {
+    const appointment = await Appointment.findById(req.params.id);
+    if (!appointment) return res.status(404).json({ success: false, message: 'Appointment not found' });
+    await appointment.deleteOne();
+    res.status(200).json({ success: true, data: {} });
   } catch (error) {
     res.status(500).json({ success: false, message: error.message });
   }

@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import { View, Text, StyleSheet, ScrollView, TouchableOpacity, StatusBar, Alert, ActivityIndicator } from 'react-native';
-import { SafeAreaView } from 'react-native-safe-area-context';
+import { SafeAreaView, useSafeAreaInsets } from 'react-native-safe-area-context';
 import { Ionicons } from '@expo/vector-icons';
 import { useRoute, useNavigation } from '@react-navigation/native';
 import api from '../../services/api';
@@ -16,6 +16,7 @@ const STATUS_CONFIG = {
 const VendorBookingDetailScreen = () => {
   const route = useRoute();
   const navigation = useNavigation();
+  const insets = useSafeAreaInsets();
   const { id } = route.params;
   const [apt, setApt] = useState(null);
   const [loading, setLoading] = useState(true);
@@ -148,7 +149,7 @@ const VendorBookingDetailScreen = () => {
       </ScrollView>
 
       {(apt.status === 'Pending' || apt.status === 'Confirmed') && (
-        <View style={styles.footerAction}>
+        <View style={[styles.footerAction, { paddingBottom: 16 + insets.bottom }]}>
           {apt.status === 'Pending' && (
             <TouchableOpacity style={styles.primaryButton} onPress={() => handleStatusUpdate('Confirmed')}>
               <Text style={styles.primaryButtonText}>Confirm Booking</Text>

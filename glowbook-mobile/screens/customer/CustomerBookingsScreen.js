@@ -25,13 +25,18 @@ const formatDate = (dateStr) => {
 
 const CustomerBookingsScreen = ({ navigation }) => {
   const [appointments, setAppointments] = useState([]);
+  const [reviewedIds, setReviewedIds] = useState(new Set());
   const [loading, setLoading] = useState(true);
   const [activeFilter, setActiveFilter] = useState('All');
 
   const loadAppointments = async () => {
     try {
-      const res = await api.get('/api/appointments/my');
-      setAppointments(res.data.data || []);
+      const [aptsRes, reviewsRes] = await Promise.all([
+        api.get('/api/appointments/my'),
+        api.get('/api/reviews/my'),
+      ]);
+      setAppointments(aptsRes.data.data || []);
+      setReviewedIds(new Set((reviewsRes.data.data || []).map(r => r.appointmentId)));
     } catch (err) {
       console.error('Load bookings error:', err.message);
     } finally {
@@ -77,6 +82,7 @@ const CustomerBookingsScreen = ({ navigation }) => {
   const renderItem = ({ item }) => {
     const cfg = STATUS_CONFIG[item.status] || STATUS_CONFIG.Pending;
     const canCancel = item.status === 'Pending' || item.status === 'Confirmed';
+    const canReview = item.status === 'Completed' && !reviewedIds.has(item._id);
 
     return (
       <View style={styles.card}>
@@ -129,12 +135,13 @@ const CustomerBookingsScreen = ({ navigation }) => {
                 <Text style={styles.cancelBtnText}>Cancel</Text>
               </TouchableOpacity>
             )}
-            {item.status === 'Completed' && (
+            {canReview && (
               <TouchableOpacity
                 style={styles.reviewBtn}
                 onPress={() => navigation.navigate('LeaveReview', {
                   salonId: item.salonId?._id,
                   salonName: item.salonId?.name || 'Salon',
+                  appointmentId: item._id,
                 })}
                 activeOpacity={0.75}
               >

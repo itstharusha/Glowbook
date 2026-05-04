@@ -75,7 +75,7 @@ const VendorAddEditPortfolioScreen = ({ navigation, route }) => {
 
   const pickImages = async () => {
     if (totalImages >= MAX_IMAGES) {
-      Alert.alert('Limit reached', `You can add up to ${MAX_IMAGES} images per portfolio item.`);
+      Alert.alert('Photo Limit Reached', `You can add up to ${MAX_IMAGES} photos per portfolio item.`);
       return;
     }
 
@@ -109,7 +109,7 @@ const VendorAddEditPortfolioScreen = ({ navigation, route }) => {
       await api.delete(`/api/portfolio/${editItem._id}/images`, { data: { imageUrl } });
       setExistingImages(prev => prev.filter(url => url !== imageUrl));
     } catch (err) {
-      Alert.alert('Error', 'Failed to remove image.');
+      Alert.alert('Could Not Remove Photo', 'We could not remove that photo. Please try again.');
     } finally {
       setRemovingImage(null);
     }
@@ -137,18 +137,17 @@ const VendorAddEditPortfolioScreen = ({ navigation, route }) => {
 
   const handleSubmit = async () => {
     if (!form.title.trim()) {
-      Alert.alert('Required', 'Please enter a title.');
+      Alert.alert('Missing Information', 'Please enter a title for this portfolio item.');
       return;
     }
     if (!isEdit && newImages.length === 0) {
-      Alert.alert('Required', 'Please add at least one image.');
+      Alert.alert('Missing Photos', 'Please add at least one photo to your portfolio item.');
       return;
     }
 
     setLoading(true);
     try {
       if (isEdit) {
-        // Update text fields
         await api.put(`/api/portfolio/${editItem._id}`, {
           title: form.title.trim(),
           description: form.description.trim(),
@@ -158,7 +157,6 @@ const VendorAddEditPortfolioScreen = ({ navigation, route }) => {
           isPublic: form.isPublic,
         });
 
-        // Upload new images if any
         if (newImages.length > 0) {
           const formData = new FormData();
           newImages.forEach((img, i) => {
@@ -172,20 +170,16 @@ const VendorAddEditPortfolioScreen = ({ navigation, route }) => {
             headers: { 'Content-Type': 'multipart/form-data' },
           });
         }
-
-        Alert.alert('Success', 'Portfolio item updated.');
       } else {
         const formData = buildFormData();
         await api.post('/api/portfolio', formData, {
           headers: { 'Content-Type': 'multipart/form-data' },
         });
-        Alert.alert('Success', 'Portfolio item created.');
       }
 
       navigation.goBack();
     } catch (error) {
-      const msg = error.response?.data?.message || 'Failed to save portfolio item.';
-      Alert.alert('Error', msg);
+      Alert.alert('Something Went Wrong', 'We could not save this portfolio item. Please try again.');
     } finally {
       setLoading(false);
     }

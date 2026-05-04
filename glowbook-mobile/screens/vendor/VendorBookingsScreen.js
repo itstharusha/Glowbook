@@ -95,7 +95,7 @@ const VendorBookingsScreen = () => {
       </View>
 
       <View style={styles.segmentedControl}>
-        {['Pending', 'Confirmed', 'Completed'].map(tab => (
+        {['Pending', 'Confirmed', 'Completed', 'Cancelled'].map(tab => (
           <TouchableOpacity
             key={tab}
             style={[styles.segmentTab, activeTab === tab && styles.segmentTabActive]}

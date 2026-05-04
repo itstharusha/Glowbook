@@ -8,6 +8,7 @@ import {
   StatusBar,
   Dimensions,
 } from 'react-native';
+import { SafeAreaView } from 'react-native-safe-area-context';
 import { LinearGradient } from 'expo-linear-gradient';
 import theme from '../../constants/theme';
 
@@ -45,7 +46,7 @@ const SplashScreen = ({ navigation }) => {
   }, []);
 
   return (
-    <View style={styles.container}>
+    <SafeAreaView style={styles.container}>
       <StatusBar barStyle="dark-content" backgroundColor={theme.background} />
 
       {/* Decorative ambient circles — rose warmth, very low opacity */}
@@ -83,7 +84,7 @@ const SplashScreen = ({ navigation }) => {
           Beauty, on your schedule.
         </Animated.Text>
       </Animated.View>
-    </View>
+    </SafeAreaView>
   );
 };
 

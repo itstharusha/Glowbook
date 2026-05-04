@@ -7,6 +7,7 @@ const {
   bookAppointment,
   getMyAppointments,
   cancelAppointment,
+  deleteAppointment,
 } = require('../controllers/appointmentController');
 const { protect } = require('../middleware/authMiddleware');
 const { isVendor, isVendorOrAdmin } = require('../middleware/vendorMiddleware');
@@ -21,6 +22,7 @@ router.get('/my', protect, getMyAppointments);
 router.post('/', protect, bookAppointment);
 router.put('/:id/cancel', protect, cancelAppointment);
 router.put('/:id/status', protect, isVendorOrAdmin, updateAppointmentStatus);
+router.delete('/:id', protect, admin, deleteAppointment);
 router.get('/:id', protect, isVendorOrAdmin, getAppointmentById);
 
 module.exports = router;

@@ -48,16 +48,22 @@ const LoginScreen = () => {
   });
 
   const handleLogin = async () => {
-    if (!email || !password) return;
+    if (!email.trim()) {
+      Alert.alert('Missing Information', 'Please enter your email address.');
+      return;
+    }
+    if (!password) {
+      Alert.alert('Missing Information', 'Please enter your password.');
+      return;
+    }
     setLoading(true);
     try {
-      const result = await login(email, password);
+      const result = await login(email.trim(), password);
       if (!result.success) {
-        Alert.alert('Sign In Failed', result.message);
+        Alert.alert('Sign In Failed', 'Incorrect email or password. Please try again.');
       }
     } catch (error) {
-      console.error(error);
-      Alert.alert('Error', 'An unexpected error occurred');
+      Alert.alert('Something Went Wrong', 'We could not sign you in. Please try again.');
     } finally {
       setLoading(false);
     }
